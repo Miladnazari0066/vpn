@@ -234,6 +234,7 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .cloudok{color:var(--teal);font-size:.82rem;font-weight:700;margin-bottom:10px}
 .cloudid{display:flex;align-items:center;gap:8px;background:#081a20;border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-bottom:10px}
 .cloudid code{font-family:var(--mono);font-size:.66rem;color:var(--sky);flex:1;word-break:break-all}
+.cloudacts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 
 /* ================= فوتر ================= */
 footer{border-top:1px solid var(--line);background:rgba(8,24,30,.75);padding:26px 22px;display:flex;gap:22px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.8rem;color:var(--dim)}
@@ -402,12 +403,17 @@ footer a:hover{text-decoration:underline}
         <button class="btn primary" id="cloudCreate" type="button">☁ فعال‌سازی ابر</button>
       </div>
       <div id="cloudOn" style="display:none">
-        <p class="cloudok">☁ ابر متصله — تغییرات خودکار برای همه ذخیره می‌شه</p>
+        <p class="cloudok">☁ ابر فعال شد — شناسه ابر شما:</p>
         <div class="cloudid">
           <code id="cloudOnId" dir="ltr"></code>
           <button class="mini" id="copyCloudId" title="کپی شناسه">📋</button>
         </div>
-        <p class="hint" id="cloudHint">⚠️ <b>قدم یک‌بار:</b> این شناسه رو کپی کن، توی کد سایت خط <b dir="ltr">cloudId:''</b> بذار (مثلاً <b dir="ltr">cloudId:'abc-123'</b>) و فایل رو توی گیت‌هاب آپلود کن. از اون به بعد همه‌چی خودکاره.</p>
+        <div class="cloudacts">
+          <button class="btn primary" id="dlReady" type="button">⬇ دانلود فایل آمادهٔ سایت</button>
+        </div>
+        <p class="hint" id="cloudHint">
+          <b>قدم یک‌بار — راه آسون:</b> دکمه «دانلود فایل آماده» رو بزن. یه <b dir="ltr">index.html</b> دانلود می‌شه که شناسه ابر <b>خودکار داخلش نوشته شده</b>. بعد برو توی گیت‌هاب، روی <b dir="ltr">index.html</b> بزن، دکمه مداد ✏️ رو بزن، محتوای فایل جدید رو جایگزین کن و <b dir="ltr">Commit</b> رو بزن. تمام — از اون به بعد همه‌چی خودکاره! 🎉
+        </p>
       </div>
     </section>
 
@@ -424,7 +430,7 @@ const CONFIG = {
   siteName : 'پوم',
   adminPass: '@Miladn46',   // رمز پنل مدیریت
   telegram : '',            // آیدی کانال تلگرام (بدون @) — خالی = مخفی
-  cloudId  : '',            // ← شناسه ابر (بعد از فعال‌سازی از پنل، این‌جا بذار — یک‌بار)
+  cloudId  : '',            // شناسه ابر — با دکمه «دانلود فایل آماده» خودکار پر می‌شه
 };
 
 const CLOUD_API = 'https://jsonblob.com/api/jsonBlob';
@@ -594,13 +600,33 @@ $('#cloudCreate').onclick=async()=>{
     localStorage.setItem('pomCloudId',id);
     renderCloudSec(false);
     setCloudStatus('ok');
-    toast('☁ ابر فعال شد! حالا شناسه رو یه‌بار توی کد بذار (راهنمای بالا)');
+    toast('☁ ابر فعال شد! حالا دکمه «دانلود فایل آماده» رو بزن');
   }catch(e){
     toast('اتصال به ابر ناموفق: '+e.message+' — اینترنت رو چک کن و دوباره بزن','err');
     btn.disabled=false; btn.textContent='☁ فعال‌سازی ابر';
   }
 };
 $('#copyCloudId').onclick=async()=>{ await copyText(CONFIG.cloudId); toast('شناسه کپی شد 📋'); };
+
+/* دانلود فایل آماده — شناسه ابر خودکار داخلش نوشته می‌شه */
+$('#dlReady').onclick=async()=>{
+  const btn=$('#dlReady');
+  btn.disabled=true; btn.textContent='در حال ساخت فایل…';
+  try{
+    const src=await (await fetch(location.href)).text();
+    const needle="cloudId  : ''";
+    if(!src.includes(needle)) throw new Error('خط CONFIG توی فایل پیدا نشد');
+    const out=src.replace(needle, "cloudId  : '"+CONFIG.cloudId+"'");
+    const blob=new Blob([out],{type:'text/html'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='index.html'; a.click();
+    URL.revokeObjectURL(a.href);
+    toast('فایل آماده دانلود شد 📁 — حالا توی گیت‌هاب جایگزین فایل قبلی کن');
+  }catch(e){
+    toast('خطا: '+e.message+' — سایت رو از آدرس اینترنتی (گیت‌هاب) باز کن، نه از روی کامپیوتر','err');
+  }
+  btn.disabled=false; btn.textContent='⬇ دانلود فایل آمادهٔ سایت';
+};
 
 /* ================= رندر ================= */
 function filtered(){
