@@ -288,7 +288,7 @@ function relTime(ts){
 const ZW_RE=new RegExp('[​-‏‪-‮⁠﻿]','g');
 function normCode(s){
   return String(s==null?'':s)
-    .replace(/[۰-۹]/g,d=>'۰۱۳۴۵۷۸۹'.indexOf(d))
+    .replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
     .replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d))
     .replace(/［﹫＠]/g,'@').replace(ZW_RE,'').replace(/\s+/g,' ').trim();
 }
@@ -347,14 +347,14 @@ function setSrvStat(s){
   const map={ok:['🟢 همگام','var(--teal)'],sync:['🟡 ارسال…','var(--amber)'],err:['🔴 خطا','var(--coral)'],off:['⚪ قطع','var(--faint)']};
   el.textContent=map[s][0];el.style.color=map[s][1];
 }
-let pushTimer=null;
-function schedulePush(){clearTimeout(pushTimer);pushTimer=setTimeout(pushAdmin,900)}
 async function pushAdmin(){
   const base=workerBase(),tok=getAdminToken();
-  if(!base||!tok){setSrvStat('off');return}
+  if(!base||!tok){setSrvStat('off');return false}
   setSrvStat('sync');
-  try{const r=await fetch(base+'/api/admin',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({servers:state.servers,gateOn:state.gateOn,gates:state.gates})});setSrvStat(r.ok?'ok':'err')}
-  catch(e){setSrvStat('err')}
+  try{
+    const r=await fetch(base+'/api/admin',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},keepalive:true,body:JSON.stringify({servers:state.servers,gateOn:state.gateOn,gates:state.gates})});
+    setSrvStat(r.ok?'ok':'err');return r.ok;
+  }catch(e){setSrvStat('err');return false}
 }
 async function adminPassAction(action,id,extra){
   const base=workerBase(),tok=getAdminToken();
@@ -407,7 +407,7 @@ function renderPanelList(){
       </div></div>`;
   }).join('')||'<p class="hint">هنوز سروری اضافه نشده.</p>';
 }
-$('#pList').addEventListener('click',e=>{
+$('#pList').addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i,a=b.dataset.a;
   if(a==='del'){const s=state.servers[i];if(confirm(`سرور «${s.name}» حذف بشه؟`)){state.servers.splice(i,1);afterChange()}}
   if(a==='toggle'){const s=state.servers[i];s.active=s.active===false?true:false;afterChange();toast(s.active?'سرور روشن شد 🟢':'سرور خاموش شد 🔴')}
@@ -415,22 +415,24 @@ $('#pList').addEventListener('click',e=>{
   if(a==='up'&&i>0){[state.servers[i-1],state.servers[i]]=[state.servers[i],state.servers[i-1]];afterChange()}
   if(a==='down'&&i<state.servers.length-1){[state.servers[i+1],state.servers[i]]=[state.servers[i],state.servers[i+1]];afterChange()}
 });
-$('#addForm').addEventListener('submit',e=>{
+$('#addForm').addEventListener('submit',async e=>{
   e.preventDefault();const name=$('#sName').value.trim(),country=$('#sCountry').value,cfg=$('#sCfg').value.trim(),note=$('#sNote').value.trim();
   if(!name||!cfg){toast('نام و کانفیگ الزامیه','err');return}
   const apps=[...pickedApps];
-  if(editingId){const s=state.servers.find(x=>x.id===editingId);if(s)Object.assign(s,{name,country,config:cfg,note,apps});editingId=null;$('#addBtn').textContent='افزودن سرور';$('#cancelEdit').style.display='none';toast('ویرایش ذخیره شد ✓')}
-  else{state.servers.unshift({id:'s'+Date.now(),name,country,config:cfg,note,added:Date.now(),apps,active:true});toast('سرور اضافه شد ✓')}
-  e.target.reset();$('#sCountry').value='DE';pickedApps.clear();renderAppPick();afterChange();
+  if(editingId){const s=state.servers.find(x=>x.id===editingId);if(s)Object.assign(s,{name,country,config:cfg,note,apps});editingId=null;$('#addBtn').textContent='افزودن سرور';$('#cancelEdit').style.display='none';toast('ویرایش ذخیره شد')}
+  else{state.servers.unshift({id:'s'+Date.now(),name,country,config:cfg,note,added:Date.now(),apps,active:true});toast('سرور اضافه شد')}
+  e.target.reset();$('#sCountry').value='DE';pickedApps.clear();renderAppPick();
+  renderAll();const ok=await pushAdmin();toast(ok?'✓ همگام شد':'⚠ همگام‌سازی ناموفق',ok?'ok':'err');
 });
 $('#cancelEdit').onclick=()=>{editingId=null;$('#addBtn').textContent='افزودن سرور';$('#cancelEdit').style.display='none';$('#addForm').reset();$('#sCountry').value='DE';pickedApps.clear();renderAppPick()};
-$('#bulkBtn').onclick=()=>{
+$('#bulkBtn').onclick=async()=>{
   const lines=$('#bulkIn').value.split('\n').map(l=>l.trim()).filter(Boolean);let n=0;
   lines.forEach(l=>{if(!(/^https?:\/\//i.test(l)||/^[a-z]+:\/\//i.test(l)))return;
     let nm='';const h=l.indexOf('#');if(h>-1){try{nm=decodeURIComponent(l.slice(h+1))}catch(_){nm=l.slice(h+1)}}
     if(!nm){try{nm=new URL(l.replace(/^[a-z]+:\/\//i,'https://')).hostname}catch(_){nm='سرور '+(state.servers.length+1)}}
     state.servers.unshift({id:'s'+Date.now()+'_'+n,name:nm,country:guessCountry(nm),config:l,note:'',added:Date.now(),apps:[],active:true});n++});
-  if(n){$('#bulkIn').value='';toast(`${faNum(n)} سرور اضافه شد ✓`);afterChange()}else toast('هیچ کانفیگ معتبری پیدا نشد','err');
+  if(n){$('#bulkIn').value='';renderAll();const ok=await pushAdmin();toast(ok?`✓ ${faNum(n)} سرور اضافه و همگام شد`:'⚠ همگام‌سازی ناموفق',ok?'ok':'err')}
+  else toast('هیچ کانفیگ معتبری پیدا نشد','err');
 };
 function renderGateCount(){$('#gateCount').textContent=faNum(state.gates.length);$('#tabGateBadge').textContent=faNum(state.gates.length)}
 function renderGates(){
@@ -461,19 +463,21 @@ $('#gateList').addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;const gid=b.dataset.gid,ga=b.dataset.ga;
   const g=state.gates.find(x=>x.id===gid);if(!g)return;
   if(ga==='copy'){await copyText(g.code);toast('کد «'+g.code+'» کپی شد 📋')}
-  else if(ga==='toggle'){g.enabled=!g.enabled;afterChange();toast(g.enabled?'کد فعال شد ▶':'کد غیرفعال شد ⏸')}
-  else if(ga==='del'){if(confirm(`کد «${gateLabel(g)}» حذف بشه؟ (کارت‌های ورودش دیگه کار نمی‌کنن)`)){state.gates=state.gates.filter(x=>x.id!==gid);if(editingGateId===gid)resetGateForm();afterChange();toast('کد حذف شد 🗑')}}
+  else if(ga==='toggle'){g.enabled=!g.enabled;renderAll();const ok=await pushAdmin();toast(ok?(g.enabled?'کد فعال شد ▶':'کد غیرفعال شد ⏸'):'⚠ همگام‌سازی ناموفق',ok?'ok':'err')}
+  else if(ga==='del'){if(confirm(`کد «${gateLabel(g)}» حذف بشه؟ (کارت‌های ورودش دیگه کار نمی‌کنن)`)){state.gates=state.gates.filter(x=>x.id!==gid);if(editingGateId===gid)resetGateForm();renderAll();const ok=await pushAdmin();toast(ok?'کد حذف شد 🗑':'⚠ همگام‌سازی ناموفق',ok?'ok':'err')}}
   else if(ga==='edit'){editingGateId=gid;$('#gateLabel').value=g.label;$('#gateCode').value=g.code;$('#gateDays').value=String(g.days);$('#gateMax').value=String(g.maxUses);$('#gateFormTitle').textContent='✎ ویرایش کد';$('#gateSaveBtn').textContent='💾 ذخیره ویرایش';$('#gateCancelBtn').style.display='';$('#gateLabel').focus()}
 });
 function resetGateForm(){editingGateId=null;$('#gateLabel').value='';$('#gateCode').value='';$('#gateDays').value='1';$('#gateMax').value='1';$('#gateFormTitle').textContent='➕ کد جدید';$('#gateSaveBtn').textContent='💾 ذخیره کد';$('#gateCancelBtn').style.display='none'}
 $('#gateAddBtn').onclick=()=>{resetGateForm();$('#gateLabel').focus()};
 $('#gateCancelBtn').onclick=resetGateForm;
-$('#gateSaveBtn').onclick=()=>{
+$('#gateSaveBtn').onclick=async()=>{
   const label=$('#gateLabel').value.trim(),code=normCode($('#gateCode').value),days=+$('#gateDays').value,maxUses=+$('#gateMax').value;
   if(!code){toast('کد دسترسی رو بنویس','err');return}
-  if(editingGateId){const g=state.gates.find(x=>x.id===editingGateId);if(g)Object.assign(g,{label,code,days,maxUses});toast('کد ویرایش شد ✓')}
-  else{if(state.gates.some(x=>x.code===code)){toast('این کد قبلاً ساخته شده','err');return}state.gates.push({id:'g'+Date.now(),label,code,days,maxUses,enabled:true});toast('کد جدید ساخته شد ✓')}
-  resetGateForm();afterChange();
+  if(editingGateId){const g=state.gates.find(x=>x.id===editingGateId);if(g)Object.assign(g,{label,code,days,maxUses})}
+  else{if(state.gates.some(x=>x.code===code)){toast('این کد قبلاً ساخته شده','err');return}state.gates.push({id:'g'+Date.now(),label,code,days,maxUses,enabled:true})}
+  resetGateForm();renderAll();
+  const ok=await pushAdmin();
+  toast(ok?'✓ کد ذخیره و همگام شد — الان قابل استفاده‌ست':'⚠ ذخیره شد ولی به سرور نرسید — دوباره تلاش کن',ok?'ok':'err');
 };
 function renderUsersFilter(){
   const sel=$('#usersFilter');
@@ -524,7 +528,8 @@ function renderSrvSec(){$('#workerIn').value=workerBase();setSrvStat(workerBase(
 function renderAll(){renderPanelList();renderGateCount();renderGates();renderUsersFilter();renderUsers();renderSrvSec()}
 function afterChange(){
   renderAll();
-  const as=$('#autosave');as.classList.remove('flash');void as.offsetWidth;as.classList.add('flash');schedulePush();
+  const as=$('#autosave');as.classList.remove('flash');void as.offsetWidth;as.classList.add('flash');
+  pushAdmin();
 }
 function fillCountries(){
   const opts=Object.keys(COUNTRIES).map(c=>`<option value="${c}">${flagEmoji(c)} ${COUNTRIES[c]}</option>`).join('');
