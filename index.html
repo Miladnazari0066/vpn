@@ -46,7 +46,10 @@ button{font-family:inherit}
 .live i{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 9px var(--teal);animation:blink 1.6s infinite}
 @keyframes blink{50%{opacity:.2}}
 .tb-name{color:var(--ink);font-weight:700;font-family:'Vazirmatn';letter-spacing:0;font-size:.8rem}
-.gtimer{display:inline-flex;align-items:center;gap:7px;background:rgba(47,214,172,.1);border:1px solid rgba(47,214,172,.35);border-radius:9px;padding:4px 12px 4px 8px;color:var(--teal);transition:all .3s;animation:popin .5s cubic-bezier(.2,1.4,.4,1)}
+.gtwrap{position:relative;display:inline-flex}
+body:not(.role-user) .gtwrap{display:none!important}
+.gtimer{display:inline-flex;align-items:center;gap:7px;background:rgba(47,214,172,.1);border:1px solid rgba(47,214,172,.35);border-radius:9px;padding:4px 12px 4px 8px;color:var(--teal);transition:all .3s;animation:popin .5s cubic-bezier(.2,1.4,.4,1);cursor:pointer}
+.gtimer:hover{background:rgba(47,214,172,.18)}
 @keyframes popin{from{transform:scale(.4);opacity:0}}
 .gtimer .gtring{flex-shrink:0}
 .gtimer b{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;font-weight:700}
@@ -54,6 +57,22 @@ button{font-family:inherit}
 .gtimer.low .gtring .gp{stroke:var(--coral)}
 .tb-clock{margin-inline-start:auto;color:var(--amber);font-weight:700}
 .tb-tz{color:var(--faint)}
+
+/* popover اعتبار کاربر */
+.upop{position:absolute;top:calc(100% + 10px);inset-inline-start:0;width:264px;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line2);border-radius:14px;padding:18px;box-shadow:0 18px 44px rgba(0,0,0,.55);opacity:0;pointer-events:none;transform:translateY(-8px) scale(.96);transition:all .25s cubic-bezier(.2,.8,.2,1);z-index:60;text-align:center}
+.upop.open{opacity:1;pointer-events:auto;transform:none}
+.upop::before{content:'';position:absolute;top:-6px;inset-inline-start:18px;width:12px;height:12px;background:var(--card2);border-inline-start:1px solid var(--line2);border-top:1px solid var(--line2);transform:rotate(45deg)}
+.up-ring{width:118px;height:118px;margin:2px auto 12px;position:relative}
+.up-ring svg{transform:rotate(-90deg);width:100%;height:100%}
+.up-ring .ur-track{fill:none;stroke:rgba(94,234,212,.12);stroke-width:7}
+.up-ring .ur-prog{fill:none;stroke:url(#fxgrad);stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .7s ease}
+.up-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.up-center b{font-family:'Lalezar';font-weight:400;font-size:2.3rem;line-height:1;color:var(--ink)}
+.up-center span{font-size:.64rem;color:var(--teal);letter-spacing:.12em;margin-top:1px}
+.up-rows{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+.up-row{display:flex;justify-content:space-between;align-items:center;font-size:.76rem;color:var(--dim);gap:10px}
+.up-row b{color:var(--ink);font-family:var(--mono);font-size:.72rem;text-align:left;direction:ltr}
+.up-row .dev{font-family:'Vazirmatn';direction:rtl;font-size:.72rem}
 
 .masthead{max-width:1200px;margin:0 auto;padding:54px 22px 34px;display:flex;gap:48px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .mast-right{flex:1.2;min-width:300px}
@@ -85,12 +104,12 @@ h1.big{font-family:'Lalezar',cursive;font-weight:400;font-size:clamp(4rem,10vw,6
 .sblock span{font-size:.68rem;color:var(--dim);letter-spacing:.04em}
 
 .ticker{border-block:1px solid var(--line);background:rgba(10,30,38,.75);overflow:hidden}
-.tk{display:flex;width:max-content;animation:tick 36s linear infinite}
-.ticker:hover .tk{animation-play-state:paused}
-.half{display:flex;align-items:center;gap:32px;padding:11px 16px 11px 48px}
+.tk{display:inline-flex;width:max-content;animation:tick 36s linear infinite;will-change:transform}
+.half{display:inline-flex;align-items:center;gap:32px;padding:11px 16px 11px 48px;flex-shrink:0;white-space:nowrap}
 .half span{font-family:var(--mono);font-size:.74rem;letter-spacing:.18em;color:var(--dim);white-space:nowrap}
 .half i{color:var(--amber);font-style:normal;font-size:.55rem}
 @keyframes tick{to{transform:translateX(-50%)}}
+@media(hover:hover){.ticker:hover .tk{animation-play-state:paused}}
 
 main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .banner{margin:0 0 20px;padding:13px 18px;border-radius:11px;font-size:.88rem;display:flex;gap:14px;align-items:center;flex-wrap:wrap;animation:slideDown .5s ease;line-height:1.9}
@@ -179,7 +198,6 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .toast.warn{border-inline-start-color:var(--amber)}.toast.warn::after{background:var(--amber)}
 .toast.info{border-inline-start-color:var(--sky)}.toast.info::after{background:var(--sky)}
 
-/* درگاه ورود */
 #gate{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;background:rgba(5,15,19,.93);padding:22px;overflow-y:auto}
 #gate.open{display:flex;animation:gatein .45s ease}
 #gate.out{animation:gateout .5s ease forwards}
@@ -220,20 +238,20 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 #entryFx.open{display:flex;animation:fxin .4s ease}
 #entryFx.go{transform:translateY(-101%);opacity:.3}
 @keyframes fxin{from{opacity:0}}
-.fx-ring{position:relative;width:232px;height:232px;filter:drop-shadow(0 0 40px rgba(47,214,172,.25))}
-.fx-ring svg{transform:rotate(-90deg)}
+.fx-ring{position:relative;width:clamp(168px,60vw,232px);height:clamp(168px,60vw,232px);filter:drop-shadow(0 0 40px rgba(47,214,172,.25))}
+.fx-ring svg{transform:rotate(-90deg);width:100%;height:100%}
 .fx-ring .track{fill:none;stroke:rgba(94,234,212,.12);stroke-width:6}
 .fx-ring .prog{fill:none;stroke:url(#fxgrad);stroke-width:6;stroke-linecap:round;stroke-dasharray:653;stroke-dashoffset:653;transition:stroke-dashoffset 1.5s cubic-bezier(.2,.8,.2,1)}
 #entryFx.open .fx-ring .prog{stroke-dashoffset:0}
 .fx-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.fx-check{margin-bottom:4px}
+.fx-check{margin-bottom:4px;width:clamp(34px,11vw,44px);height:clamp(34px,11vw,44px)}
 .fx-check path{stroke-dasharray:46;stroke-dashoffset:46}
 #entryFx.open .fx-check path{stroke-dashoffset:0;transition:stroke-dashoffset .55s ease .4s}
-.fx-num{font-family:'Lalezar';font-weight:400;font-size:4.6rem;line-height:.95;color:var(--ink);text-shadow:0 0 34px rgba(47,214,172,.45)}
-.fx-unit{font-size:.92rem;color:var(--teal);letter-spacing:.14em;margin-top:2px}
-.fx-ttl{margin-top:30px;font-family:'Lalezar';font-weight:400;font-size:1.8rem;color:var(--ink);opacity:0;transform:translateY(10px);transition:all .5s ease .5s}
+.fx-num{font-family:'Lalezar';font-weight:400;font-size:clamp(2.8rem,12vw,4.6rem);line-height:.95;color:var(--ink);text-shadow:0 0 34px rgba(47,214,172,.45)}
+.fx-unit{font-size:clamp(.74rem,2.6vw,.92rem);color:var(--teal);letter-spacing:.14em;margin-top:2px}
+.fx-ttl{margin-top:clamp(18px,4vh,30px);font-family:'Lalezar';font-weight:400;font-size:clamp(1.3rem,5.5vw,1.8rem);color:var(--ink);opacity:0;transform:translateY(10px);transition:all .5s ease .5s}
 #entryFx.open .fx-ttl{opacity:1;transform:none}
-.fx-sub{color:var(--dim);font-size:.82rem;margin-top:9px;font-family:var(--mono);direction:ltr;opacity:0;transition:opacity .5s ease .8s}
+.fx-sub{color:var(--dim);font-size:clamp(.68rem,2.4vw,.82rem);margin-top:9px;font-family:var(--mono);direction:ltr;opacity:0;transition:opacity .5s ease .8s}
 #entryFx.open .fx-sub{opacity:1}
 .fx-spark{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);opacity:0}
 #entryFx.open .fx-spark{animation:spark 1.4s ease-out forwards}
@@ -250,17 +268,31 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .close-x{position:absolute;top:12px;left:14px;background:none;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;transition:color .2s,transform .3s}
 .close-x:hover{color:var(--coral);transform:rotate(90deg)}
 
+/* پنل */
 body.role-user #adminBtn,body.role-user #panel{display:none!important}
 #panel{position:fixed;top:0;bottom:0;inset-inline-start:0;width:min(475px,100%);background:#0a2029;border-inline-end:1px solid var(--line2);z-index:350;transform:translateX(110%);transition:transform .4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;box-shadow:-26px 0 80px rgba(0,0,0,.6)}
 #panel.open{transform:none}
-.p-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:18px 22px;border-bottom:1px solid var(--line)}
-.p-head h2{font-family:'Lalezar';font-weight:400;font-size:1.6rem;color:var(--teal)}
+.p-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--line)}
+.p-head h2{font-family:'Lalezar';font-weight:400;font-size:1.5rem;color:var(--teal)}
 .autosave{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;color:var(--faint);display:inline-flex;align-items:center;gap:6px;margin-inline-start:auto}
 .autosave::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2.2s infinite}
 .autosave.flash{animation:saveflash 1.1s}
 @keyframes saveflash{0%{color:var(--lime);text-shadow:0 0 12px rgba(198,232,90,.7)}100%{color:var(--faint)}}
 #srvStat{font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--faint);transition:color .3s}
-.p-body{flex:1;overflow-y:auto;padding:22px 22px 55px;display:flex;flex-direction:column;gap:30px}
+.p-iconbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;font-size:.95rem;transition:all .2s;display:inline-flex;align-items:center;justify-content:center}
+.p-iconbtn:hover{color:var(--teal);border-color:var(--teal);background:rgba(47,214,172,.1);transform:rotate(90deg)}
+.p-iconbtn.spin svg{animation:spin .8s linear}
+/* تب‌های پنل */
+.p-nav{position:sticky;top:0;z-index:6;display:flex;gap:6px;padding:11px 14px;background:rgba(10,32,41,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.p-nav::-webkit-scrollbar{display:none}
+.p-tab{flex:0 0 auto;display:flex;align-items:center;gap:7px;background:transparent;border:1px solid transparent;border-radius:10px;color:var(--dim);font-family:inherit;font-size:.82rem;font-weight:700;padding:9px 14px;cursor:pointer;white-space:nowrap;transition:all .2s}
+.p-tab:hover{color:var(--ink);background:rgba(47,214,172,.06)}
+.p-tab.active{color:var(--teal);background:rgba(47,214,172,.12);border-color:rgba(47,214,172,.3);box-shadow:0 4px 14px rgba(47,214,172,.1)}
+.p-tab .tbadge{font-family:var(--mono);font-size:.58rem;background:var(--teal);color:#04231c;border-radius:20px;padding:1px 7px;font-weight:700;min-width:18px;text-align:center}
+.p-body{flex:1;overflow-y:auto;padding:22px 20px 55px}
+.pane{display:none}
+.pane.active{display:flex;flex-direction:column;gap:30px;animation:panefade .35s ease}
+@keyframes panefade{from{opacity:0;transform:translateY(8px)}}
 .psec h4{font-size:.8rem;color:var(--amber);letter-spacing:.05em;margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .psec h4::after{content:'';flex:1;height:1px;background:var(--line)}
 .seat{font-family:var(--mono);font-size:.66rem;color:var(--teal);background:rgba(47,214,172,.1);border:1px solid rgba(47,214,172,.3);border-radius:7px;padding:3px 9px}
@@ -281,7 +313,6 @@ body.role-user #adminBtn,body.role-user #panel{display:none!important}
 .pacts button{width:29px;height:29px;border-radius:7px;border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;font-size:.8rem;transition:all .15s}
 .pacts button:hover{color:var(--ink);border-color:var(--teal);background:rgba(47,214,172,.1)}
 .pacts .del:hover{color:var(--coral);border-color:var(--coral);background:rgba(255,107,129,.1)}
-/* ردیف کاربر */
 .uro{display:flex;align-items:center;gap:11px;padding:11px 12px;border:1px solid var(--line);border-radius:11px;margin-bottom:9px;background:rgba(13,40,49,.5);transition:border-color .2s}
 .uro.banned{opacity:.6;border-color:rgba(255,107,129,.3)}
 .uro.expired{opacity:.5}
@@ -293,7 +324,8 @@ body.role-user #adminBtn,body.role-user #panel{display:none!important}
 .uinfo{flex:1;min-width:0}
 .uinfo b{display:block;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .uinfo .ulab{color:var(--teal)}
-.uinfo i{font-style:normal;font-family:var(--mono);font-size:.58rem;color:var(--dim);display:block;margin-top:2px}
+.uinfo i{font-style:normal;font-family:var(--mono);font-size:.56rem;color:var(--dim);display:block;margin-top:2px;line-height:1.5}
+.uinfo .dev{color:var(--sky)}
 .ust{font-family:var(--mono);font-size:.58rem;color:var(--dim);text-align:left;white-space:nowrap}
 .ust .on{color:var(--lime)}.ust .off{color:var(--faint)}.ust .ban{color:var(--coral)}
 .uacts{display:flex;gap:4px}
@@ -325,9 +357,10 @@ footer a:hover{text-decoration:underline}
   .toolbar input[type=text],.toolbar select,.f input,.f select,.f textarea{font-size:16px}
   #gateIn{font-size:1.15rem;letter-spacing:.28em}.gate-brand{font-size:3.1rem}
   .gtimer b{font-size:.64rem}.topbar{gap:10px;padding:9px 14px}
-  .fx-ring{width:190px;height:190px}.fx-num{font-size:3.6rem}
+  .p-tab{padding:8px 12px;font-size:.78rem}
+  .upop{width:min(264px,82vw)}
 }
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -341,10 +374,23 @@ footer a:hover{text-decoration:underline}
   <span class="live"><i></i> LIVE</span>
   <span class="tb-name" id="tbName">پوم</span>
   <span class="tb-tag" style="color:var(--faint)">V2RAY CONFIGS</span>
-  <span class="gtimer" id="gateTimer" style="display:none">
-    <svg class="gtring" width="17" height="17" viewBox="0 0 17 17"><circle cx="8.5" cy="8.5" r="6.5" fill="none" stroke="rgba(94,234,212,.2)" stroke-width="2"/><circle class="gp" id="gtProg" cx="8.5" cy="8.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" transform="rotate(-90 8.5 8.5)" stroke-dasharray="40.84" stroke-dashoffset="0"/></svg>
-    <b dir="ltr">--:--</b>
-  </span>
+  <div class="gtwrap" id="gtwrap">
+    <button class="gtimer" id="gateTimer" type="button" aria-label="اعتبار من">
+      <svg class="gtring" width="17" height="17" viewBox="0 0 17 17"><circle cx="8.5" cy="8.5" r="6.5" fill="none" stroke="rgba(94,234,212,.2)" stroke-width="2"/><circle class="gp" id="gtProg" cx="8.5" cy="8.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" transform="rotate(-90 8.5 8.5)" stroke-dasharray="40.84" stroke-dashoffset="0"/></svg>
+      <b dir="ltr">--:--</b>
+    </button>
+    <div class="upop" id="upop">
+      <div class="up-ring">
+        <svg viewBox="0 0 120 120"><circle class="ur-track" cx="60" cy="60" r="52"/><circle class="ur-prog" id="upProg" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="0"/></svg>
+        <div class="up-center"><b id="upDays">0</b><span>روز باقی‌مانده</span></div>
+      </div>
+      <div class="up-rows">
+        <div class="up-row"><span>زمان دقیق</span><b id="upRem">—</b></div>
+        <div class="up-row"><span>تاریخ انقضا</span><b id="upExp">—</b></div>
+        <div class="up-row"><span>دستگاه شما</span><b class="dev" id="upDev">—</b></div>
+      </div>
+    </div>
+  </div>
   <span class="tb-clock" id="clock">--:--:--</span>
   <span class="tb-tz">TEHRAN</span>
 </div>
@@ -408,16 +454,15 @@ footer a:hover{text-decoration:underline}
   <button id="adminBtn">⚙ پنل مدیریت</button>
 </footer>
 
-<!-- پردهٔ انیمیشن ورود -->
 <div id="entryFx">
   <div class="fx-ring">
-    <svg width="232" height="232" viewBox="0 0 232 232">
+    <svg viewBox="0 0 232 232">
       <defs><linearGradient id="fxgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2fd6ac"/><stop offset="1" stop-color="#ffb454"/></linearGradient></defs>
       <circle class="track" cx="116" cy="116" r="104"/>
       <circle class="prog" cx="116" cy="116" r="104"/>
     </svg>
     <div class="fx-center">
-      <svg class="fx-check" width="44" height="44" viewBox="0 0 44 44"><path d="M10 23l8 8 16-18" fill="none" stroke="#2fd6ac" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="fx-check" viewBox="0 0 44 44"><path d="M10 23l8 8 16-18" fill="none" stroke="#2fd6ac" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div class="fx-num" id="fxNum">0</div>
       <div class="fx-unit" id="fxUnit">روز</div>
     </div>
@@ -426,7 +471,6 @@ footer a:hover{text-decoration:underline}
   <div class="fx-sub" id="fxSub">—</div>
 </div>
 
-<!-- درگاه ورود -->
 <div id="gate">
   <div class="gate-inner" id="gateCard">
     <div class="lockwrap" id="lockwrap">
@@ -460,73 +504,90 @@ footer a:hover{text-decoration:underline}
 
 <aside id="panel">
   <div class="p-head">
-    <h2>⚙ مدیریت سرورها</h2>
+    <h2>⚙ مدیریت</h2>
     <span class="autosave" id="autosave">ذخیره خودکار</span>
     <span id="srvStat"></span>
+    <button class="p-iconbtn" id="refreshBtn" type="button" title="بروزرسانی از سرور">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+    </button>
     <button class="mini" id="pClose" style="font-size:1.3rem">✕</button>
   </div>
+
+  <nav class="p-nav" id="pNav">
+    <button class="p-tab active" data-tab="servers" type="button">📦 سرورها</button>
+    <button class="p-tab" data-tab="gate" type="button">🔑 کد دسترسی</button>
+    <button class="p-tab" data-tab="users" type="button">👥 کارت‌ها <span class="tbadge" id="tabUsersBadge">0</span></button>
+    <button class="p-tab" data-tab="cloud" type="button">☁ ابر</button>
+  </nav>
+
   <div class="p-body">
 
-    <section class="psec">
-      <h4>➕ افزودن سرور جدید</h4>
-      <form id="addForm" class="f">
-        <div class="frow"><input id="sName" placeholder="نام سرور — مثلاً آلمان · REALITY"><select id="sCountry"></select></div>
-        <textarea id="sCfg" placeholder="vless://...  یا  https://example.com/sub.txt"></textarea>
-        <input id="sNote" placeholder="یادداشت (اختیاری)">
-        <button class="btn primary" id="addBtn" type="submit">افزودن سرور</button>
-        <a href="javascript:void(0)" id="cancelEdit">✕ لغو ویرایش</a>
-      </form>
-    </section>
-
-    <section class="psec">
-      <h4>📥 افزودن گروهی</h4>
-      <div class="f">
-        <textarea id="bulkIn" placeholder="vless://...#DE-REALITY&#10;vless://...#SE-WS&#10;https://site.com/sub.txt"></textarea>
-        <button class="btn ghost" id="bulkBtn" type="button">افزودن همه</button>
-        <p class="hint">هر کانفیگ یک خط. نام و کشور خودکار تشخیص داده می‌شه.</p>
+    <section class="pane active" data-pane="servers">
+      <div class="psec">
+        <h4>➕ افزودن سرور جدید</h4>
+        <form id="addForm" class="f">
+          <div class="frow"><input id="sName" placeholder="نام سرور — مثلاً آلمان · REALITY"><select id="sCountry"></select></div>
+          <textarea id="sCfg" placeholder="vless://...  یا  https://example.com/sub.txt"></textarea>
+          <input id="sNote" placeholder="یادداشت (اختیاری)">
+          <button class="btn primary" id="addBtn" type="submit">افزودن سرور</button>
+          <a href="javascript:void(0)" id="cancelEdit">✕ لغو ویرایش</a>
+        </form>
       </div>
-    </section>
-
-    <section class="psec">
-      <h4>🗂 سرورها (<span id="pCount">0</span>)</h4>
-      <div id="pList"></div>
-    </section>
-
-    <section class="psec">
-      <h4>🔑 کد دسترسی کاربران</h4>
-      <div class="f">
-        <label class="switch"><input type="checkbox" id="gateOn" checked><span class="sw"></span><span class="swlbl">درگاه ورود فعال باشه</span></label>
-        <span class="flbl">کد دسترسی کاربران</span>
-        <input id="gateCode" dir="ltr" placeholder="مثلاً 482913 یا pom-vip" autocomplete="off">
-        <div class="frow">
-          <div style="display:flex;flex-direction:column;gap:6px"><span class="flbl">اعتبار (روز)</span>
-            <select id="gateDays"><option value="1">۱ روز</option><option value="10">۱۰ روز</option><option value="15">۱۵ روز</option><option value="20">۲۰ روز</option><option value="30">۳۰ روز</option></select></div>
-          <div style="display:flex;flex-direction:column;gap:6px"><span class="flbl">تعداد دستگاه/نفر</span>
-            <select id="gateMax"><option value="1">۱ نفر</option><option value="2">۲ نفر</option><option value="3">۳ نفر</option><option value="5">۵ نفر</option><option value="10">۱۰ نفر</option><option value="20">۲۰ نفر</option><option value="0">نامحدود</option></select></div>
+      <div class="psec">
+        <h4>📥 افزودن گروهی</h4>
+        <div class="f">
+          <textarea id="bulkIn" placeholder="vless://...#DE-REALITY&#10;vless://...#SE-WS&#10;https://site.com/sub.txt"></textarea>
+          <button class="btn ghost" id="bulkBtn" type="button">افزودن همه</button>
+          <p class="hint">هر کانفیگ یک خط. نام و کشور خودکار تشخیص داده می‌شه.</p>
         </div>
-        <button class="btn primary" id="gateSave" type="button">💾 ذخیره کد دسترسی</button>
-        <p class="hint">هر دستگاهی که اول با این کد وارد بشه، یه صندلی رو مال خودش می‌کنه و کس دیگه نمی‌تونه با همون کد اون صندلی رو بگیره. وقتی صندلی‌ها پر بشه، نفر بعدی پیام «ظرفیت پر» می‌گیره. رمز خودت (مدیر) هیچ محدودیتی نداره.</p>
+      </div>
+      <div class="psec">
+        <h4>🗂 سرورها (<span id="pCount">0</span>)</h4>
+        <div id="pList"></div>
       </div>
     </section>
 
-    <section class="psec">
-      <h4>👥 کارت‌های ورود <span class="seat" id="seatInfo">— / —</span></h4>
-      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-        <button class="btn ghost" id="refreshUsers" type="button" style="padding:8px 14px;font-size:.78rem">🔄 بروزرسانی</button>
-        <button class="btn ghost" id="clearExp" type="button" style="padding:8px 14px;font-size:.78rem">🧹 پاک کردن منقضی‌ها</button>
+    <section class="pane" data-pane="gate">
+      <div class="psec">
+        <h4>🔑 کد دسترسی کاربران</h4>
+        <div class="f">
+          <label class="switch"><input type="checkbox" id="gateOn" checked><span class="sw"></span><span class="swlbl">درگاه ورود فعال باشه</span></label>
+          <span class="flbl">کد دسترسی کاربران</span>
+          <input id="gateCode" dir="ltr" placeholder="مثلاً 482913 یا pom-vip" autocomplete="off">
+          <div class="frow">
+            <div style="display:flex;flex-direction:column;gap:6px"><span class="flbl">اعتبار (روز)</span>
+              <select id="gateDays"><option value="1">۱ روز</option><option value="10">۱۰ روز</option><option value="15">۱۵ روز</option><option value="20">۲۰ روز</option><option value="30">۳۰ روز</option></select></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span class="flbl">تعداد دستگاه/نفر</span>
+              <select id="gateMax"><option value="1">۱ نفر</option><option value="2">۲ نفر</option><option value="3">۳ نفر</option><option value="5">۵ نفر</option><option value="10">۱۰ نفر</option><option value="20">۲۰ نفر</option><option value="0">نامحدود</option></select></div>
+          </div>
+          <button class="btn primary" id="gateSave" type="button">💾 ذخیره کد دسترسی</button>
+          <p class="hint">هر دستگاهی که اول با این کد وارد بشه، یه صندلی رو مال خودش می‌کنه و کس دیگه نمی‌تونه با همون کد اون صندلی رو بگیره. وقتی صندلی‌ها پر بشه، نفر بعدی پیام «ظرفیت پر» می‌گیره. رمز خودت (مدیر) هیچ محدودیتی نداره.</p>
+        </div>
       </div>
-      <div id="userList"></div>
-      <p class="hint">هر ردیف یک دستگاهه که با کد فعلی وارد شده. نقطهٔ سبز = آنلاین، خاکستری = آفلاین. می‌تونی برچسب بذاری، موقت بن کنی، یا کامل پاکش کنی.</p>
     </section>
 
-    <section class="psec">
-      <h4>🛰 سرور ابری (Cloudflare)</h4>
-      <div class="f">
-        <span class="flbl">آدرس Worker</span>
-        <input id="workerIn" dir="ltr" placeholder="https://pom-gate.YOURNAME.workers.dev">
-        <button class="btn ghost" id="workerSave" type="button">💾 ذخیره آدرس</button>
-        <button class="btn primary" id="dlReady" type="button">⬇ دانلود فایل آمادهٔ سایت</button>
-        <p class="hint">آدرس Worker از پیش داخل کد نوشته شده. اگه عوضش کردی این‌جا ذخیره کن و «دانلود فایل آماده» رو بزن تا توی گیت‌هاب جایگزین کنی.</p>
+    <section class="pane" data-pane="users">
+      <div class="psec">
+        <h4>👥 کارت‌های ورود <span class="seat" id="seatInfo">— / —</span></h4>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <button class="btn ghost" id="refreshUsers" type="button" style="padding:8px 14px;font-size:.78rem">🔄 بروزرسانی وضعیت</button>
+          <button class="btn ghost" id="clearExp" type="button" style="padding:8px 14px;font-size:.78rem">🧹 پاک کردن منقضی‌ها</button>
+        </div>
+        <div id="userList"></div>
+        <p class="hint">هر ردیف یک دستگاهه که با کد فعلی وارد شده. نقطهٔ سبز = آنلاین (سایتش بازه)، خاکستری = آفلاین. مدل گوشی هم زیر شناسه نوشته شده. می‌تونی برچسب 🏷 بذاری، موقت ✋ بن کنی، یا 🗑 کامل پاکش کنی.</p>
+      </div>
+    </section>
+
+    <section class="pane" data-pane="cloud">
+      <div class="psec">
+        <h4>🛰 سرور ابری (Cloudflare)</h4>
+        <div class="f">
+          <span class="flbl">آدرس Worker</span>
+          <input id="workerIn" dir="ltr" placeholder="https://pom-gate.YOURNAME.workers.dev">
+          <button class="btn ghost" id="workerSave" type="button">💾 ذخیره آدرس</button>
+          <button class="btn primary" id="dlReady" type="button">⬇ دانلود فایل آمادهٔ سایت</button>
+          <p class="hint">آدرس Worker از پیش داخل کد نوشته شده. اگه عوضش کردی این‌جا ذخیره کن و «دانلود فایل آماده» رو بزن تا توی گیت‌هاب جایگزین کنی.</p>
+        </div>
       </div>
     </section>
 
@@ -562,6 +623,7 @@ const DAY_OPTS=[1,10,15,20,30];
 
 /* ================= ابزارها ================= */
 const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const b64safe=s=>btoa(unescape(encodeURIComponent(s)));
 const flagEmoji=cc=>String(cc||'').toUpperCase().replace(/[^A-Z]/g,'').replace(/./g,c=>String.fromCodePoint(0x1F1E6+c.charCodeAt(0)-65));
@@ -573,14 +635,31 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const NEW_WINDOW=3*24*3600*1000;
 const isNew=s=>s.added&&(Date.now()-s.added<NEW_WINDOW);
 
-/* نرمال‌سازی کد — بدون کاراکتر نامرئی literal (بدون هشدار گیت‌هاب) */
+/* نرمال‌سازی کد */
 const ZW_RE=new RegExp('[​-‏‪-‮⁠﻿]','g');
 function normCode(s){
   return String(s==null?'':s)
-    .replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+    .replace(/[۰-۹]/g,d=>'۰۱۳۴۵۷۸۹'.indexOf(d))
     .replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d))
     .replace(/［﹫＠]/g,'@').replace(ZW_RE,'').replace(/\s+/g,' ').trim();
 }
+/* شناسایی مدل/سیستم/مرورگر از User-Agent */
+function parseUA(ua){
+  ua=ua||'';let os='دستگاه نامشخص',browser='',model='';
+  if(/android/i.test(ua)){os='Android';const m=ua.match(/;\s*([^;)]+?)\s*(?:Build\b|[);])/);if(m)model=m[1].trim()}
+  else if(/iphone/i.test(ua)){os='iOS';model='iPhone'}
+  else if(/ipad/i.test(ua)){os='iPadOS';model='iPad'}
+  else if(/windows/i.test(ua)){os='Windows'}
+  else if(/macintosh|mac os/i.test(ua)){os='macOS'}
+  else if(/linux/i.test(ua)){os='Linux'}
+  if(/edg\//i.test(ua))browser='Edge';else if(/chrome/i.test(ua))browser='Chrome';
+  else if(/safari/i.test(ua))browser='Safari';else if(/firefox/i.test(ua))browser='Firefox';
+  model=model.replace(/build\/.*/i,'').replace(/[);].*$/,'').trim();
+  const dev=[model,os].filter(Boolean).join(' · ')+(browser?' · '+browser:'');
+  return {os,browser,model,dev};
+}
+const MY_DEV=parseUA(navigator.userAgent).dev;
+
 function deviceId(){
   let id=localStorage.getItem('pomDevice');
   if(!id){id='d-'+[...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('pomDevice',id)}
@@ -640,6 +719,14 @@ function guessCountry(n){
   return 'DE';
 }
 
+/* ================= زمان ================= */
+function topRem(rem){
+  if(rem>=864e5) return faNum(Math.ceil(rem/864e5))+' روز';
+  const s=Math.max(0,Math.ceil(rem/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60,pad=n=>String(n).padStart(2,'0');
+  return pad(h)+':'+pad(m)+':'+pad(sec);
+}
+const daysLeft=rem=>rem>0?Math.ceil(rem/864e5):0;
+
 /* ================= درگاه ورود ================= */
 function setMsg(m){$('#gateMsg').textContent=m||''}
 function renderCodebar(len){let h='';for(let i=0;i<12;i++)h+=`<i class="${i<len?'on':''}"></i>`;$('#codebar').innerHTML=h}
@@ -656,12 +743,10 @@ function sparks(){
     s.style.animationDelay=(Math.random()*.3)+'s';ring.appendChild(s);setTimeout(()=>s.remove(),1800)}
 }
 function playEntry(exp){
-  const total=exp-Date.now();const days=Math.ceil(total/864e5);const hours=Math.ceil(total/36e5);
-  let num,unit;if(days>=1){num=days;unit='روز'}else{num=Math.max(1,hours);unit='ساعت'}
-  $('#fxUnit').textContent=unit;$('#fxSub').textContent='تا '+faDate(new Date(exp).toISOString());
-  $('#fxNum').textContent='0';
-  $('#entryFx').classList.add('open');sparks();
-  countUp($('#fxNum'),num,1200);
+  const total=exp-Date.now();const d=daysLeft(total);const hours=Math.ceil(total/36e5);
+  let num,unit;if(d>=1){num=d;unit='روز'}else{num=Math.max(1,hours);unit='ساعت'}
+  $('#fxUnit').textContent=unit;$('#fxSub').textContent='تا '+faDate(new Date(exp).toISOString());$('#fxNum').textContent='0';
+  $('#entryFx').classList.add('open');sparks();countUp($('#fxNum'),num,1200);
   renderAll();startGateTimer();
   setTimeout(()=>$('#entryFx').classList.add('go'),1800);
   setTimeout(()=>$('#entryFx').classList.remove('open','go'),2800);
@@ -676,11 +761,12 @@ function enterSite(j,anim){
   state.locked=false;
   if(anim&&state.role==='user'){
     $('#lockwrap').classList.add('ok');burst();
-    setTimeout(()=>{hideGate(false);playEntry(j.exp)},380);
+    if(j.isNew){setTimeout(()=>{hideGate(false);playEntry(j.exp)},380)}
+    else{setTimeout(()=>{hideGate(true);renderAll();startGateTimer();startPing();toast('خوش برگشتی 👋')},380)}
   }else if(anim&&state.role==='admin'){
     $('#lockwrap').classList.add('ok');burst();
     setTimeout(()=>{hideGate(true);renderAll();toast('خوش اومدی مدیر 👑')},420);
-  }else{hideGate(false);renderAll();startGateTimer()}
+  }else{hideGate(false);renderAll();startGateTimer();if(state.role==='user')startPing()}
 }
 function enterLocalAdmin(){
   state.role='admin';document.body.classList.add('role-admin');state.locked=false;
@@ -707,44 +793,67 @@ $('#gateIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock()});
 $('#gateIn').addEventListener('input',e=>renderCodebar(normCode(e.target.value).length));
 
 function lockDown(reason){
-  setSess(null);state.role=null;state.locked=true;state.exp=0;
+  setSess(null);state.role=null;state.locked=true;state.exp=0;clearInterval(pingTimer);
   document.body.classList.remove('role-user','role-admin');
   renderAll();
   const msg=reason==='banned'?'🚫 دسترسی این دستگاه مسدود شده — با مدیر تماس بگیر':(reason==='full'?'⛔ ظرفیت این کد پر شده':'⏰ کد دسترسی منقضی شد — برای کد جدید با مدیر تماس بگیر');
   showGate(msg);toast(msg,'warn');
 }
-function fmtRem(ms){
-  const s=Math.ceil(ms/1000);const d=Math.floor(s/86400),h=Math.floor((s%86400)/3600),m=Math.floor((s%3600)/60),sec=s%60;
-  const pad=n=>String(n).padStart(2,'0');
-  if(d>0)return faNum(d)+' روز '+faNum(h)+' ساعت';
-  if(h>0)return pad(h)+':'+pad(m)+':'+pad(sec);
-  return pad(m)+':'+pad(sec);
-}
+
+/* تایمر + منوی اعتبار */
 let gateInt=null;
+function updateUserMenu(rem,total){
+  const pct=total>0?Math.max(0,Math.min(100,(rem/total)*100)):0;
+  $('#upDays').textContent=faNum(daysLeft(rem));
+  $('#upRem').textContent=topRem(rem);
+  $('#upExp').textContent=faDate(new Date(state.exp).toISOString());
+  $('#upDev').textContent=MY_DEV;
+  const up=$('#upProg');if(up)up.style.strokeDashoffset=(326.73*(1-pct/100)).toFixed(2);
+}
 function startGateTimer(){
   clearInterval(gateInt);
-  const chip=$('#gateTimer'),bar=$('#gateProgress'),prog=$('#gtProg');
+  const wrap=$('#gtwrap'),bar=$('#gateProgress'),prog=$('#gtProg');
   const sess=getSess();
-  if(state.role!=='user'||!state.exp||!sess){chip.style.display='none';bar.style.display='none';return}
-  chip.style.display='inline-flex';bar.style.display='block';
+  if(state.role!=='user'||!state.exp||!sess){wrap.style.display='none';bar.style.display='none';return}
+  wrap.style.display='inline-flex';bar.style.display='block';
   const total=Math.max(1,state.exp-(sess.iat||Date.now()));
   const tick=()=>{
     const rem=state.exp-Date.now();
     if(rem<=0){clearInterval(gateInt);lockDown('expired');return}
-    chip.querySelector('b').textContent=fmtRem(rem);
+    $('#gateTimer').querySelector('b').textContent=topRem(rem);
     const pct=Math.max(0,Math.min(100,(rem/total)*100));
     bar.style.width=pct+'%';
     bar.style.background=pct>40?'var(--teal)':pct>15?'var(--amber)':'var(--coral)';
-    chip.classList.toggle('low',pct<=15);
+    $('#gateTimer').classList.toggle('low',pct<=15);
     if(prog)prog.style.strokeDashoffset=(40.84*(1-pct/100)).toFixed(2);
+    if($('#upop').classList.contains('open'))updateUserMenu(rem,total);
   };
   tick();gateInt=setInterval(tick,1000);
 }
+$('#gateTimer').addEventListener('click',e=>{
+  e.stopPropagation();
+  const pop=$('#upop');const open=pop.classList.toggle('open');
+  if(open){const sess=getSess();const total=Math.max(1,state.exp-(sess&&sess.iat||Date.now()));updateUserMenu(Math.max(0,state.exp-Date.now()),total)}
+});
+document.addEventListener('click',e=>{if(!$('#gtwrap').contains(e.target))$('#upop').classList.remove('open')});
+
+/* ضربان آنلاین */
+let pingTimer=null;
+function startPing(){
+  clearInterval(pingTimer);
+  if(state.role!=='user')return;
+  const fire=()=>{if(document.hidden)return;const base=workerBase(),sess=getSess();if(!base||!sess)return;
+    fetch(base+'/api/ping',{method:'POST',headers:{Authorization:'Bearer '+sess.token}}).catch(()=>{})};
+  pingTimer=setInterval(fire,45000);
+}
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden&&state.role==='user'){const base=workerBase(),sess=getSess();if(base&&sess)fetch(base+'/api/ping',{method:'POST',headers:{Authorization:'Bearer '+sess.token}}).catch(()=>{})}
+});
 
 /* ================= ارتباط با سرور ================= */
 function setSrvStat(s){
   const el=$('#srvStat');if(!el)return;
-  const map={ok:['🟢 همگام با سرور','var(--teal)'],sync:['🟡 در حال ارسال…','var(--amber)'],err:['🔴 خطا در ارسال','var(--coral)'],off:['⚪ سرور وصل نیست','var(--faint)']};
+  const map={ok:['🟢 همگام','var(--teal)'],sync:['🟡 ارسال…','var(--amber)'],err:['🔴 خطا','var(--coral)'],off:['⚪ قطع','var(--faint)']};
   el.textContent=map[s][0];el.style.color=map[s][1];
 }
 let pushTimer=null;
@@ -753,29 +862,25 @@ async function pushAdmin(){
   const base=workerBase(),sess=getSess();
   if(!base||!sess||sess.role!=='admin'){setSrvStat('off');return}
   setSrvStat('sync');
-  try{
-    const r=await fetch(base+'/api/admin',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+sess.token},body:JSON.stringify({servers:state.servers,gate:state.gate})});
-    setSrvStat(r.ok?'ok':'err');
-  }catch(e){setSrvStat('err')}
+  try{const r=await fetch(base+'/api/admin',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+sess.token},body:JSON.stringify({servers:state.servers,gate:state.gate})});setSrvStat(r.ok?'ok':'err')}
+  catch(e){setSrvStat('err')}
 }
 async function adminPassAction(action,id,extra){
   const base=workerBase(),sess=getSess();
   if(!base||!sess||sess.role!=='admin')return false;
   setSrvStat('sync');
-  try{
-    const r=await fetch(base+'/api/admin/pass',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+sess.token},body:JSON.stringify({action,id,...(extra||{})})});
-    if(!r.ok)throw 0;const j=await r.json();
-    if(j.passes)state.passes=j.passes;setSrvStat('ok');renderUsers();return true;
-  }catch(e){setSrvStat('err');toast('عملیات ناموفق','err');return false}
+  try{const r=await fetch(base+'/api/admin/pass',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+sess.token},body:JSON.stringify({action,id,...(extra||{})})});
+    if(!r.ok)throw 0;const j=await r.json();if(j.passes)state.passes=j.passes;setSrvStat('ok');renderUsers();return true}
+  catch(e){setSrvStat('err');toast('عملیات ناموفق','err');return false}
 }
-async function refreshAdmin(){
+async function refreshAdmin(silent){
   const base=workerBase(),sess=getSess();
   if(!base||!sess||sess.role!=='admin')return;
-  try{
-    const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+sess.token}});
-    if(r.ok){const j=await r.json();if(j.passes)state.passes=j.passes;if(j.gate)state.gate=normalizeGate(j.gate);renderUsers();renderGateSec()}
-  }catch(e){}
+  try{const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+sess.token}});
+    if(r.ok){const j=await r.json();if(j.passes)state.passes=j.passes;if(j.gate)state.gate=normalizeGate(j.gate);if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated}renderUsers();renderGateSec();renderPanelList();renderStats();if(!silent)toast('بروزرسانی شد 🔄')}}
+  catch(e){if(!silent)toast('خطا در بروزرسانی','err')}
 }
+$('#refreshBtn').onclick=async()=>{const b=$('#refreshBtn');b.classList.add('spin');await refreshAdmin();setTimeout(()=>b.classList.remove('spin'),800)};
 $('#workerSave').onclick=()=>{
   const v=$('#workerIn').value.trim().replace(/\/+$/,'');
   if(v&&!/^https:\/\//.test(v)){toast('آدرس باید با https:// شروع بشه','err');return}
@@ -785,15 +890,23 @@ $('#workerSave').onclick=()=>{
 $('#dlReady').onclick=async()=>{
   const base=workerBase();if(!base){toast('اول آدرس Worker رو وارد و ذخیره کن','err');return}
   const btn=$('#dlReady');btn.disabled=true;btn.textContent='در حال ساخت فایل…';
-  try{
-    const src=await(await fetch(location.href)).text();const needle="workerUrl: '";const i=src.indexOf(needle);
+  try{const src=await(await fetch(location.href)).text();const needle="workerUrl: '";const i=src.indexOf(needle);
     if(i<0)throw new Error('خط CONFIG پیدا نشد');const j=src.indexOf("'",i+needle.length);
     const out=src.slice(0,i+needle.length)+base+src.slice(j);
     const blob=new Blob([out],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='index.html';a.click();URL.revokeObjectURL(a.href);
-    toast('فایل آماده دانلود شد 📁 — توی گیت‌هاب جایگزین index.html کن');
-  }catch(e){toast('خطا: '+e.message+' — سایت رو از آدرس گیت‌هاب باز کن','err')}
+    toast('فایل آماده دانلود شد 📁 — توی گیت‌هاب جایگزین index.html کن')}
+  catch(e){toast('خطا: '+e.message+' — سایت رو از آدرس گیت‌هاب باز کن','err')}
   btn.disabled=false;btn.textContent='⬇ دانلود فایل آمادهٔ سایت';
 };
+
+/* ================= تب‌های پنل ================= */
+$$('#pNav .p-tab').forEach(b=>b.addEventListener('click',()=>{
+  $$('#pNav .p-tab').forEach(x=>x.classList.remove('active'));
+  $$('.pane').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  const pane=$(`.pane[data-pane="${b.dataset.tab}"]`);if(pane)pane.classList.add('active');
+  if(b.dataset.tab==='users')refreshAdmin(true);
+}));
 
 /* ================= رندر ================= */
 function filtered(){
@@ -853,19 +966,21 @@ function renderStats(){
 function renderGateSec(){$('#gateOn').checked=state.gate.enabled;$('#gateCode').value=state.gate.code;$('#gateDays').value=String(state.gate.days);$('#gateMax').value=String(state.gate.maxUses)}
 function renderUsers(){
   const now=Date.now();
-  const activeSeats=new Set(state.passes.filter(p=>p.codeRef===state.gate.code&&!p.banned&&p.exp>now).map(p=>p.deviceId)).size;
+  const active=state.passes.filter(p=>p.codeRef===state.gate.code&&!p.banned&&p.exp>now);
   const cap=state.gate.maxUses>0?faNum(state.gate.maxUses):'∞';
-  $('#seatInfo').textContent=`${faNum(activeSeats)} / ${cap} صندلی`;
+  $('#seatInfo').textContent=`${faNum(active.length)} / ${cap} صندلی`;
+  $('#tabUsersBadge').textContent=faNum(active.length);
   const list=[...state.passes].sort((a,b)=>(b.lastSeen||0)-(a.lastSeen||0));
   $('#userList').innerHTML=list.map(p=>{
     const online=p.lastSeen&&now-p.lastSeen<180000;const expired=p.exp<=now;const same=p.codeRef===state.gate.code;
     const dot=p.banned?'ban':(expired?'exp':(online?'on':''));
     const st=p.banned?'<span class="ban">مسدود</span>':(expired?'<span class="off">منقضی</span>':(online?'<span class="on">آنلاین</span>':'<span class="off">آفلاین</span>'));
-    const name=p.label?`<span class="ulab">${esc(p.label)}</span>`:esc(p.deviceId.slice(0,12))+'…';
-    const tag=!same?' · کد قبلی':(p.banned?'':(expired?'':' · فعال'));
+    const name=p.label?`<span class="ulab">${esc(p.label)}</span>`:esc(p.deviceId.slice(0,10))+'…';
+    const dev=esc(parseUA(p.ua).dev||'—');
+    const tag=!same?' · کد قبلی':'';
     return `<div class="uro ${p.banned?'banned':''} ${expired?'expired':''}">
       <span class="udot ${dot}"></span>
-      <div class="uinfo"><b>${name}</b><i>${esc(p.deviceId.slice(0,8))}${tag} · انقضا ${faDate(new Date(p.exp).toISOString())}</i></div>
+      <div class="uinfo"><b>${name}</b><i><span class="dev">${dev}</span>${tag} · انقضا ${faDate(new Date(p.exp).toISOString())}</i></div>
       <div class="ust">${st}</div>
       <div class="uacts">
         <button data-a="label" data-id="${p.id}" title="برچسب">🏷</button>
@@ -881,7 +996,7 @@ $('#userList').addEventListener('click',async e=>{
   else if(a==='unban'){await adminPassAction('unban',id);toast('مسدودیت رفع شد ↩')}
   else if(a==='delete'){if(confirm('این کارت ورود کامل حذف بشه؟')){await adminPassAction('delete',id);toast('حذف شد 🗑')}}
 });
-$('#refreshUsers').onclick=async()=>{await refreshAdmin();toast('لیست بروزرسانی شد 🔄')};
+$('#refreshUsers').onclick=async()=>{await refreshAdmin();toast('وضعیت بروزرسانی شد 🔄')};
 $('#clearExp').onclick=async()=>{if(confirm('کارت‌های منقضی پاک بشن؟')){await adminPassAction('clearExpired');toast('منقضی‌ها پاک شدن 🧹')}};
 function renderSrvSec(){$('#workerIn').value=workerBase();setSrvStat(workerBase()?'ok':'off')}
 function renderAll(){renderStatusBanner();renderTicker();renderStats();renderGrid();renderPanelList();renderGateSec();renderUsers();renderSrvSec()}
@@ -946,7 +1061,7 @@ function fillCountries(){
 /* ================= پنل ================= */
 function tryOpenPanel(){
   if(state.role!=='admin'){toast('فقط مدیر به پنل دسترسی داره','err');return}
-  $('#panel').classList.add('open');renderPanelList();refreshAdmin();
+  $('#panel').classList.add('open');renderPanelList();refreshAdmin(true);
 }
 $('#adminBtn').onclick=tryOpenPanel;
 $('#pClose').onclick=()=>$('#panel').classList.remove('open');
@@ -1023,13 +1138,12 @@ document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('#qrOver
   if(CONFIG.telegram){const t=$('#tgLink');t.href='https://t.me/'+CONFIG.telegram.replace('@','');t.style.display='inline'}
   fillCountries();
 
-  const base=workerBase(),sess=getSess();let entered=false,pendingReason=null;
+  const base=workerBase(),sess=getSess();let entered=false;
   if(base&&sess){
-    try{
-      const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+sess.token}});
+    try{const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+sess.token}});
       if(r.ok){const j=await r.json();j.exp=j.exp||sess.exp;enterSite(j,false);entered=true}
-      else{const j=await r.json().catch(()=>({}));pendingReason=j.reason;setSess(null)}
-    }catch(e){setSess(null)}
+      else{setSess(null)}}
+    catch(e){setSess(null)}
   }else if(sess&&!base){setSess(null)}
 
   $('#loading').remove();
