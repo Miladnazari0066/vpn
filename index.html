@@ -552,7 +552,9 @@ function guessCountry(n){
 }
 
 /* ================= درگاه ورود ================= */
+  const fixDigits=s=>s.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
 function setMsg(m){$('#gateMsg').textContent=m||''}
+  function setMsg(m){$('#gateMsg').textContent=m||''}
 function showGate(msg){
   setMsg(msg);
   $('#gate').classList.add('open');
@@ -589,7 +591,7 @@ function enterLocalAdmin(){
 }
 async function tryUnlock(){
   const gi=$('#gateIn'),gb=$('#gateBtn');
-  const code=gi.value.trim();
+  const code=fixDigits(gi.value.trim());
   if(!code)return;
   const base=workerBase();
   setMsg('');
@@ -890,7 +892,7 @@ $('#bulkBtn').onclick=()=>{
 };
 $('#gateSave').onclick=()=>{
   state.gate.enabled=$('#gateOn').checked;
-  state.gate.code=$('#gateCode').value.trim();
+  state.gate.code=fixDigits($('#gateCode').value.trim());
   state.gate.days=+$('#gateDays').value;
   if(state.gate.enabled&&!state.gate.code){toast('اول کد دسترسی رو بنویس','err');renderGateSec();return}
   afterChange();
