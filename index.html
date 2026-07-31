@@ -111,6 +111,7 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .toolbar input:focus,.toolbar select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(47,214,172,.14)}
 .btn{cursor:pointer;border-radius:10px;padding:11px 19px;font-size:.87rem;font-weight:700;border:1px solid transparent;transition:transform .15s,box-shadow .2s,background .2s,border-color .2s,color .2s;display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none}
 .btn:active{transform:scale(.95)}
+.btn:disabled{opacity:.55;cursor:wait}
 .btn.primary{background:var(--amber);color:#2b1703}
 .btn.primary:hover{box-shadow:0 6px 24px rgba(255,180,84,.35);transform:translateY(-2px)}
 .btn.ghost{background:transparent;color:var(--dim);border-color:var(--line)}
@@ -210,6 +211,10 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .codebar i{width:8px;height:8px;border-radius:50%;background:#16343d;transition:all .25s}
 .codebar i.on{background:var(--teal);box-shadow:0 0 9px rgba(47,214,172,.8);transform:scale(1.15)}
 .gate-msg{margin-top:14px;font-size:.82rem;color:var(--amber);min-height:1.5em;line-height:1.9}
+.cooldown{margin-top:14px}
+.cd-bar{height:6px;border-radius:6px;background:#081a20;overflow:hidden;border:1px solid rgba(255,107,129,.3)}
+.cd-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--coral),var(--amber));border-radius:6px;transition:width 1s linear;width:100%}
+.cd-text{display:block;text-align:center;font-family:var(--mono);font-size:.72rem;color:var(--coral);margin-top:7px}
 .shake{animation:shake .4s}
 @keyframes shake{25%{transform:translateX(7px)}50%{transform:translateX(-7px)}75%{transform:translateX(4px)}}
 #entryFx{position:fixed;inset:0;z-index:480;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle at 50% 38%,rgba(13,40,49,.98),rgba(5,15,19,.99));transition:transform 1s cubic-bezier(.85,0,.15,1),opacity .7s ease}
@@ -388,6 +393,10 @@ footer a:hover{text-decoration:underline}
     </div>
     <div class="codebar" id="codebar"></div>
     <p class="gate-msg" id="gateMsg"></p>
+    <div class="cooldown" id="cooldown" style="display:none">
+      <div class="cd-bar"><i id="cdFill"></i></div>
+      <span class="cd-text" id="cdText"></span>
+    </div>
   </div>
 </div>
 <div class="overlay" id="qrOverlay">
@@ -401,11 +410,7 @@ footer a:hover{text-decoration:underline}
 </div>
 <div id="toasts"></div>
 <script>
-const CONFIG = {
-  siteName : 'پوم',
-  telegram : '',
-  workerUrl: 'https://pom-gate.pomgate.workers.dev',
-};
+const CONFIG = { siteName:'پوم', telegram:'', workerUrl:'https://pom-gate.pomgate.workers.dev' };
 const APPS = [
   {id:'v2rayng', name:'V2rayNG',    ch:'V', color:'#ff6b81', scheme:'v2rayng://install-config?url=',   known:true},
   {id:'mahsang', name:'MahsaNG',    ch:'M', color:'#2fd6ac', scheme:'mahsang://install-config?url=',   known:true},
@@ -414,11 +419,7 @@ const APPS = [
   {id:'happ',    name:'Happ',       ch:'H', color:'#c6e85a', scheme:'happ://add/', b64:true,           known:false},
 ];
 const APPMAP = Object.fromEntries(APPS.map(a=>[a.id,a]));
-const COUNTRIES = {
-  DE:'آلمان',NL:'هلند',SE:'سوئد',FR:'فرانسه',US:'آمریکا',UK:'انگلیس',TR:'ترکیه',AE:'امارات',
-  SG:'سنگاپور',JP:'ژاپن',CA:'کانادا',CH:'سوئیس',IT:'ایتالیا',ES:'اسپانیا',PL:'لهستان',FI:'فنلاند',
-  NO:'نروژ',AT:'اتریش',BE:'بلژیک',RU:'روسیه',KR:'کره جنوبی',AU:'استرالیا',IN:'هند',BR:'برزیل',IR:'ایران',
-};
+const COUNTRIES = { DE:'آلمان',NL:'هلند',SE:'سوئد',FR:'فرانسه',US:'آمریکا',UK:'انگلیس',TR:'ترکیه',AE:'امارات',SG:'سنگاپور',JP:'ژاپن',CA:'کانادا',CH:'سوئیس',IT:'ایتالیا',ES:'اسپانیا',PL:'لهستان',FI:'فنلاند',NO:'نروژ',AT:'اتریش',BE:'بلژیک',RU:'روسیه',KR:'کره جنوبی',AU:'استرالیا',IN:'هند',BR:'برزیل',IR:'ایران' };
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -431,70 +432,19 @@ const faDate=iso=>{try{return new Intl.DateTimeFormat('fa-IR',{day:'numeric',mon
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const NEW_WINDOW=3*24*3600*1000;
 const isNew=s=>s.added&&(Date.now()-s.added<NEW_WINDOW);
-function relTime(ts){
-  if(!ts)return '';
-  const d=Date.now()-ts;
-  if(d<45000)return 'همین الان';
-  if(d<3600000)return faNum(Math.floor(d/60000))+' دقیقه پیش';
-  if(d<864e5)return faNum(Math.floor(d/3600000))+' ساعت پیش';
-  if(d<30*864e5)return faNum(Math.floor(d/864e5))+' روز پیش';
-  return faDate(new Date(ts).toISOString());
-}
+function relTime(ts){ if(!ts)return ''; const d=Date.now()-ts; if(d<45000)return 'همین الان'; if(d<3600000)return faNum(Math.floor(d/60000))+' دقیقه پیش'; if(d<864e5)return faNum(Math.floor(d/3600000))+' ساعت پیش'; if(d<30*864e5)return faNum(Math.floor(d/864e5))+' روز پیش'; return faDate(new Date(ts).toISOString()); }
 const ZW_RE=new RegExp('[​-‏‪-‮⁠﻿]','g');
-function normCode(s){
-  return String(s==null?'':s)
-    .replace(/[۰-۹]/g,d=>'۰۱۳۴۵۷۸۹'.indexOf(d))
-    .replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d))
-    .replace(/［﹫＠]/g,'@').replace(ZW_RE,'').replace(/\s+/g,' ').trim();
-}
-function parseUA(ua){
-  ua=ua||'';let os='دستگاه نامشخص',browser='',model='';
-  if(/android/i.test(ua)){os='Android';const m=ua.match(/;\s*([^;)]+?)\s*(?:Build\b|[);])/);if(m)model=m[1].trim()}
-  else if(/iphone/i.test(ua)){os='iOS';model='iPhone'}
-  else if(/ipad/i.test(ua)){os='iPadOS';model='iPad'}
-  else if(/windows/i.test(ua)){os='Windows'}
-  else if(/macintosh|mac os/i.test(ua)){os='macOS'}
-  else if(/linux/i.test(ua)){os='Linux'}
-  if(/edg\//i.test(ua))browser='Edge';else if(/chrome/i.test(ua))browser='Chrome';
-  else if(/safari/i.test(ua))browser='Safari';else if(/firefox/i.test(ua))browser='Firefox';
-  model=model.replace(/build\/.*/i,'').replace(/[);].*$/,'').trim();
-  const dev=[model,os].filter(Boolean).join(' · ')+(browser?' · '+browser:'');
-  return {os,browser,model,dev};
-}
+function normCode(s){ return String(s==null?'':s).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/［﹫＠]/g,'@').replace(ZW_RE,'').replace(/\s+/g,' ').trim(); }
+function parseUA(ua){ ua=ua||'';let os='دستگاه نامشخص',browser='',model=''; if(/android/i.test(ua)){os='Android';const m=ua.match(/;\s*([^;)]+?)\s*(?:Build\b|[);])/);if(m)model=m[1].trim()} else if(/iphone/i.test(ua)){os='iOS';model='iPhone'} else if(/ipad/i.test(ua)){os='iPadOS';model='iPad'} else if(/windows/i.test(ua)){os='Windows'} else if(/macintosh|mac os/i.test(ua)){os='macOS'} else if(/linux/i.test(ua)){os='Linux'} if(/edg\//i.test(ua))browser='Edge';else if(/chrome/i.test(ua))browser='Chrome'; else if(/safari/i.test(ua))browser='Safari';else if(/firefox/i.test(ua))browser='Firefox'; model=model.replace(/build\/.*/i,'').replace(/[);].*$/,'').trim(); const dev=[model,os].filter(Boolean).join(' · ')+(browser?' · '+browser:''); return {os,browser,model,dev}; }
 const MY_DEV=parseUA(navigator.userAgent).dev;
-function deviceId(){
-  let id=localStorage.getItem('pomDevice');
-  if(!id){id='d-'+[...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('pomDevice',id)}
-  return id;
-}
+function deviceId(){ let id=localStorage.getItem('pomDevice'); if(!id){id='d-'+[...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('pomDevice',id)} return id; }
 const DEVICE=deviceId();
-async function copyText(t){
-  try{await navigator.clipboard.writeText(t)}
-  catch(e){const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(_){}
-  ta.remove()}
-  return true;
-}
-function toast(msg,type='ok'){
-  const el=document.createElement('div');el.className='toast '+type;el.innerHTML=msg;
-  $('#toasts').appendChild(el);requestAnimationFrame(()=>el.classList.add('show'));
-  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),350)},3800);
-}
-function countUp(el,to,dur=900,fa=true){
-  const start=performance.now();
-  (function f(now){const p=Math.min(1,(now-start)/dur);const v=Math.round(p*to);el.textContent=fa?faNum(v):v;if(p<1)requestAnimationFrame(f)})(start);
-}
-function scramble(el,final,dur=950){
-  if(reduced){el.textContent=final;return}
-  const chars='ابپتثجچحخدذرزسشصعغفقکگلمنوهی0123456789#@$%&';const start=performance.now();
-  (function frame(now){const p=Math.min(1,(now-start)/dur);const rev=Math.floor(p*final.length);let out='';
-    for(let i=0;i<final.length;i++){if(final[i]===' '){out+=' ';continue}out+= i<rev?final[i]:chars[(Math.random()*chars.length)|0]}
-    el.textContent=out;if(p<1)requestAnimationFrame(frame);else el.textContent=final})(start);
-}
+async function copyText(t){ try{await navigator.clipboard.writeText(t)} catch(e){const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(_){} ta.remove()} return true; }
+function toast(msg,type='ok'){ const el=document.createElement('div');el.className='toast '+type;el.innerHTML=msg; $('#toasts').appendChild(el);requestAnimationFrame(()=>el.classList.add('show')); setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),350)},3800); }
+function countUp(el,to,dur=900,fa=true){ const start=performance.now(); (function f(now){const p=Math.min(1,(now-start)/dur);const v=Math.round(p*to);el.textContent=fa?faNum(v):v;if(p<1)requestAnimationFrame(f)})(start); }
+function scramble(el,final,dur=950){ if(reduced){el.textContent=final;return} const chars='ابپتثجچحخدذرزسشصعغفقکگلمنوهی0123456789#@$%&';const start=performance.now(); (function frame(now){const p=Math.min(1,(now-start)/dur);const rev=Math.floor(p*final.length);let out=''; for(let i=0;i<final.length;i++){if(final[i]===' '){out+=' ';continue}out+= i<rev?final[i]:chars[(Math.random()*chars.length)|0]} el.textContent=out;if(p<1)requestAnimationFrame(frame);else el.textContent=final})(start); }
 const ua=navigator.userAgent;
-const state={
-  servers:[],generated:null,q:'',fc:'',fp:'',locked:true,role:null,exp:0,
-  platform:/android/i.test(ua)?'android':/iphone|ipad|ipod/i.test(ua)?'ios':'desktop',
-};
+const state={ servers:[],generated:null,q:'',fc:'',fp:'',locked:true,role:null,exp:0, platform:/android/i.test(ua)?'android':/iphone|ipad|ipod/i.test(ua)?'ios':'desktop' };
 const expanded=new Set();
 function normalize(s){return{id:s.id||'s'+Math.random().toString(36).slice(2,8),name:s.name||'سرور',country:s.country||'DE',config:s.config||'',note:s.note||'',added:s.added||null,apps:Array.isArray(s.apps)?s.apps:[],active:s.active!==false}}
 const workerBase=()=>((CONFIG.workerUrl||'').replace(/\/+$/,''));
@@ -502,219 +452,48 @@ function getSess(){try{return JSON.parse(localStorage.getItem('pomSess'))}catch(
 function setSess(s){s?localStorage.setItem('pomSess',JSON.stringify(s)):localStorage.removeItem('pomSess')}
 function protoOf(s){if(/^https?:\/\//i.test(s.config))return'sub';const m=s.config.match(/^([a-z]+):\/\//i);return m?m[1].toLowerCase():'other'}
 function maskCfg(c){if(c.length<=52)return c;const h=c.indexOf('#');const tail=h>-1?' '+c.slice(h):'';return c.slice(0,44)+'…'+tail}
-function topRem(rem){
-  if(rem>=864e5) return faNum(Math.ceil(rem/864e5))+' روز';
-  const s=Math.max(0,Math.ceil(rem/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60,pad=n=>String(n).padStart(2,'0');
-  return pad(h)+':'+pad(m)+':'+pad(sec);
-}
+function topRem(rem){ if(rem>=864e5) return faNum(Math.ceil(rem/864e5))+' روز'; const s=Math.max(0,Math.ceil(rem/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60),sec=s%60,pad=n=>String(n).padStart(2,'0'); return pad(h)+':'+pad(m)+':'+pad(sec); }
 const daysLeft=rem=>rem>0?Math.ceil(rem/864e5):0;
 function setMsg(m){$('#gateMsg').textContent=m||''}
 function renderCodebar(len){let h='';for(let i=0;i<12;i++)h+=`<i class="${i<len?'on':''}"></i>`;$('#codebar').innerHTML=h}
 function burst(){const w=$('#lockwrap');if(!w)return;for(let i=0;i<3;i++){const s=document.createElement('span');s.className='burst';s.style.animationDelay=(i*90)+'ms';w.appendChild(s);setTimeout(()=>s.remove(),900)}}
 function showGate(msg){setMsg(msg);$('#gate').classList.add('open');document.body.style.overflow='hidden';renderCodebar(0);setTimeout(()=>$('#gateIn').focus(),180)}
 function hideGate(anim){const g=$('#gate');if(anim){g.classList.add('out');setTimeout(()=>{g.classList.remove('open','out');$('#lockwrap').classList.remove('ok');document.body.style.overflow=''},480)}else{g.classList.remove('open');$('#lockwrap').classList.remove('ok');document.body.style.overflow=''}}
-function wrongCode(msg){const b=$('#gateCard');b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');const gi=$('#gateIn');gi.classList.add('bad');setTimeout(()=>gi.classList.remove('bad'),900);gi.value='';renderCodebar(0);gi.focus();setMsg(msg);toast(msg,'err')}
-function sparks(){
-  const ring=$('#entryFx .fx-ring');if(!ring||reduced)return;
-  for(let i=0;i<14;i++){const s=document.createElement('span');s.className='fx-spark';
-    const a=Math.random()*Math.PI*2,d=120+Math.random()*60;
-    s.style.left='50%';s.style.top='50%';s.style.setProperty('--sx',Math.cos(a)*d+'px');s.style.setProperty('--sy',Math.sin(a)*d+'px');
-    s.style.animationDelay=(Math.random()*.3)+'s';ring.appendChild(s);setTimeout(()=>s.remove(),1800)}
-}
-function playEntry(exp){
-  const total=exp-Date.now();const d=daysLeft(total);const hours=Math.ceil(total/36e5);
-  let num,unit;if(d>=1){num=d;unit='روز'}else{num=Math.max(1,hours);unit='ساعت'}
-  $('#fxUnit').textContent=unit;$('#fxSub').textContent='تا '+faDate(new Date(exp).toISOString());$('#fxNum').textContent='0';
-  $('#entryFx').classList.add('open');sparks();countUp($('#fxNum'),num,1200);
-  renderAll();startGateTimer();
-  setTimeout(()=>$('#entryFx').classList.add('go'),1800);
-  setTimeout(()=>$('#entryFx').classList.remove('open','go'),2800);
-}
-function enterSite(j,anim){
-  state.role=j.role;
-  state.exp=(j.role==='public')?0:(j.exp||0);
-  if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated||state.generated}
-  document.body.classList.add(j.role==='public'?'role-user':('role-'+state.role));
-  state.locked=false;
-  if(anim&&state.role==='user'){
-    $('#lockwrap').classList.add('ok');burst();
-    if(j.isNew){setTimeout(()=>{hideGate(false);playEntry(j.exp)},380)}
-    else{setTimeout(()=>{hideGate(true);renderAll();startGateTimer();startPing();toast('خوش برگشتی 👋')},380)}
-  }else{hideGate(false);renderAll();if(state.role==='user'){startGateTimer();startPing()}}
-}
-async function tryUnlock(){
-  const gi=$('#gateIn'),gb=$('#gateBtn');const code=normCode(gi.value);if(!code)return;
-  const base=workerBase();setMsg('');
-  if(!base){wrongCode('سرور ابری وصل نشده — بعداً دوباره تلاش کن');return}
-  gi.disabled=true;gb.disabled=true;gb.textContent='در حال بررسی…';
-  try{
-    const r=await fetch(base+'/api/unlock',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,device:DEVICE})});
-    const j=await r.json().catch(()=>({}));
-    if(r.status===429)wrongCode(j.error||'تلاش بیش از حد — چند دقیقه صبر کن');
-    else if(!r.ok)wrongCode(j.error||'کد دسترسی اشتباهه ❌');
-    else{setSess({token:j.token,role:j.role,exp:j.exp||0,iat:Date.now()});enterSite(j,true)}
-  }catch(e){wrongCode('خطا در اتصال — اینترنت رو چک کن')}
-  gi.disabled=false;gb.disabled=false;gb.textContent='🔓 باز کردن درگاه';
-}
+function wrongCode(msg){const b=$('#gateCard');b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');const gi=$('#gateIn');gi.classList.add('bad');setTimeout(()=>gi.classList.remove('bad'),900);gi.value='';renderCodebar(0);setMsg(msg);toast(msg,'err')}
+let cdTimer=null;
+function showCooldown(sec){ const wrap=$('#cooldown'),fill=$('#cdFill'),txt=$('#cdText'),btn=$('#gateBtn'),gi=$('#gateIn'); wrap.style.display='block';btn.disabled=true;gi.disabled=true; clearInterval(cdTimer); let left=sec;const total=sec; const tick=()=>{ txt.textContent=faNum(left)+' ثانیه تا باز شدن'; fill.style.width=(Math.max(0,left)/total*100)+'%'; if(left<=0){clearInterval(cdTimer);wrap.style.display='none';btn.disabled=false;gi.disabled=false;gi.focus();return} left--; }; tick();cdTimer=setInterval(tick,1000); }
+function sparks(){ const ring=$('#entryFx .fx-ring');if(!ring||reduced)return; for(let i=0;i<14;i++){const s=document.createElement('span');s.className='fx-spark'; const a=Math.random()*Math.PI*2,d=120+Math.random()*60; s.style.left='50%';s.style.top='50%';s.style.setProperty('--sx',Math.cos(a)*d+'px');s.style.setProperty('--sy',Math.sin(a)*d+'px'); s.style.animationDelay=(Math.random()*.3)+'s';ring.appendChild(s);setTimeout(()=>s.remove(),1800)} }
+function playEntry(exp){ const total=exp-Date.now();const d=daysLeft(total);const hours=Math.ceil(total/36e5); let num,unit;if(d>=1){num=d;unit='روز'}else{num=Math.max(1,hours);unit='ساعت'} $('#fxUnit').textContent=unit;$('#fxSub').textContent='تا '+faDate(new Date(exp).toISOString());$('#fxNum').textContent='0'; $('#entryFx').classList.add('open');sparks();countUp($('#fxNum'),num,1200); renderAll();startGateTimer(); setTimeout(()=>$('#entryFx').classList.add('go'),1800); setTimeout(()=>$('#entryFx').classList.remove('open','go'),2800); }
+function enterSite(j,anim){ state.role=j.role; state.exp=(j.role==='public')?0:(j.exp||0); if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated||state.generated} document.body.classList.add(j.role==='public'?'role-user':('role-'+state.role)); state.locked=false; if(anim&&state.role==='user'){ $('#lockwrap').classList.add('ok');burst(); if(j.isNew){setTimeout(()=>{hideGate(false);playEntry(j.exp)},380)} else{setTimeout(()=>{hideGate(true);renderAll();startGateTimer();startPing();toast('خوش برگشتی 👋')},380)} }else{hideGate(false);renderAll();if(state.role==='user'){startGateTimer();startPing()}} }
+async function tryUnlock(){ const gi=$('#gateIn'),gb=$('#gateBtn');const code=normCode(gi.value);if(!code)return; const base=workerBase();setMsg(''); if(!base){wrongCode('سرور ابری وصل نشده — بعداً دوباره تلاش کن');return} gi.disabled=true;gb.disabled=true;gb.textContent='در حال بررسی…'; try{ const r=await fetch(base+'/api/unlock',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,device:DEVICE})}); const j=await r.json().catch(()=>({})); if(r.status===429){setMsg(j.error||'تلاش بیش از حد');showCooldown(j.retryAfter||10);gb.textContent='🔓 باز کردن درگاه';return} if(!r.ok){ wrongCode(j.error||'کد دسترسی اشتباهه ❌'); if(j.triesLeft!==undefined&&j.triesLeft>0)setMsg(`کد اشتباهه — ${faNum(j.triesLeft)} تلاش دیگه مونده`); gi.disabled=false;gb.disabled=false;gb.textContent='🔓 باز کردن درگاه';return; } setSess({token:j.token,role:j.role,exp:j.exp||0,iat:Date.now()});enterSite(j,true); }catch(e){wrongCode('خطا در اتصال — اینترنت رو چک کن')} gi.disabled=false;gb.disabled=false;gb.textContent='🔓 باز کردن درگاه'; }
 $('#gateBtn').onclick=tryUnlock;
 $('#gateIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock()});
 $('#gateIn').addEventListener('input',e=>renderCodebar(normCode(e.target.value).length));
-function lockDown(reason){
-  setSess(null);state.role=null;state.locked=true;state.exp=0;clearInterval(pingTimer);
-  document.body.classList.remove('role-user','role-admin');
-  $('#gtwrap').style.display='none';$('#gateProgress').style.display='none';
-  renderAll();
-  const msg=reason==='banned'?'🚫 دسترسی این دستگاه مسدود شده — با مدیر تماس بگیر':(reason==='full'?'⛔ ظرفیت این کد پر شده':'⏰ کد دسترسی منقضی شد — برای کد جدید با مدیر تماس بگیر');
-  showGate(msg);toast(msg,'warn');
-}
-$('#logoutBtn').onclick=()=>{
-  if(!confirm('از حساب خارج می‌شی؟ برای ورود دوباره باید کد دسترسی بزنی. (همین دستگاه شناخته می‌مونه و صندلی جدید مصرف نمی‌شه)'))return;
-  setSess(null);state.role=null;state.locked=true;state.exp=0;
-  clearInterval(pingTimer);clearInterval(gateInt);
-  document.body.classList.remove('role-user','role-admin');
-  $('#gtwrap').style.display='none';$('#gateProgress').style.display='none';
-  renderAll();showGate('');
-  toast('خارج شدی 👋 برای ورود دوباره کد دسترسی رو بزن');
-};
+function lockDown(reason){ setSess(null);state.role=null;state.locked=true;state.exp=0;clearInterval(pingTimer); document.body.classList.remove('role-user','role-admin'); $('#gtwrap').style.display='none';$('#gateProgress').style.display='none'; renderAll(); const msg=reason==='banned'?'🚫 دسترسی این دستگاه مسدود شده — با مدیر تماس بگیر':(reason==='full'?'⛔ ظرفیت این کد پر شده':'⏰ کد دسترسی منقضی شد — برای کد جدید با مدیر تماس بگیر'); showGate(msg);toast(msg,'warn'); }
+$('#logoutBtn').onclick=()=>{ if(!confirm('از حساب خارج می‌شی؟ برای ورود دوباره باید کد دسترسی بزنی. (همین دستگاه شناخته می‌مونه و صندلی جدید مصرف نمی‌شه)'))return; setSess(null);state.role=null;state.locked=true;state.exp=0; clearInterval(pingTimer);clearInterval(gateInt); document.body.classList.remove('role-user','role-admin'); $('#gtwrap').style.display='none';$('#gateProgress').style.display='none'; renderAll();showGate(''); toast('خارج شدی 👋 برای ورود دوباره کد دسترسی رو بزن'); };
 let gateInt=null;
-function updateUserMenu(rem,total){
-  const pct=total>0?Math.max(0,Math.min(100,(rem/total)*100)):0;
-  $('#upDays').textContent=faNum(daysLeft(rem));
-  $('#upRem').textContent=topRem(rem);
-  $('#upExp').textContent=faDate(new Date(state.exp).toISOString());
-  $('#upDev').textContent=MY_DEV;
-  const up=$('#upProg');if(up)up.style.strokeDashoffset=(326.73*(1-pct/100)).toFixed(2);
-}
-function startGateTimer(){
-  clearInterval(gateInt);
-  const wrap=$('#gtwrap'),bar=$('#gateProgress'),prog=$('#gtProg');
-  const sess=getSess();
-  if(state.role!=='user'||!state.exp||!sess){wrap.style.display='none';bar.style.display='none';return}
-  wrap.style.display='inline-flex';bar.style.display='block';
-  const total=Math.max(1,state.exp-(sess.iat||Date.now()));
-  const tick=()=>{
-    const rem=state.exp-Date.now();
-    if(rem<=0){clearInterval(gateInt);lockDown('expired');return}
-    $('#gateTimer').querySelector('b').textContent=topRem(rem);
-    const pct=Math.max(0,Math.min(100,(rem/total)*100));
-    bar.style.width=pct+'%';
-    bar.style.background=pct>40?'var(--teal)':pct>15?'var(--amber)':'var(--coral)';
-    $('#gateTimer').classList.toggle('low',pct<=15);
-    if(prog)prog.style.strokeDashoffset=(40.84*(1-pct/100)).toFixed(2);
-    if($('#upop').classList.contains('open'))updateUserMenu(rem,total);
-  };
-  tick();gateInt=setInterval(tick,1000);
-}
-$('#gateTimer').addEventListener('click',e=>{
-  e.stopPropagation();
-  const pop=$('#upop');const open=pop.classList.toggle('open');
-  if(open){const sess=getSess();const total=Math.max(1,state.exp-(sess&&sess.iat||Date.now()));updateUserMenu(Math.max(0,state.exp-Date.now()),total)}
-});
+function updateUserMenu(rem,total){ const pct=total>0?Math.max(0,Math.min(100,(rem/total)*100)):0; $('#upDays').textContent=faNum(daysLeft(rem)); $('#upRem').textContent=topRem(rem); $('#upExp').textContent=faDate(new Date(state.exp).toISOString()); $('#upDev').textContent=MY_DEV; const up=$('#upProg');if(up)up.style.strokeDashoffset=(326.73*(1-pct/100)).toFixed(2); }
+function startGateTimer(){ clearInterval(gateInt); const wrap=$('#gtwrap'),bar=$('#gateProgress'),prog=$('#gtProg'); const sess=getSess(); if(state.role!=='user'||!state.exp||!sess){wrap.style.display='none';bar.style.display='none';return} wrap.style.display='inline-flex';bar.style.display='block'; const total=Math.max(1,state.exp-(sess.iat||Date.now())); const tick=()=>{ const rem=state.exp-Date.now(); if(rem<=0){clearInterval(gateInt);lockDown('expired');return} $('#gateTimer').querySelector('b').textContent=topRem(rem); const pct=Math.max(0,Math.min(100,(rem/total)*100)); bar.style.width=pct+'%'; bar.style.background=pct>40?'var(--teal)':pct>15?'var(--amber)':'var(--coral)'; $('#gateTimer').classList.toggle('low',pct<=15); if(prog)prog.style.strokeDashoffset=(40.84*(1-pct/100)).toFixed(2); if($('#upop').classList.contains('open'))updateUserMenu(rem,total); }; tick();gateInt=setInterval(tick,1000); }
+$('#gateTimer').addEventListener('click',e=>{ e.stopPropagation(); const pop=$('#upop');const open=pop.classList.toggle('open'); if(open){const sess=getSess();const total=Math.max(1,state.exp-(sess&&sess.iat||Date.now()));updateUserMenu(Math.max(0,state.exp-Date.now()),total)} });
 document.addEventListener('click',e=>{if(!$('#gtwrap').contains(e.target))$('#upop').classList.remove('open')});
 let pingTimer=null;
-function startPing(){
-  clearInterval(pingTimer);
-  if(state.role!=='user')return;
-  const fire=()=>{if(document.hidden)return;const base=workerBase(),sess=getSess();if(!base||!sess)return;
-    fetch(base+'/api/ping',{method:'POST',headers:{Authorization:'Bearer '+sess.token}}).catch(()=>{})};
-  pingTimer=setInterval(fire,45000);
-}
-document.addEventListener('visibilitychange',()=>{
-  if(!document.hidden&&state.role==='user'){const base=workerBase(),sess=getSess();if(base&&sess)fetch(base+'/api/ping',{method:'POST',headers:{Authorization:'Bearer '+sess.token}}).catch(()=>{})}
-});
-function filtered(){
-  const q=state.q.trim().toLowerCase();
-  return state.servers.filter(s=>{const p=protoOf(s);
-    if(state.fc&&s.country!==state.fc)return false;
-    if(state.fp==='sub'&&p!=='sub')return false;
-    if(state.fp==='vless'&&p!=='vless')return false;
-    if(state.fp==='other'&&(p==='sub'||p==='vless'))return false;
-    if(q&&!s.name.toLowerCase().includes(q))return false;
-    return true});
-}
-function cardHTML(s,i){
-  const p=protoOf(s);const pcls=p==='sub'?'sub':p==='vless'?'vless':'other';
-  const badge=p==='sub'?'ساب':p.toUpperCase();const sub=p==='sub'?'لینک سابسکریپشن':'کانفیگ '+p.toUpperCase();
-  const appList=(Array.isArray(s.apps)&&s.apps.length)?s.apps.map(id=>APPMAP[id]).filter(Boolean):APPS;
-  const chips=appList.map(a=>`<button class="chip" data-app="${a.id}" data-id="${s.id}" style="--c:${a.color}" title="افزودن مستقیم به ${a.name}"><span class="chl">${a.ch}</span><span class="chn">${a.name}</span></button>`).join('');
-  const addedTxt=relTime(s.added);
-  const addedFull=s.added?faDate(new Date(s.added).toISOString()):'';
-  return `<article class="card rv p-${pcls}" data-id="${s.id}" style="transition-delay:${(i%6)*55}ms">
-    <span class="corner c-tl"></span><span class="corner c-br"></span>
-    <div class="card-top">
-      <div class="flagwrap"><img class="flagimg" data-c="${s.country}" src="https://flagcdn.com/w40/${s.country.toLowerCase()}.png" alt="${cname(s.country)}"></div>
-      <div class="cinfo"><h3>${esc(s.name)}</h3><span>${cname(s.country)} · ${sub}</span>${addedTxt?`<span class="added" title="افزوده شده: ${esc(addedFull)}">📅 ${addedTxt}</span>`:''}</div>
-      <div class="meta">${isNew(s)?'<span class="badge new">جدید ✦</span>':''}<span class="badge">${badge}</span><span class="sig"><i></i><i></i><i></i><i></i></span></div>
-    </div>
-    <div class="cfgrow"><code dir="ltr" class="cfg">${esc(maskCfg(s.config))}</code><button class="mini eye" data-id="${s.id}" title="نمایش کامل">👁</button></div>
-    ${s.note?`<p class="note">📌 ${esc(s.note)}</p>`:''}
-    <div class="actions"><button class="btn primary copybtn" data-id="${s.id}">📋 کپی کانفیگ</button><button class="btn ghost qrbtn" data-id="${s.id}">QR</button></div>
-    <div class="apps"><span class="appslabel">افزودن مستقیم به اپلیکیشن${appList.length<APPS.length?' ('+faNum(appList.length)+' کلاینت)':''}:</span><div class="chips">${chips}</div></div>
-  </article>`;
-}
-function renderGrid(){
-  const g=$('#grid');
-  if(state.locked){g.innerHTML='';$('#empty').style.display='none';$('#visCount').textContent='—';return}
-  const list=filtered();$('#visCount').textContent=faNum(list.length)+' سرور';
-  if(!list.length){g.innerHTML='';$('#empty').style.display='block';
-    if(state.servers.length===0){$('#emptyTitle').textContent='هنوز سروری ثبت نشده 🛰️';$('#emptySub').textContent='به‌محض اینکه سرور جدیدی اضافه بشه، همین‌جا ظاهر می‌شه'}
-    else{$('#emptyTitle').textContent='چیزی پیدا نشد 🔍';$('#emptySub').textContent='فیلترها رو عوض کن یا عبارت دیگه‌ای جستجو کن'}return}
-  $('#empty').style.display='none';g.innerHTML=list.map(cardHTML).join('');
-  g.querySelectorAll('.flagimg').forEach(im=>im.addEventListener('error',()=>{im.outerHTML=`<span class="flagemoji">${flag(im.dataset.c)}</span>`},{once:true}));
-  observe();
-}
-function renderTicker(){
-  const parts=['POM GATEWAY','VLESS','REALITY','SUBSCRIPTION','TROJAN','WS','GRPC','VISION','XRAY','KARING'];
-  parts.push(...new Set(state.servers.map(s=>cname(s.country))));
-  const one=parts.map(p=>`<span>${esc(p)}</span>`).join('<i>◆</i>');
-  $('#tk').innerHTML=`<div class="half">${one}</div><div class="half">${one}</div>`;
-}
-function renderStats(){
-  countUp($('#stServers'),state.servers.length);countUp($('#stCountries'),new Set(state.servers.map(s=>s.country)).size);
-  $('#stUpdated').textContent=faDate(state.generated);$('#fdate').textContent=faDate(state.generated);
-}
+function startPing(){ clearInterval(pingTimer); if(state.role!=='user')return; const fire=()=>{if(document.hidden)return;const base=workerBase(),sess=getSess();if(!base||!sess)return; fetch(base+'/api/ping',{method:'POST',headers:{Authorization:'Bearer '+sess.token}}).catch(()=>{})}; pingTimer=setInterval(fire,45000); }
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&state.role==='user'){const base=workerBase(),sess=getSess();if(base&&sess)fetch(base+'/api/ping',{method:'POST',headers:{Authorization:'Bearer '+sess.token}}).catch(()=>{})} });
+function filtered(){ const q=state.q.trim().toLowerCase(); return state.servers.filter(s=>{const p=protoOf(s); if(state.fc&&s.country!==state.fc)return false; if(state.fp==='sub'&&p!=='sub')return false; if(state.fp==='vless'&&p!=='vless')return false; if(state.fp==='other'&&(p==='sub'||p==='vless'))return false; if(q&&!s.name.toLowerCase().includes(q))return false; return true}); }
+function cardHTML(s,i){ const p=protoOf(s);const pcls=p==='sub'?'sub':p==='vless'?'vless':'other'; const badge=p==='sub'?'ساب':p.toUpperCase();const sub=p==='sub'?'لینک سابسکریپشن':'کانفیگ '+p.toUpperCase(); const appList=(Array.isArray(s.apps)&&s.apps.length)?s.apps.map(id=>APPMAP[id]).filter(Boolean):APPS; const chips=appList.map(a=>`<button class="chip" data-app="${a.id}" data-id="${s.id}" style="--c:${a.color}" title="افزودن مستقیم به ${a.name}"><span class="chl">${a.ch}</span><span class="chn">${a.name}</span></button>`).join(''); const addedTxt=relTime(s.added); const addedFull=s.added?faDate(new Date(s.added).toISOString()):''; return `<article class="card rv p-${pcls}" data-id="${s.id}" style="transition-delay:${(i%6)*55}ms"> <span class="corner c-tl"></span><span class="corner c-br"></span> <div class="card-top"> <div class="flagwrap"><img class="flagimg" data-c="${s.country}" src="https://flagcdn.com/w40/${s.country.toLowerCase()}.png" alt="${cname(s.country)}"></div> <div class="cinfo"><h3>${esc(s.name)}</h3><span>${cname(s.country)} · ${sub}</span>${addedTxt?`<span class="added" title="افزوده شده: ${esc(addedFull)}">📅 ${addedTxt}</span>`:''}</div> <div class="meta">${isNew(s)?'<span class="badge new">جدید ✦</span>':''}<span class="badge">${badge}</span><span class="sig"><i></i><i></i><i></i><i></i></span></div> </div> <div class="cfgrow"><code dir="ltr" class="cfg">${esc(maskCfg(s.config))}</code><button class="mini eye" data-id="${s.id}" title="نمایش کامل">👁</button></div> ${s.note?`<p class="note">📌 ${esc(s.note)}</p>`:''} <div class="actions"><button class="btn primary copybtn" data-id="${s.id}">📋 کپی کانفیگ</button><button class="btn ghost qrbtn" data-id="${s.id}">QR</button></div> <div class="apps"><span class="appslabel">افزودن مستقیم به اپلیکیشن${appList.length<APPS.length?' ('+faNum(appList.length)+' کلاینت)':''}:</span><div class="chips">${chips}</div></div> </article>`; }
+function renderGrid(){ const g=$('#grid'); if(state.locked){g.innerHTML='';$('#empty').style.display='none';$('#visCount').textContent='—';return} const list=filtered();$('#visCount').textContent=faNum(list.length)+' سرور'; if(!list.length){g.innerHTML='';$('#empty').style.display='block'; if(state.servers.length===0){$('#emptyTitle').textContent='هنوز سروری ثبت نشده 🛰️';$('#emptySub').textContent='به‌محض اینکه سرور جدیدی اضافه بشه، همین‌جا ظاهر می‌شه'} else{$('#emptyTitle').textContent='چیزی پیدا نشد 🔍';$('#emptySub').textContent='فیلترها رو عوض کن یا عبارت دیگه‌ای جستجو کن'}return} $('#empty').style.display='none';g.innerHTML=list.map(cardHTML).join(''); g.querySelectorAll('.flagimg').forEach(im=>im.addEventListener('error',()=>{im.outerHTML=`<span class="flagemoji">${flag(im.dataset.c)}</span>`},{once:true})); observe(); }
+function renderTicker(){ const parts=['POM GATEWAY','VLESS','REALITY','SUBSCRIPTION','TROJAN','WS','GRPC','VISION','XRAY','KARING']; parts.push(...new Set(state.servers.map(s=>cname(s.country)))); const one=parts.map(p=>`<span>${esc(p)}</span>`).join('<i>◆</i>'); $('#tk').innerHTML=`<div class="half">${one}</div><div class="half">${one}</div>`; }
+function renderStats(){ countUp($('#stServers'),state.servers.length);countUp($('#stCountries'),new Set(state.servers.map(s=>s.country)).size); $('#stUpdated').textContent=faDate(state.generated);$('#fdate').textContent=faDate(state.generated); }
 function renderAll(){renderTicker();renderStats();renderGrid()}
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.08});
 function observe(){document.querySelectorAll('.rv:not(.in)').forEach(el=>io.observe(el))}
-$('#grid').addEventListener('click',e=>{
-  const chip=e.target.closest('.chip');if(chip){openApp(chip.dataset.app,chip.dataset.id);return}
-  const cp=e.target.closest('.copybtn');if(cp){copyServer(cp.dataset.id,cp);return}
-  const qr=e.target.closest('.qrbtn');if(qr){showQR(qr.dataset.id);return}
-  const eye=e.target.closest('.eye');if(eye){toggleCfg(eye.dataset.id,eye);return}
-});
-$('#grid').addEventListener('pointermove',e=>{
-  const card=e.target.closest('.card');if(!card||reduced)return;const r=card.getBoundingClientRect();
-  const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
-  card.style.setProperty('--mx',(e.clientX-r.left)+'px');card.style.setProperty('--my',(e.clientY-r.top)+'px');
-  card.style.transform=`translateY(-6px) rotateX(${(0.5-y)*4}deg) rotateY(${(x-0.5)*4}deg)`;
-});
+$('#grid').addEventListener('click',e=>{ const chip=e.target.closest('.chip');if(chip){openApp(chip.dataset.app,chip.dataset.id);return} const cp=e.target.closest('.copybtn');if(cp){copyServer(cp.dataset.id,cp);return} const qr=e.target.closest('.qrbtn');if(qr){showQR(qr.dataset.id);return} const eye=e.target.closest('.eye');if(eye){toggleCfg(eye.dataset.id,eye);return} });
+$('#grid').addEventListener('pointermove',e=>{ const card=e.target.closest('.card');if(!card||reduced)return;const r=card.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height; card.style.setProperty('--mx',(e.clientX-r.left)+'px');card.style.setProperty('--my',(e.clientY-r.top)+'px'); card.style.transform=`translateY(-6px) rotateX(${(0.5-y)*4}deg) rotateY(${(x-0.5)*4}deg)`; });
 $('#grid').addEventListener('pointerout',e=>{const card=e.target.closest('.card');if(card&&!card.contains(e.relatedTarget))card.style.transform=''});
-async function copyServer(id,btn){
-  const s=state.servers.find(x=>x.id===id);if(!s)return;await copyText(s.config);
-  btn.classList.add('ok');const old=btn.innerHTML;btn.innerHTML='✓ کپی شد';
-  setTimeout(()=>{btn.innerHTML=old;btn.classList.remove('ok')},1500);
-  toast('کانفیگ کپی شد — حالا توی اپلیکیشن Paste کن 📋');
-}
-function toggleCfg(id,btn){
-  const s=state.servers.find(x=>x.id===id);if(!s)return;const code=btn.closest('.card').querySelector('.cfg');
-  if(expanded.has(id)){expanded.delete(id);code.textContent=maskCfg(s.config);btn.textContent='👁'}
-  else{expanded.add(id);code.textContent=s.config;btn.textContent='🙈'}
-}
-function openApp(appId,sid){
-  const s=state.servers.find(x=>x.id===sid);const a=APPMAP[appId];if(!s||!a)return;
-  copyText(s.config);
-  if(state.platform==='desktop'){showQR(sid);toast('کانفیگ کپی شد. افزودن مستقیم مخصوص گوشیه — از QR یا کپی استفاده کن 🖥','info');return}
-  const url=a.b64?a.scheme+b64safe(s.config):a.scheme+encodeURIComponent(s.config);
-  const f=document.createElement('iframe');f.style.display='none';f.src=url;document.body.appendChild(f);setTimeout(()=>f.remove(),2600);
-  if(a.known)toast(`کانفیگ کپی شد؛ در حال باز کردن <b>${a.name}</b>… 📲`);
-  else toast(`کانفیگ کپی شد. اگر <b>${a.name}</b> باز نشد، دستی Paste کن`,'warn');
-}
-function showQR(sid){
-  const s=state.servers.find(x=>x.id===sid);if(!s)return;const box=$('#qrEl');box.innerHTML='';
-  $('#qrText').textContent=s.config.length>90?s.config.slice(0,90)+'…':s.config;$('#qrOverlay').classList.add('open');
-  try{new QRCode(box,{text:s.config,width:210,height:210,colorDark:'#08262e',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})}
-  catch(e){box.innerHTML='<p style="color:#333;font-size:.8rem">کتابخانه QR لود نشده</p>'}
-}
+async function copyServer(id,btn){ const s=state.servers.find(x=>x.id===id);if(!s)return;await copyText(s.config); btn.classList.add('ok');const old=btn.innerHTML;btn.innerHTML='✓ کپی شد'; setTimeout(()=>{btn.innerHTML=old;btn.classList.remove('ok')},1500); toast('کانفیگ کپی شد — حالا توی اپلیکیشن Paste کن 📋'); }
+function toggleCfg(id,btn){ const s=state.servers.find(x=>x.id===id);if(!s)return;const code=btn.closest('.card').querySelector('.cfg'); if(expanded.has(id)){expanded.delete(id);code.textContent=maskCfg(s.config);btn.textContent='👁'} else{expanded.add(id);code.textContent=s.config;btn.textContent='🙈'} }
+function openApp(appId,sid){ const s=state.servers.find(x=>x.id===sid);const a=APPMAP[appId];if(!s||!a)return; copyText(s.config); if(state.platform==='desktop'){showQR(sid);toast('کانفیگ کپی شد. افزودن مستقیم مخصوص گوشیه — از QR یا کپی استفاده کن 🖥','info');return} const url=a.b64?a.scheme+b64safe(s.config):a.scheme+encodeURIComponent(s.config); const f=document.createElement('iframe');f.style.display='none';f.src=url;document.body.appendChild(f);setTimeout(()=>f.remove(),2600); if(a.known)toast(`کانفیگ کپی شد؛ در حال باز کردن <b>${a.name}</b>… 📲`); else toast(`کانفیگ کپی شد. اگر <b>${a.name}</b> باز نشد، دستی Paste کن`,'warn'); }
+function showQR(sid){ const s=state.servers.find(x=>x.id===sid);if(!s)return;const box=$('#qrEl');box.innerHTML=''; $('#qrText').textContent=s.config.length>90?s.config.slice(0,90)+'…':s.config;$('#qrOverlay').classList.add('open'); try{new QRCode(box,{text:s.config,width:210,height:210,colorDark:'#08262e',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})} catch(e){box.innerHTML='<p style="color:#333;font-size:.8rem">کتابخانه QR لود نشده</p>'} }
 $('#qrClose').onclick=()=>$('#qrOverlay').classList.remove('open');
 $('#qrOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')});
 $('#copyAll').onclick=async()=>{if(!state.servers.length)return toast('لیست خالیه','err');await copyText(state.servers.map(s=>s.config).join('\n'));toast(`${faNum(state.servers.length)} کانفیگ کپی شد ✓`)};
@@ -723,49 +502,12 @@ $('#q').addEventListener('input',e=>{state.q=e.target.value;renderGrid()});
 $('#fCountry').addEventListener('change',e=>{state.fc=e.target.value;renderGrid()});
 $('#fProto').addEventListener('change',e=>{state.fp=e.target.value;renderGrid()});
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();$('#q').focus()}});
-function fillCountries(){
-  const opts=Object.keys(COUNTRIES).map(c=>`<option value="${c}">${flagEmoji(c)} ${COUNTRIES[c]}</option>`).join('');
-  $('#fCountry').innerHTML='<option value="">🌍 همه کشورها</option>'+opts;
-}
-(function network(){
-  const cv=$('#net'),ctx=cv.getContext('2d');let W,H;const rs=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};addEventListener('resize',rs);rs();
-  const N=Math.min(44,Math.max(18,Math.floor(innerWidth/30)));
-  const nodes=Array.from({length:N},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.6+.8}));
-  let pulses=[],t=0;
-  if(!reduced)setInterval(()=>{for(let k=0;k<10;k++){const i=(Math.random()*N)|0,j=(Math.random()*N)|0;if(i===j)continue;const a=nodes[i],b=nodes[j];if(Math.hypot(a.x-b.x,a.y-b.y)<150){pulses.push({i,j,t:0});break}}},750);
-  function draw(){t+=.02;ctx.clearRect(0,0,W,H);
-    for(const n of nodes){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1}
-    for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<150){ctx.strokeStyle=`rgba(47,214,172,${(1-d/150)*.15})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}
-    nodes.forEach((n,i)=>{ctx.fillStyle=`rgba(94,234,212,${.35+.25*Math.sin(t*2+i)})`;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,7);ctx.fill()});
-    pulses=pulses.filter(p=>p.t<=1);
-    for(const p of pulses){p.t+=.018;const a=nodes[p.i],b=nodes[p.j];const x=a.x+(b.x-a.x)*p.t,y=a.y+(b.y-a.y)*p.t;ctx.fillStyle='rgba(255,180,84,.9)';ctx.shadowColor='rgba(255,180,84,.9)';ctx.shadowBlur=9;ctx.beginPath();ctx.arc(x,y,2,0,7);ctx.fill();ctx.shadowBlur=0}
-    if(!reduced)requestAnimationFrame(draw)}
-  draw();
-})();
+function fillCountries(){ const opts=Object.keys(COUNTRIES).map(c=>`<option value="${c}">${flagEmoji(c)} ${COUNTRIES[c]}</option>`).join(''); $('#fCountry').innerHTML='<option value="">🌍 همه کشورها</option>'+opts; }
+(function network(){ const cv=$('#net'),ctx=cv.getContext('2d');let W,H;const rs=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};addEventListener('resize',rs);rs(); const N=Math.min(44,Math.max(18,Math.floor(innerWidth/30))); const nodes=Array.from({length:N},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.6+.8})); let pulses=[],t=0; if(!reduced)setInterval(()=>{for(let k=0;k<10;k++){const i=(Math.random()*N)|0,j=(Math.random()*N)|0;if(i===j)continue;const a=nodes[i],b=nodes[j];if(Math.hypot(a.x-b.x,a.y-b.y)<150){pulses.push({i,j,t:0});break}}},750); function draw(){t+=.02;ctx.clearRect(0,0,W,H); for(const n of nodes){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1} for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<150){ctx.strokeStyle=`rgba(47,214,172,${(1-d/150)*.15})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}} nodes.forEach((n,i)=>{ctx.fillStyle=`rgba(94,234,212,${.35+.25*Math.sin(t*2+i)})`;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,7);ctx.fill()}); pulses=pulses.filter(p=>p.t<=1); for(const p of pulses){p.t+=.018;const a=nodes[p.i],b=nodes[p.j];const x=a.x+(b.x-a.x)*p.t,y=a.y+(b.y-a.y)*p.t;ctx.fillStyle='rgba(255,180,84,.9)';ctx.shadowColor='rgba(255,180,84,.9)';ctx.shadowBlur=9;ctx.beginPath();ctx.arc(x,y,2,0,7);ctx.fill();ctx.shadowBlur=0} if(!reduced)requestAnimationFrame(draw)} draw(); })();
 function tickClock(){$('#clock').textContent=new Intl.DateTimeFormat('fa-IR',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'Asia/Tehran'}).format(new Date())}
 setInterval(tickClock,1000);tickClock();
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('#qrOverlay').classList.contains('open'))$('#qrOverlay').classList.remove('open')});
-(async function init(){
-  document.title=CONFIG.siteName+' | کانفیگ V2ray';
-  $('#brandName').textContent=CONFIG.siteName;$('#gateBrand').textContent=CONFIG.siteName;$('#tbName').textContent=CONFIG.siteName;$('#fname').textContent=CONFIG.siteName;
-  scramble($('#brandName'),CONFIG.siteName);scramble($('#gateBrand'),CONFIG.siteName);
-  if(CONFIG.telegram){const t=$('#tgLink');t.href='https://t.me/'+CONFIG.telegram.replace('@','');t.style.display='inline'}
-  fillCountries();
-  const base=workerBase(),sess=getSess();let entered=false;
-  if(base){
-    if(sess){
-      try{const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+sess.token}});
-        if(r.ok){const j=await r.json();j.exp=j.exp||sess.exp;enterSite(j,false);entered=true}else setSess(null)}
-      catch(e){setSess(null)}
-    }
-    if(!entered){
-      try{const r=await fetch(base+'/api/data');
-        if(r.ok){const j=await r.json();if(j.role==='public'){enterSite(j,false);entered=true}}}catch(e){}
-    }
-  }
-  $('#loading').remove();
-  if(!entered){state.locked=true;renderAll();showGate('')}
-})();
+(async function init(){ document.title=CONFIG.siteName+' | کانفیگ V2ray'; $('#brandName').textContent=CONFIG.siteName;$('#gateBrand').textContent=CONFIG.siteName;$('#tbName').textContent=CONFIG.siteName;$('#fname').textContent=CONFIG.siteName; scramble($('#brandName'),CONFIG.siteName);scramble($('#gateBrand'),CONFIG.siteName); if(CONFIG.telegram){const t=$('#tgLink');t.href='https://t.me/'+CONFIG.telegram.replace('@','');t.style.display='inline'} fillCountries(); const base=workerBase(),sess=getSess();let entered=false; if(base){ if(sess){ try{const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+sess.token}}); if(r.ok){const j=await r.json();j.exp=j.exp||sess.exp;enterSite(j,false);entered=true}else setSess(null)} catch(e){setSess(null)} } if(!entered){ try{const r=await fetch(base+'/api/data'); if(r.ok){const j=await r.json();if(j.role==='public'){enterSite(j,false);entered=true}}}catch(e){} } } $('#loading').remove(); if(!entered){state.locked=true;renderAll();showGate('')} })();
 </script>
 </body>
 </html>
