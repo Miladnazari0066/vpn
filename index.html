@@ -27,6 +27,7 @@ body{font-family:'Vazirmatn',system-ui,sans-serif;background:var(--bg0);color:va
 ::-webkit-scrollbar-thumb{background:#17434e;border-radius:9px}
 button{font-family:inherit}
 
+/* لایه‌های پس‌زمینه */
 .bgfx{position:fixed;inset:0;z-index:-3;background:
   radial-gradient(1000px 620px at 88% -10%,rgba(47,214,172,.11),transparent 60%),
   radial-gradient(900px 700px at 4% 115%,rgba(255,180,84,.09),transparent 62%),
@@ -37,8 +38,11 @@ button{font-family:inherit}
   -webkit-mask-image:radial-gradient(ellipse 95% 80% at 50% 0%,#000 25%,transparent 80%);
   mask-image:radial-gradient(ellipse 95% 80% at 50% 0%,#000 25%,transparent 80%)}
 #net{position:fixed;inset:0;z-index:-2;opacity:.55;pointer-events:none}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 #gateProgress{position:fixed;top:0;right:0;height:3px;width:0;background:var(--teal);z-index:450;display:none;transition:width 1s linear,background .5s;box-shadow:0 0 10px rgba(47,214,172,.5)}
 
+/* نوار بالا */
 .topbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:9px 22px;border-bottom:1px solid var(--line);
   font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;color:var(--dim);background:rgba(7,20,26,.88);position:relative;z-index:5}
 .live{display:inline-flex;align-items:center;gap:7px;color:var(--teal);font-weight:700}
@@ -51,10 +55,11 @@ button{font-family:inherit}
 .tb-clock{margin-inline-start:auto;color:var(--amber);font-weight:700}
 .tb-tz{color:var(--faint)}
 
+/* هدر */
 .masthead{max-width:1200px;margin:0 auto;padding:54px 22px 34px;display:flex;gap:48px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .mast-right{flex:1.2;min-width:300px}
 .kicker{font-family:var(--mono);font-size:.68rem;letter-spacing:.24em;color:var(--amber);margin-bottom:16px;direction:ltr;text-align:right}
-h1.big{font-family:'Lalezar',cursive;font-weight:400;font-size:clamp(4rem,10vw,6.8rem);line-height:.95;margin-bottom:18px}
+h1.big{font-family:'Lalezar',cursive;font-weight:400;font-size:clamp(4rem,10vw,6.8rem);line-height:.95;margin-bottom:18px;min-height:1.1em}
 .hdot{color:var(--teal);display:inline-block;animation:blink 2.6s infinite}
 .tagline{color:var(--dim);font-size:1.02rem;line-height:2.1;max-width:54ch;margin-bottom:24px}
 .tagline b{color:var(--amber);font-weight:700}
@@ -80,6 +85,7 @@ h1.big{font-family:'Lalezar',cursive;font-weight:400;font-size:clamp(4rem,10vw,6
 .sblock b{display:block;font-family:'Lalezar';font-weight:400;font-size:2.1rem;line-height:1.15;text-shadow:0 0 20px rgba(47,214,172,.2)}
 .sblock span{font-size:.68rem;color:var(--dim);letter-spacing:.04em}
 
+/* نوار متحرک */
 .ticker{border-block:1px solid var(--line);background:rgba(10,30,38,.75);overflow:hidden}
 .tk{display:flex;width:max-content;animation:tick 36s linear infinite}
 .ticker:hover .tk{animation-play-state:paused}
@@ -115,6 +121,7 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .btn.ghost{background:transparent;color:var(--dim);border-color:var(--line)}
 .btn.ghost:hover{color:var(--ink);border-color:var(--line2);background:rgba(47,214,172,.07)}
 
+/* کارت سرور */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(335px,1fr));gap:18px;perspective:1100px}
 .card{position:relative;background:linear-gradient(165deg,var(--card2),var(--card) 60%);border:1px solid var(--line);border-radius:13px;padding:19px;overflow:hidden;transition:transform .28s cubic-bezier(.2,.7,.2,1),border-color .28s,box-shadow .28s;transform-style:preserve-3d}
 .card::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
@@ -166,6 +173,7 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .rv{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
 .rv.in{opacity:1;transform:none}
 
+/* توست */
 #toasts{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom));inset-inline-start:18px;z-index:800;display:flex;flex-direction:column;gap:10px;max-width:min(92vw,395px)}
 .toast{position:relative;overflow:hidden;background:#0d2b33;border:1px solid var(--line2);border-inline-start:3px solid var(--teal);color:var(--ink);padding:13px 17px;border-radius:10px;font-size:.84rem;box-shadow:0 12px 34px rgba(0,0,0,.55);opacity:0;transform:translateY(14px);transition:opacity .3s,transform .3s;line-height:1.9}
 .toast::after{content:'';position:absolute;bottom:0;right:0;height:2px;width:100%;background:var(--teal);animation:tprog 3.8s linear forwards}
@@ -181,28 +189,35 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 #gate.out{animation:gateout .5s ease forwards}
 @keyframes gatein{from{opacity:0}}
 @keyframes gateout{to{opacity:0;transform:scale(1.07)}}
-.gate-inner{text-align:center;max-width:410px;width:100%;animation:riseup .55s cubic-bezier(.2,.8,.2,1)}
+.gate-inner{text-align:center;max-width:420px;width:100%;animation:riseup .55s cubic-bezier(.2,.8,.2,1)}
 @keyframes riseup{from{opacity:0;transform:translateY(26px)}}
 .lockwrap{position:relative;width:118px;height:118px;margin:6px auto 20px;display:flex;align-items:center;justify-content:center}
-.lockicon{width:60px;height:60px;filter:drop-shadow(0 0 20px rgba(47,214,172,.5));animation:lockfloat 3.6s ease-in-out infinite}
+.lockicon{width:60px;height:60px;filter:drop-shadow(0 0 20px rgba(47,214,172,.5));animation:lockfloat 3.6s ease-in-out infinite;transition:filter .4s}
+.lockwrap.ok .lockicon{filter:drop-shadow(0 0 26px rgba(47,214,172,.95));animation:lockpop .5s ease}
 @keyframes lockfloat{50%{transform:translateY(-8px)}}
+@keyframes lockpop{0%{transform:scale(1)}40%{transform:scale(1.25) rotate(-6deg)}100%{transform:scale(1)}}
 .ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(47,214,172,.4);animation:ringp 2.6s ease-out infinite}
 .ring.r2{animation-delay:1.3s}
 @keyframes ringp{0%{transform:scale(.55);opacity:.9}100%{transform:scale(1.55);opacity:0}}
 .dashring{position:absolute;inset:-8px;border-radius:50%;border:1.5px dashed rgba(255,180,84,.45);animation:spin 16s linear infinite}
-.gate-brand{font-family:'Lalezar';font-weight:400;font-size:3.8rem;line-height:1}
+.burst{position:absolute;inset:0;border-radius:50%;border:2px solid var(--teal);animation:burst .8s ease-out forwards}
+@keyframes burst{from{transform:scale(.6);opacity:.9}to{transform:scale(2.3);opacity:0}}
+.gate-brand{font-family:'Lalezar';font-weight:400;font-size:3.8rem;line-height:1;min-height:1.1em}
 .gate-brand span{color:var(--teal)}
-.gate-sub{color:var(--dim);margin:12px 0 28px;font-size:.93rem;line-height:2}
+.gate-sub{color:var(--dim);margin:12px 0 22px;font-size:.93rem;line-height:2}
 .gate-form{display:flex;flex-direction:column;gap:12px}
 #gateIn{background:#081a20;border:1.5px solid var(--line2);border-radius:12px;padding:15px;text-align:center;font-family:var(--mono);font-size:1.35rem;letter-spacing:.4em;color:var(--ink);transition:border-color .2s,box-shadow .2s;width:100%;caret-color:var(--teal)}
 #gateIn:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px rgba(47,214,172,.15)}
 #gateIn.bad{border-color:var(--coral);box-shadow:0 0 0 4px rgba(255,107,129,.18)}
 #gateIn::placeholder{color:var(--faint)}
-.gate-msg{margin-top:16px;font-size:.82rem;color:var(--amber);min-height:1.5em;line-height:1.9}
+.codebar{display:flex;justify-content:center;gap:7px;margin-top:14px;height:8px}
+.codebar i{width:8px;height:8px;border-radius:50%;background:#16343d;transition:all .25s}
+.codebar i.on{background:var(--teal);box-shadow:0 0 9px rgba(47,214,172,.8);transform:scale(1.15)}
+.gate-msg{margin-top:14px;font-size:.82rem;color:var(--amber);min-height:1.5em;line-height:1.9}
 .shake{animation:shake .4s}
 @keyframes shake{25%{transform:translateX(7px)}50%{transform:translateX(-7px)}75%{transform:translateX(4px)}}
 
-/* ================= مودال QR ================= */
+/* مودال QR */
 .overlay{position:fixed;inset:0;background:rgba(4,14,18,.82);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;z-index:300}
 .overlay.open{opacity:1;pointer-events:auto}
 .qr-box{position:relative;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line2);border-radius:16px;padding:28px;text-align:center;max-width:355px;width:92%;transform:scale(.9);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
@@ -214,7 +229,7 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .close-x{position:absolute;top:12px;left:14px;background:none;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;transition:color .2s,transform .3s}
 .close-x:hover{color:var(--coral);transform:rotate(90deg)}
 
-/* ================= پنل (فقط مدیر) ================= */
+/* پنل (فقط مدیر) */
 body.role-user #adminBtn,body.role-user #panel{display:none!important}
 #panel{position:fixed;top:0;bottom:0;inset-inline-start:0;width:min(475px,100%);background:#0a2029;border-inline-end:1px solid var(--line2);z-index:350;transform:translateX(110%);transition:transform .4s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;box-shadow:-26px 0 80px rgba(0,0,0,.6)}
 #panel.open{transform:none}
@@ -286,6 +301,7 @@ footer a:hover{text-decoration:underline}
 
 <div class="bgfx"></div>
 <canvas id="net"></canvas>
+<div class="grain"></div>
 <div id="gateProgress"></div>
 
 <div class="topbar">
@@ -361,7 +377,7 @@ footer a:hover{text-decoration:underline}
 <!-- درگاه ورود -->
 <div id="gate">
   <div class="gate-inner" id="gateCard">
-    <div class="lockwrap">
+    <div class="lockwrap" id="lockwrap">
       <span class="dashring"></span>
       <span class="ring"></span><span class="ring r2"></span>
       <svg class="lockicon" viewBox="0 0 64 64" fill="none">
@@ -372,11 +388,12 @@ footer a:hover{text-decoration:underline}
       </svg>
     </div>
     <h2 class="gate-brand"><span id="gateBrand">پوم</span><span>.</span></h2>
-    <p class="gate-sub">این بخش خصوصیه 🔒<br>کد دسترسی خودت رو وارد کن (کد مدیر دائمیه، کد کاربران زمان‌دار)</p>
+    <p class="gate-sub">این بخش خصوصیه 🔒<br>کد دسترسی خودت رو وارد کن — با هر کیبوردی (فارسی/انگلیسی) کار می‌کنه</p>
     <div class="gate-form">
-      <input id="gateIn" dir="ltr" placeholder="••••••" autocomplete="off" maxlength="48">
+      <input id="gateIn" dir="ltr" placeholder="کد دسترسی" autocomplete="off" maxlength="48">
       <button class="btn primary" id="gateBtn" style="width:100%;padding:14px">🔓 باز کردن درگاه</button>
     </div>
+    <div class="codebar" id="codebar"></div>
     <p class="gate-msg" id="gateMsg"></p>
   </div>
 </div>
@@ -460,7 +477,7 @@ footer a:hover{text-decoration:underline}
         <input id="workerIn" dir="ltr" placeholder="https://pom-gate.YOURNAME.workers.dev">
         <button class="btn ghost" id="workerSave" type="button">💾 ذخیره آدرس</button>
         <button class="btn primary" id="dlReady" type="button">⬇ دانلود فایل آمادهٔ سایت</button>
-        <p class="hint">آدرس Worker رو از Cloudflare کپی و این‌جا ذخیره کن. بعد «دانلود فایل آماده» رو بزن و فایل رو توی گیت‌هاب جایگزین index.html کن (یک‌بار). از اون به بعد همه تغییرات از پنل، برای همه اعمال می‌شه.</p>
+        <p class="hint">آدرس Worker از پیش داخل کد نوشته شده. اگه عوضش کردی این‌جا ذخیره کن و «دانلود فایل آماده» رو بزن تا توی گیت‌هاب جایگزین کنی.</p>
       </div>
     </section>
 
@@ -471,13 +488,13 @@ footer a:hover{text-decoration:underline}
 
 <script>
 /* =====================================================
-   ⚙️ CONFIG
+   ⚙️ CONFIG — آدرس Worker از پیش داخله
 ===================================================== */
 const CONFIG = {
   siteName : 'پوم',
-  adminPass: '@Miladn46',   // فقط برای اتصال اولیه — بعدش بررسی سمت سروره
+  adminPass: '@Miladn46',
   telegram : '',
-  workerUrl: 'https://pom-gate.pomgate.workers.dev/api/data',            // ← آدرس Worker — با «دانلود فایل آماده» خودکار پر می‌شه
+  workerUrl: 'https://pom-gate.pomgate.workers.dev',
 };
 
 const APPS = [
@@ -488,11 +505,11 @@ const APPS = [
   {id:'happ',    name:'Happ',       ch:'H', color:'#c6e85a', scheme:'happ://add/', b64:true,           known:false},
 ];
 const COUNTRIES = {
-  DE:['🇩🇪','آلمان'],NL:['🇳🇱','هلند'],SE:['🇸🇪','سوئد'],FR:['🇫🇷','فرانسه'],US:['🇺🇸','آمریکا'],
-  UK:['🇬🇧','انگلیس'],TR:['🇹🇷','ترکیه'],AE:['🇦🇪','امارات'],SG:['🇸🇬','سنگاپور'],JP:['🇯🇵','ژاپن'],
-  CA:['🇨🇦','کانادا'],CH:['🇨🇭','سوئیس'],IT:['🇮🇹','ایتالیا'],ES:['🇪🇸','اسپانیا'],PL:['🇵🇱','لهستان'],
-  FI:['🇫🇮','فنلاند'],NO:['🇳🇴','نروژ'],AT:['🇦🇹','اتریش'],BE:['🇧🇪','بلژیک'],RU:['🇷🇺','روسیه'],
-  KR:['🇰🇷','کره جنوبی'],AU:['🇦🇺','استرالیا'],IN:['🇮🇳','هند'],BR:['🇧🇷','برزیل'],IR:['🇮🇷','ایران'],
+  DE:['🇩🇪','آلمان'],NL:['🇳🇱','هلند'],SE:['🇸','سوئد'],FR:['🇫🇷','فرانسه'],US:['🇺🇸','آمریکا'],
+  UK:['🇬🇧','انگلیس'],TR:['🇹','ترکیه'],AE:['🇦🇪','امارات'],SG:['🇸🇬','سنگاپور'],JP:['🇯🇵','ژاپن'],
+  CA:['🇨🇦','کانادا'],CH:['🇨🇭','سوئیس'],IT:['🇮','ایتالیا'],ES:['🇪🇸','اسپانیا'],PL:['🇵','لهستان'],
+  FI:['🇫🇮','فنلاند'],NO:['🇳🇴','نروژ'],AT:['🇦🇹','اتریش'],BE:['🇧','بلژیک'],RU:['🇷🇺','روسیه'],
+  KR:['🇰','کره جنوبی'],AU:['🇦🇺','استرالیا'],IN:['🇮🇳','هند'],BR:['🇧🇷','برزیل'],IR:['🇮🇷','ایران'],
 };
 const DAY_OPTS=[1,10,15,20,30];
 
@@ -508,6 +525,19 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const NEW_WINDOW=3*24*3600*1000;
 const isNew=s=>s.added&&(Date.now()-s.added<NEW_WINDOW);
 
+/* 🔑 نرمال‌سازی کد — حل مشکل کیبورد فارسی و کاراکتر نامرئی */
+const ZW='‌‏‪‫‬‭‮⁠﻿';
+const ZW_RE=new RegExp('['+ZW+']','g');
+function normCode(s){
+  return String(s==null?'':s)
+    .replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))   // اعداد فارسی → انگلیسی
+    .replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d))   // اعداد عربی → انگلیسی
+    .replace(/［﹫＠]/g,'@')                          // @ تمام‌عرض → @
+    .replace(ZW_RE,'')                                // حذف کاراکترهای نامرئی
+    .replace(/\s+/g,' ')                              // فاصله‌های اضافی → یک فاصله
+    .trim();
+}
+
 async function copyText(t){
   try{await navigator.clipboard.writeText(t)}
   catch(e){const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(_){}
@@ -520,6 +550,24 @@ function toast(msg,type='ok'){
   setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),350)},3800);
 }
 function countUp(el,to){let n=0;const step=Math.max(1,Math.ceil(to/25));const t=setInterval(()=>{n+=step;if(n>=to){n=to;clearInterval(t)}el.textContent=faNum(n)},30)}
+
+/* افکت scramble روی برند */
+function scramble(el,final,dur=950){
+  if(reduced){el.textContent=final;return}
+  const chars='ابپتثجچحخدذرزسشصعغفقکگلمنوهی0123456789#@$%&';
+  const start=performance.now();
+  (function frame(now){
+    const p=Math.min(1,(now-start)/dur);
+    const rev=Math.floor(p*final.length);
+    let out='';
+    for(let i=0;i<final.length;i++){
+      if(final[i]===' '){out+=' ';continue}
+      out+= i<rev ? final[i] : chars[(Math.random()*chars.length)|0];
+    }
+    el.textContent=out;
+    if(p<1)requestAnimationFrame(frame); else el.textContent=final;
+  })(start);
+}
 
 /* ================= وضعیت ================= */
 const ua=navigator.userAgent;
@@ -534,7 +582,7 @@ const expanded=new Set();
 function normalize(s){return{id:s.id||'s'+Math.random().toString(36).slice(2,8),name:s.name||'سرور',country:s.country||'DE',config:s.config||'',note:s.note||'',added:s.added||null}}
 function normalizeGate(g){
   if(!g)return{enabled:true,code:'',days:1};
-  return{enabled:g.enabled!==false,code:String(g.code||''),days:DAY_OPTS.includes(+g.days)?+g.days:1};
+  return{enabled:g.enabled!==false,code:normCode(g.code),days:DAY_OPTS.includes(+g.days)?+g.days:1};
 }
 const workerBase=()=>((CONFIG.workerUrl||localStorage.getItem('pomWorker')||'').replace(/\/+$/,''));
 function getSess(){try{return JSON.parse(localStorage.getItem('pomSess'))}catch(e){return null}}
@@ -552,25 +600,32 @@ function guessCountry(n){
 }
 
 /* ================= درگاه ورود ================= */
-  const fixDigits=s=>s.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
 function setMsg(m){$('#gateMsg').textContent=m||''}
-  function setMsg(m){$('#gateMsg').textContent=m||''}
+function renderCodebar(len){
+  const n=12;let h='';
+  for(let i=0;i<n;i++)h+=`<i class="${i<len?'on':''}"></i>`;
+  $('#codebar').innerHTML=h;
+}
+function burst(){
+  const w=$('#lockwrap');if(!w)return;
+  for(let i=0;i<3;i++){const s=document.createElement('span');s.className='burst';s.style.animationDelay=(i*90)+'ms';w.appendChild(s);setTimeout(()=>s.remove(),900)}
+}
 function showGate(msg){
   setMsg(msg);
   $('#gate').classList.add('open');
   document.body.style.overflow='hidden';
-  $('#gateIn').inputMode=/^\d+$/.test(state.gate.code)?'numeric':'text';
+  renderCodebar(0);
   setTimeout(()=>$('#gateIn').focus(),180);
 }
 function hideGate(anim){
   const g=$('#gate');
-  if(anim){g.classList.add('out');setTimeout(()=>{g.classList.remove('open','out');document.body.style.overflow=''},480)}
-  else{g.classList.remove('open');document.body.style.overflow=''}
+  if(anim){g.classList.add('out');setTimeout(()=>{g.classList.remove('open','out');$('#lockwrap').classList.remove('ok');document.body.style.overflow=''},480)}
+  else{g.classList.remove('open');$('#lockwrap').classList.remove('ok');document.body.style.overflow=''}
 }
 function wrongCode(msg){
   const b=$('#gateCard');b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');
   const gi=$('#gateIn');gi.classList.add('bad');setTimeout(()=>gi.classList.remove('bad'),900);
-  gi.value='';gi.focus();setMsg(msg);toast(msg,'err');
+  gi.value='';renderCodebar(0);gi.focus();setMsg(msg);toast(msg,'err');
 }
 function enterSite(j,anim){
   state.role=j.role==='public'?'user':j.role;
@@ -579,25 +634,24 @@ function enterSite(j,anim){
   if(j.gate)state.gate=normalizeGate(j.gate);
   document.body.classList.add('role-'+state.role);
   state.locked=false;
-  hideGate(anim);
-  renderAll();startGateTimer();
-  if(anim)toast(state.role==='admin'?'خوش اومدی مدیر 👑':'به <b>پوم</b> خوش اومدی 🔓');
+  if(anim){$('#lockwrap').classList.add('ok');burst()}
+  setTimeout(()=>{hideGate(anim);renderAll();startGateTimer();if(anim)toast(state.role==='admin'?'خوش اومدی مدیر 👑':'به <b>پوم</b> خوش اومدی 🔓')},anim?420:0);
 }
 function enterLocalAdmin(){
   state.role='admin';document.body.classList.add('role-admin');state.locked=false;
   const d=loadDraft();if(d){state.servers=d.servers.map(normalize);state.gate=normalizeGate(d.gate)}
-  hideGate(true);renderAll();
-  toast('حالت محلی — از پنل، آدرس Worker رو وصل کن تا دسترسی برای همه فعال بشه','warn');
+  $('#lockwrap').classList.add('ok');burst();
+  setTimeout(()=>{hideGate(true);renderAll();toast('حالت محلی — سرور ابری وصل نیست','warn')},420);
 }
 async function tryUnlock(){
   const gi=$('#gateIn'),gb=$('#gateBtn');
-  const code=fixDigits(gi.value.trim());
+  const code=normCode(gi.value);   // 🔑 نرمال‌سازی قبل از ارسال
   if(!code)return;
   const base=workerBase();
   setMsg('');
   if(!base){
-    if(code===CONFIG.adminPass){enterLocalAdmin()}
-    else wrongCode('سرور ابری هنوز وصل نشده — فقط مدیر می‌تونه وارد شه');
+    if(code===normCode(CONFIG.adminPass)){enterLocalAdmin()}
+    else wrongCode('سرور ابری وصل نشده — فقط مدیر می‌تونه وارد شه');
     return;
   }
   gi.disabled=true;gb.disabled=true;gb.textContent='در حال بررسی…';
@@ -606,22 +660,18 @@ async function tryUnlock(){
     const j=await r.json().catch(()=>({}));
     if(r.status===429)wrongCode(j.error||'تلاش بیش از حد — چند دقیقه صبر کن');
     else if(!r.ok)wrongCode('کد دسترسی اشتباهه ❌');
-    else{
-      setSess({token:j.token,role:j.role,exp:j.exp||0,iat:Date.now()});
-      enterSite(j,true);
-    }
+    else{setSess({token:j.token,role:j.role,exp:j.exp||0,iat:Date.now()});enterSite(j,true)}
   }catch(e){wrongCode('خطا در اتصال — اینترنت رو چک کن')}
   gi.disabled=false;gb.disabled=false;gb.textContent='🔓 باز کردن درگاه';
 }
 $('#gateBtn').onclick=tryUnlock;
 $('#gateIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock()});
+$('#gateIn').addEventListener('input',e=>renderCodebar(normCode(e.target.value).length));
 
 function lockDown(){
-  setSess(null);
-  state.role=null;state.locked=true;state.exp=0;
+  setSess(null);state.role=null;state.locked=true;state.exp=0;
   document.body.classList.remove('role-user','role-admin');
-  renderAll();
-  showGate('⏰ کد دسترسی منقضی شد — برای کد جدید با مدیر تماس بگیر');
+  renderAll();showGate('⏰ کد دسترسی منقضی شد — برای کد جدید با مدیر تماس بگیر');
   toast('کد دسترسی منقضی شد','warn');
 }
 function fmtRem(ms){
@@ -659,10 +709,7 @@ function setSrvStat(s){
   el.textContent=map[s][0];el.style.color=map[s][1];
 }
 let pushTimer=null;
-function schedulePush(){
-  if(state.role!=='admin')return;
-  clearTimeout(pushTimer);pushTimer=setTimeout(pushAdmin,900);
-}
+function schedulePush(){if(state.role!=='admin')return;clearTimeout(pushTimer);pushTimer=setTimeout(pushAdmin,900)}
 async function pushAdmin(){
   const base=workerBase(),sess=getSess();
   if(!base||!sess||sess.role!=='admin'){setSrvStat('off');return}
@@ -676,7 +723,7 @@ $('#workerSave').onclick=()=>{
   const v=$('#workerIn').value.trim().replace(/\/+$/,'');
   if(v&&!/^https:\/\//.test(v)){toast('آدرس باید با https:// شروع بشه','err');return}
   if(v)localStorage.setItem('pomWorker',v);else localStorage.removeItem('pomWorker');
-  toast(v?'آدرس سرور ذخیره شد 🛰 — حالا «دانلود فایل آماده» رو بزن':'آدرس حذف شد');
+  toast(v?'آدرس سرور ذخیره شد 🛰':'آدرس حذف شد');
 };
 $('#dlReady').onclick=async()=>{
   const base=workerBase();
@@ -684,9 +731,11 @@ $('#dlReady').onclick=async()=>{
   const btn=$('#dlReady');btn.disabled=true;btn.textContent='در حال ساخت فایل…';
   try{
     const src=await(await fetch(location.href)).text();
-    const needle="workerUrl: ''";
-    if(!src.includes(needle))throw new Error('خط CONFIG پیدا نشد');
-    const out=src.replace(needle,"workerUrl: '"+base+"'");
+    const needle="workerUrl: '";
+    const i=src.indexOf(needle);
+    if(i<0)throw new Error('خط CONFIG پیدا نشد');
+    const j=src.indexOf("'",i+needle.length);
+    const out=src.slice(0,i+needle.length)+base+src.slice(j);
     const blob=new Blob([out],{type:'text/html'});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='index.html';a.click();
     URL.revokeObjectURL(a.href);
@@ -762,11 +811,7 @@ function renderStats(){
   $('#stUpdated').textContent=faDate(state.generated);
   $('#fdate').textContent=faDate(state.generated);
 }
-function renderGateSec(){
-  $('#gateOn').checked=state.gate.enabled;
-  $('#gateCode').value=state.gate.code;
-  $('#gateDays').value=String(state.gate.days);
-}
+function renderGateSec(){$('#gateOn').checked=state.gate.enabled;$('#gateCode').value=state.gate.code;$('#gateDays').value=String(state.gate.days)}
 function renderSrvSec(){$('#workerIn').value=workerBase();setSrvStat(workerBase()?'ok':'off')}
 function renderAll(){renderStatusBanner();renderTicker();renderStats();renderGrid();renderPanelList();renderGateSec();renderSrvSec()}
 
@@ -788,10 +833,7 @@ $('#grid').addEventListener('pointermove',e=>{
   card.style.setProperty('--my',(e.clientY-r.top)+'px');
   card.style.transform=`translateY(-6px) rotateX(${(0.5-y)*4}deg) rotateY(${(x-0.5)*4}deg)`;
 });
-$('#grid').addEventListener('pointerout',e=>{
-  const card=e.target.closest('.card');
-  if(card&&!card.contains(e.relatedTarget))card.style.transform='';
-});
+$('#grid').addEventListener('pointerout',e=>{const card=e.target.closest('.card');if(card&&!card.contains(e.relatedTarget))card.style.transform=''});
 async function copyServer(id,btn){
   const s=state.servers.find(x=>x.id===id);if(!s)return;
   await copyText(s.config);
@@ -839,9 +881,7 @@ $('#subAll').onclick=async()=>{
 $('#q').addEventListener('input',e=>{state.q=e.target.value;renderGrid()});
 $('#fCountry').addEventListener('change',e=>{state.fc=e.target.value;renderGrid()});
 $('#fProto').addEventListener('change',e=>{state.fp=e.target.value;renderGrid()});
-document.addEventListener('keydown',e=>{
-  if(e.key==='/'&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();$('#q').focus()}
-});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();$('#q').focus()}});
 function fillCountries(){
   const opts=Object.entries(COUNTRIES).map(([c,v])=>`<option value="${c}">${v[0]} ${v[1]}</option>`).join('');
   $('#sCountry').innerHTML=opts;$('#sCountry').value='DE';
@@ -892,7 +932,7 @@ $('#bulkBtn').onclick=()=>{
 };
 $('#gateSave').onclick=()=>{
   state.gate.enabled=$('#gateOn').checked;
-  state.gate.code=fixDigits($('#gateCode').value.trim());
+  state.gate.code=normCode($('#gateCode').value);   // 🔑 کد کاربر هم نرمال ذخیره می‌شه
   state.gate.days=+$('#gateDays').value;
   if(state.gate.enabled&&!state.gate.code){toast('اول کد دسترسی رو بنویس','err');renderGateSec();return}
   afterChange();
@@ -988,6 +1028,8 @@ document.addEventListener('keydown',e=>{
   $('#gateBrand').textContent=CONFIG.siteName;
   $('#tbName').textContent=CONFIG.siteName;
   $('#fname').textContent=CONFIG.siteName;
+  scramble($('#brandName'),CONFIG.siteName);
+  scramble($('#gateBrand'),CONFIG.siteName);
   if(CONFIG.telegram){const t=$('#tgLink');t.href='https://t.me/'+CONFIG.telegram.replace('@','');t.style.display='inline'}
   fillCountries();
 
@@ -996,21 +1038,13 @@ document.addEventListener('keydown',e=>{
   if(base&&sess){
     try{
       const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+sess.token}});
-      if(r.ok){
-        const j=await r.json();
-        j.exp=j.exp||sess.exp;
-        enterSite(j,false);
-        entered=true;
-      }else setSess(null);
+      if(r.ok){const j=await r.json();j.exp=j.exp||sess.exp;enterSite(j,false);entered=true}
+      else setSess(null);
     }catch(e){setSess(null)}
   }else if(sess&&!base){setSess(null)}
 
   $('#loading').remove();
-  if(!entered){
-    state.locked=true;
-    renderAll();
-    showGate(base?'':'⚠️ سرور ابری هنوز وصل نشده — فقط مدیر می‌تونه وارد شه');
-  }
+  if(!entered){state.locked=true;renderAll();showGate('')}
   if(location.hash==='#panel'){tryOpenPanel();history.replaceState(null,'',location.pathname)}
 })();
 </script>
