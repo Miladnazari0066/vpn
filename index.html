@@ -116,6 +116,22 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .btn.primary:hover{box-shadow:0 6px 24px rgba(255,180,84,.35);transform:translateY(-2px)}
 .btn.ghost{background:transparent;color:var(--dim);border-color:var(--line)}
 .btn.ghost:hover{color:var(--ink);border-color:var(--line2);background:rgba(47,214,172,.07)}
+/* ===== دکمهٔ تست اتصال ===== */
+.probe-btn{position:relative;overflow:visible}
+.probe-btn .pb-ic{display:inline-flex;width:15px;height:15px;flex-shrink:0}
+.probe-btn .pb-ic svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.probe-btn .pb-tx{white-space:nowrap}
+.probe-btn .probe-ms{font-family:var(--mono);font-size:.62rem;opacity:.85;margin-inline-start:2px}
+.probe-btn[data-st="probing"]{color:var(--amber);border-color:rgba(255,180,84,.45);background:rgba(255,180,84,.07)}
+.probe-btn[data-st="probing"] .pb-ic{animation:pbspin .9s linear infinite}
+@keyframes pbspin{to{transform:rotate(360deg)}}
+.probe-btn[data-st="up"]{color:var(--teal);border-color:rgba(47,214,172,.5);background:rgba(47,214,172,.1)}
+.probe-btn[data-st="up"]::before{content:'';position:absolute;inset:-3px;border-radius:12px;border:1.5px solid var(--teal);opacity:0;animation:pbping 1.4s ease-out 1}
+@keyframes pbping{0%{opacity:.7;transform:scale(.85)}100%{opacity:0;transform:scale(1.18)}}
+.probe-btn[data-st="down"]{color:var(--coral);border-color:rgba(255,107,129,.45);background:rgba(255,107,129,.07)}
+.probe-btn[data-st="down"].just{animation:pbshake .42s}
+@keyframes pbshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.probe-btn[data-st="manual"]{color:var(--amber);border-color:rgba(255,180,84,.32);background:rgba(255,180,84,.05);opacity:.92}
 .guide-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 .gstep{display:flex;gap:14px;background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:13px;padding:18px;transition:transform .25s,border-color .25s,box-shadow .25s}
 .gstep:hover{transform:translateY(-5px);border-color:var(--line2);box-shadow:0 14px 34px rgba(0,0,0,.4)}
@@ -156,7 +172,7 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .mini{background:none;border:none;cursor:pointer;font-size:.95rem;opacity:.6;transition:opacity .2s,transform .2s;color:var(--dim)}
 .mini:hover{opacity:1;transform:scale(1.2)}
 .note{font-size:.75rem;color:var(--amber);margin:-4px 2px 12px}
-.actions{display:flex;gap:10px;margin-bottom:15px}
+.actions{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap}
 .apps{border-top:1px dashed var(--line);padding-top:13px}
 .appslabel{font-size:.72rem;color:var(--faint);display:block;margin-bottom:11px}
 .chips{display:flex;gap:14px;flex-wrap:wrap}
@@ -211,10 +227,16 @@ main{max-width:1200px;margin:0 auto;padding:30px 22px 80px}
 .codebar i{width:8px;height:8px;border-radius:50%;background:#16343d;transition:all .25s}
 .codebar i.on{background:var(--teal);box-shadow:0 0 9px rgba(47,214,172,.8);transform:scale(1.15)}
 .gate-msg{margin-top:14px;font-size:.82rem;color:var(--amber);min-height:1.5em;line-height:1.9}
-.cooldown{margin-top:14px}
-.cd-bar{height:6px;border-radius:6px;background:#081a20;overflow:hidden;border:1px solid rgba(255,107,129,.3)}
-.cd-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--coral),var(--amber));border-radius:6px;transition:width 1s linear;width:100%}
-.cd-text{display:block;text-align:center;font-family:var(--mono);font-size:.72rem;color:var(--coral);margin-top:7px}
+.cooldown{margin-top:16px;padding:13px 15px;border-radius:12px;background:rgba(255,107,129,.07);border:1px solid rgba(255,107,129,.3);animation:cdin .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes cdin{from{opacity:0;transform:translateY(8px) scale(.97)}}
+.cd-head{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.cd-ic{font-size:1.05rem;animation:cdpulse 1.3s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(255,107,129,.5))}
+@keyframes cdpulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.18);opacity:1}}
+.cd-head span{font-size:.78rem;color:var(--coral);font-weight:700}
+.cd-head b{margin-inline-start:auto;font-family:var(--mono);font-size:1.05rem;color:var(--amber);font-weight:700;letter-spacing:.02em}
+.cd-head b small{font-size:.62rem;color:var(--dim);font-weight:400;margin-inline-start:3px}
+.cd-bar{height:7px;border-radius:7px;background:#081a20;overflow:hidden;border:1px solid rgba(255,107,129,.22)}
+.cd-bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--coral),var(--amber));border-radius:7px;transition:width 1s linear;box-shadow:0 0 12px rgba(255,180,84,.45)}
 .shake{animation:shake .4s}
 @keyframes shake{25%{transform:translateX(7px)}50%{transform:translateX(-7px)}75%{transform:translateX(4px)}}
 #entryFx{position:fixed;inset:0;z-index:480;display:none;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle at 50% 38%,rgba(13,40,49,.98),rgba(5,15,19,.99));transition:transform 1s cubic-bezier(.85,0,.15,1),opacity .7s ease}
@@ -253,7 +275,7 @@ footer{border-top:1px solid var(--line);background:rgba(8,24,30,.75);padding:26p
 footer a{color:var(--teal);text-decoration:none}
 footer a:hover{text-decoration:underline}
 @media(max-width:700px){.masthead{flex-direction:column;text-align:center;padding-top:40px}.kicker{text-align:center}.tagline{margin-inline:auto}.howto{justify-content:center}.grid{grid-template-columns:1fr}.tb-tz,.tb-tag{display:none}.statboard{width:100%;justify-content:center}.toolbar select{flex:1}}
-@media(max-width:640px){.toolbar input[type=text],.toolbar select{font-size:16px}#gateIn{font-size:1.15rem;letter-spacing:.28em}.gate-brand{font-size:3.1rem}.gtimer b{font-size:.64rem}.topbar{gap:10px;padding:9px 14px}.upop{width:min(264px,82vw)}}
+@media(max-width:640px){.toolbar input[type=text],.toolbar select{font-size:16px}#gateIn{font-size:1.15rem;letter-spacing:.28em}.gate-brand{font-size:3.1rem}.gtimer b{font-size:.64rem}.topbar{gap:10px;padding:9px 14px}.upop{width:min(264px,82vw)}.probe-btn{padding:9px 13px;font-size:.8rem}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
@@ -349,7 +371,7 @@ footer a:hover{text-decoration:underline}
     <span class="secline"></span>
   </div>
   <section class="guide-steps rv">
-    <div class="gstep"><span class="gnum">۱</span><div><b>کپی کانفیگ</b><p>روی دکمهٔ «📋 کپی کانفیگ» کنار سرور مورد نظرت بزن تا کانفیگ کپی بشه.</p></div></div>
+    <div class="gstep"><span class="gnum">۱</span><div><b>کپی کانفیگ</b><p>روی دکمهٔ «کپی کانفیگ» کنار سرور مورد نظرت بزن تا کانفیگ کپی بشه.</p></div></div>
     <div class="gstep"><span class="gnum">۲</span><div><b>باز کردن Karing</b><p>اپ Karing رو باز کن. اگه نداری، از دکمهٔ بالای صفحه دانلودش کن.</p></div></div>
     <div class="gstep"><span class="gnum">۳</span><div><b>وارد کردن کانفیگ</b><p>توی Karing گزینهٔ «Paste from clipboard» یا «Import» رو بزن تا کانفیگ اضافه بشه.</p></div></div>
     <div class="gstep"><span class="gnum">۴</span><div><b>اتصال</b><p>روی دکمهٔ اتصال بزن و از اینترنت آزاد لذت ببر. 🎉</p></div></div>
@@ -394,8 +416,12 @@ footer a:hover{text-decoration:underline}
     <div class="codebar" id="codebar"></div>
     <p class="gate-msg" id="gateMsg"></p>
     <div class="cooldown" id="cooldown" style="display:none">
+      <div class="cd-head">
+        <span class="cd-ic">🔒</span>
+        <span>تلاش بیش از حد — کمی صبر کن</span>
+        <b><span id="cdNum">0</span><small>ثانیه</small></b>
+      </div>
       <div class="cd-bar"><i id="cdFill"></i></div>
-      <span class="cd-text" id="cdText"></span>
     </div>
   </div>
 </div>
@@ -434,7 +460,7 @@ const NEW_WINDOW=3*24*3600*1000;
 const isNew=s=>s.added&&(Date.now()-s.added<NEW_WINDOW);
 function relTime(ts){ if(!ts)return ''; const d=Date.now()-ts; if(d<45000)return 'همین الان'; if(d<3600000)return faNum(Math.floor(d/60000))+' دقیقه پیش'; if(d<864e5)return faNum(Math.floor(d/3600000))+' ساعت پیش'; if(d<30*864e5)return faNum(Math.floor(d/864e5))+' روز پیش'; return faDate(new Date(ts).toISOString()); }
 const ZW_RE=new RegExp('[​-‏‪-‮⁠﻿]','g');
-function normCode(s){ return String(s==null?'':s).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/［﹫＠]/g,'@').replace(ZW_RE,'').replace(/\s+/g,' ').trim(); }
+function normCode(s){ return String(s==null?'':s).replace(/[۰-۹]/g,d=>'۰۱۳۴۵۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٣٤٥٧٨٩'.indexOf(d)).replace(/［﹫＠]/g,'@').replace(ZW_RE,'').replace(/\s+/g,' ').trim(); }
 function parseUA(ua){ ua=ua||'';let os='دستگاه نامشخص',browser='',model=''; if(/android/i.test(ua)){os='Android';const m=ua.match(/;\s*([^;)]+?)\s*(?:Build\b|[);])/);if(m)model=m[1].trim()} else if(/iphone/i.test(ua)){os='iOS';model='iPhone'} else if(/ipad/i.test(ua)){os='iPadOS';model='iPad'} else if(/windows/i.test(ua)){os='Windows'} else if(/macintosh|mac os/i.test(ua)){os='macOS'} else if(/linux/i.test(ua)){os='Linux'} if(/edg\//i.test(ua))browser='Edge';else if(/chrome/i.test(ua))browser='Chrome'; else if(/safari/i.test(ua))browser='Safari';else if(/firefox/i.test(ua))browser='Firefox'; model=model.replace(/build\/.*/i,'').replace(/[);].*$/,'').trim(); const dev=[model,os].filter(Boolean).join(' · ')+(browser?' · '+browser:''); return {os,browser,model,dev}; }
 const MY_DEV=parseUA(navigator.userAgent).dev;
 function deviceId(){ let id=localStorage.getItem('pomDevice'); if(!id){id='d-'+[...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('pomDevice',id)} return id; }
@@ -461,11 +487,48 @@ function showGate(msg){setMsg(msg);$('#gate').classList.add('open');document.bod
 function hideGate(anim){const g=$('#gate');if(anim){g.classList.add('out');setTimeout(()=>{g.classList.remove('open','out');$('#lockwrap').classList.remove('ok');document.body.style.overflow=''},480)}else{g.classList.remove('open');$('#lockwrap').classList.remove('ok');document.body.style.overflow=''}}
 function wrongCode(msg){const b=$('#gateCard');b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');const gi=$('#gateIn');gi.classList.add('bad');setTimeout(()=>gi.classList.remove('bad'),900);gi.value='';renderCodebar(0);setMsg(msg);toast(msg,'err')}
 let cdTimer=null;
-function showCooldown(sec){ const wrap=$('#cooldown'),fill=$('#cdFill'),txt=$('#cdText'),btn=$('#gateBtn'),gi=$('#gateIn'); wrap.style.display='block';btn.disabled=true;gi.disabled=true; clearInterval(cdTimer); let left=sec;const total=sec; const tick=()=>{ txt.textContent=faNum(left)+' ثانیه تا باز شدن'; fill.style.width=(Math.max(0,left)/total*100)+'%'; if(left<=0){clearInterval(cdTimer);wrap.style.display='none';btn.disabled=false;gi.disabled=false;gi.focus();return} left--; }; tick();cdTimer=setInterval(tick,1000); }
+function showCooldown(sec){ const wrap=$('#cooldown'),fill=$('#cdFill'),num=$('#cdNum'),btn=$('#gateBtn'),gi=$('#gateIn'); wrap.style.display='block';btn.disabled=true;gi.disabled=true; clearInterval(cdTimer); let left=Math.max(1,Math.ceil(sec));const total=left; const tick=()=>{ num.textContent=faNum(left); fill.style.width=(Math.max(0,left)/total*100)+'%'; if(left<=0){clearInterval(cdTimer);wrap.style.display='none';btn.disabled=false;gi.disabled=false;gi.value='';gi.focus();setMsg('');return} left--; }; tick();cdTimer=setInterval(tick,1000); }
+/* ===== تست اتصال از شبکهٔ کاربر ===== */
+const IC_RADAR=`<svg viewBox="0 0 24 24"><path d="M4.5 12.5a9.5 9.5 0 0 1 15 0"/><path d="M7.5 15.2a5.5 5.5 0 0 1 9 0"/><circle cx="12" cy="18.2" r="1.4" fill="currentColor" stroke="none"/></svg>`;
+const IC_OK=`<svg viewBox="0 0 24 24"><path d="M5 13l4 4 10-11"/></svg>`;
+const IC_NO=`<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
+function parseEndpoint(cfg){ try{ const u=new URL(cfg); const host=u.hostname; if(!host) return null; const port=u.port || (u.protocol==='http:'?'80':'443'); return {host,port,proto:u.protocol.replace(':','')}; }catch(e){ return null; } }
+function isReality(cfg){ const core=String(cfg).split('#')[0]; return /(^|[?&])security=reality\b/i.test(core) || /\breality\b/i.test(core); }
+function isVmess(cfg){ return /^vmess:\/\//i.test(String(cfg)); }
+async function probeServer(s){
+  if(isReality(s.config)||isVmess(s.config)) return {st:'manual'};
+  const ep=parseEndpoint(s.config);
+  if(!ep) return {st:'manual'};
+  const url=(ep.proto==='http'?`http://${ep.host}:${ep.port}/`:`https://${ep.host}:${ep.port}/`);
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),5000);
+  const t0=performance.now();
+  try{
+    await fetch(url,{mode:'no-cors',cache:'no-store',signal:ctrl.signal});
+    clearTimeout(timer);
+    return {st:'up', ms:Math.max(1,Math.round(performance.now()-t0))};
+  }catch(e){
+    clearTimeout(timer);
+    return {st:'down'};
+  }
+}
+function setProbeIcon(btn,st){ const ic=btn.querySelector('.pb-ic'); if(ic) ic.innerHTML = st==='up'?IC_OK : st==='down'?IC_NO : IC_RADAR; }
+function setProbeText(btn,html){ const tx=btn.querySelector('.pb-tx'); if(tx) tx.innerHTML=html; }
+const PROBE_TIP={ idle:'سنجش در دسترس بودن از شبکهٔ فعلی‌ت', probing:'در حال سنجش…', up:'از شبکهٔ تو در دسترسه', down:'از شبکهٔ فعلی‌ت پاسخی نگرفتم — ممکنه فیلتر یا خاموش باشه', manual:'این پروتکل (REALITY/VMess) از مرورگر قابل سنجش نیست؛ در اپ تست کن' };
+async function runProbe(btn,id){
+  const s=state.servers.find(x=>x.id===id); if(!s) return;
+  if(btn.dataset.st==='probing') return;
+  btn.dataset.st='probing'; setProbeIcon(btn,'probing'); setProbeText(btn,'در حال سنجش…'); btn.title=PROBE_TIP.probing;
+  const r=await probeServer(s);
+  btn.classList.remove('just'); void btn.offsetWidth;
+  if(r.st==='up'){ btn.dataset.st='up'; setProbeIcon(btn,'up'); setProbeText(btn,`در دسترس <span class="probe-ms">· ${faNum(r.ms)}ms</span>`); btn.title=PROBE_TIP.up; }
+  else if(r.st==='down'){ btn.dataset.st='down'; setProbeIcon(btn,'down'); setProbeText(btn,'نرسید'); btn.title=PROBE_TIP.down; btn.classList.add('just'); setTimeout(()=>btn.classList.remove('just'),460); }
+  else { btn.dataset.st='manual'; setProbeIcon(btn,'manual'); setProbeText(btn,'در اپ تست کن'); btn.title=PROBE_TIP.manual; }
+}
 function sparks(){ const ring=$('#entryFx .fx-ring');if(!ring||reduced)return; for(let i=0;i<14;i++){const s=document.createElement('span');s.className='fx-spark'; const a=Math.random()*Math.PI*2,d=120+Math.random()*60; s.style.left='50%';s.style.top='50%';s.style.setProperty('--sx',Math.cos(a)*d+'px');s.style.setProperty('--sy',Math.sin(a)*d+'px'); s.style.animationDelay=(Math.random()*.3)+'s';ring.appendChild(s);setTimeout(()=>s.remove(),1800)} }
 function playEntry(exp){ const total=exp-Date.now();const d=daysLeft(total);const hours=Math.ceil(total/36e5); let num,unit;if(d>=1){num=d;unit='روز'}else{num=Math.max(1,hours);unit='ساعت'} $('#fxUnit').textContent=unit;$('#fxSub').textContent='تا '+faDate(new Date(exp).toISOString());$('#fxNum').textContent='0'; $('#entryFx').classList.add('open');sparks();countUp($('#fxNum'),num,1200); renderAll();startGateTimer(); setTimeout(()=>$('#entryFx').classList.add('go'),1800); setTimeout(()=>$('#entryFx').classList.remove('open','go'),2800); }
 function enterSite(j,anim){ state.role=j.role; state.exp=(j.role==='public')?0:(j.exp||0); if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated||state.generated} document.body.classList.add(j.role==='public'?'role-user':('role-'+state.role)); state.locked=false; if(anim&&state.role==='user'){ $('#lockwrap').classList.add('ok');burst(); if(j.isNew){setTimeout(()=>{hideGate(false);playEntry(j.exp)},380)} else{setTimeout(()=>{hideGate(true);renderAll();startGateTimer();startPing();toast('خوش برگشتی 👋')},380)} }else{hideGate(false);renderAll();if(state.role==='user'){startGateTimer();startPing()}} }
-async function tryUnlock(){ const gi=$('#gateIn'),gb=$('#gateBtn');const code=normCode(gi.value);if(!code)return; const base=workerBase();setMsg(''); if(!base){wrongCode('سرور ابری وصل نشده — بعداً دوباره تلاش کن');return} gi.disabled=true;gb.disabled=true;gb.textContent='در حال بررسی…'; try{ const r=await fetch(base+'/api/unlock',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,device:DEVICE})}); const j=await r.json().catch(()=>({})); if(r.status===429){setMsg(j.error||'تلاش بیش از حد');showCooldown(j.retryAfter||10);gb.textContent='🔓 باز کردن درگاه';return} if(!r.ok){ wrongCode(j.error||'کد دسترسی اشتباهه ❌'); if(j.triesLeft!==undefined&&j.triesLeft>0)setMsg(`کد اشتباهه — ${faNum(j.triesLeft)} تلاش دیگه مونده`); gi.disabled=false;gb.disabled=false;gb.textContent='🔓 باز کردن درگاه';return; } setSess({token:j.token,role:j.role,exp:j.exp||0,iat:Date.now()});enterSite(j,true); }catch(e){wrongCode('خطا در اتصال — اینترنت رو چک کن')} gi.disabled=false;gb.disabled=false;gb.textContent='🔓 باز کردن درگاه'; }
+async function tryUnlock(){ const gi=$('#gateIn'),gb=$('#gateBtn');const code=normCode(gi.value);if(!code)return; const base=workerBase();setMsg(''); if(!base){wrongCode('سرور ابری وصل نشده — بعداً دوباره تلاش کن');return} gi.disabled=true;gb.disabled=true;gb.textContent='در حال بررسی…'; try{ const r=await fetch(base+'/api/unlock',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,device:DEVICE})}); const j=await r.json().catch(()=>({})); if(r.status===429){ setMsg(j.error||'تلاش بیش از حد'); showCooldown(j.retryAfter||10); gb.textContent='🔓 باز کردن درگاه'; return; } if(!r.ok){ wrongCode(j.error||'کد دسترسی اشتباهه ❌'); if(j.triesLeft!==undefined){ if(j.triesLeft<=1) setMsg('⚠️ یک اشتباه دیگه و موقت قفل می‌شی'); else setMsg(`${faNum(j.triesLeft)} تلاش دیگه تا قفل موقت`); } gi.disabled=false;gb.disabled=false;gb.textContent='🔓 باز کردن درگاه';return; } setSess({token:j.token,role:j.role,exp:j.exp||0,iat:Date.now()});enterSite(j,true); }catch(e){wrongCode('خطا در اتصال — اینترنت رو چک کن')} gi.disabled=false;gb.disabled=false;gb.textContent='🔓 باز کردن درگاه'; }
 $('#gateBtn').onclick=tryUnlock;
 $('#gateIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock()});
 $('#gateIn').addEventListener('input',e=>renderCodebar(normCode(e.target.value).length));
@@ -480,14 +543,14 @@ let pingTimer=null;
 function startPing(){ clearInterval(pingTimer); if(state.role!=='user')return; const fire=()=>{if(document.hidden)return;const base=workerBase(),sess=getSess();if(!base||!sess)return; fetch(base+'/api/ping',{method:'POST',headers:{Authorization:'Bearer '+sess.token}}).catch(()=>{})}; pingTimer=setInterval(fire,45000); }
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&state.role==='user'){const base=workerBase(),sess=getSess();if(base&&sess)fetch(base+'/api/ping',{method:'POST',headers:{Authorization:'Bearer '+sess.token}}).catch(()=>{})} });
 function filtered(){ const q=state.q.trim().toLowerCase(); return state.servers.filter(s=>{const p=protoOf(s); if(state.fc&&s.country!==state.fc)return false; if(state.fp==='sub'&&p!=='sub')return false; if(state.fp==='vless'&&p!=='vless')return false; if(state.fp==='other'&&(p==='sub'||p==='vless'))return false; if(q&&!s.name.toLowerCase().includes(q))return false; return true}); }
-function cardHTML(s,i){ const p=protoOf(s);const pcls=p==='sub'?'sub':p==='vless'?'vless':'other'; const badge=p==='sub'?'ساب':p.toUpperCase();const sub=p==='sub'?'لینک سابسکریپشن':'کانفیگ '+p.toUpperCase(); const appList=(Array.isArray(s.apps)&&s.apps.length)?s.apps.map(id=>APPMAP[id]).filter(Boolean):APPS; const chips=appList.map(a=>`<button class="chip" data-app="${a.id}" data-id="${s.id}" style="--c:${a.color}" title="افزودن مستقیم به ${a.name}"><span class="chl">${a.ch}</span><span class="chn">${a.name}</span></button>`).join(''); const addedTxt=relTime(s.added); const addedFull=s.added?faDate(new Date(s.added).toISOString()):''; return `<article class="card rv p-${pcls}" data-id="${s.id}" style="transition-delay:${(i%6)*55}ms"> <span class="corner c-tl"></span><span class="corner c-br"></span> <div class="card-top"> <div class="flagwrap"><img class="flagimg" data-c="${s.country}" src="https://flagcdn.com/w40/${s.country.toLowerCase()}.png" alt="${cname(s.country)}"></div> <div class="cinfo"><h3>${esc(s.name)}</h3><span>${cname(s.country)} · ${sub}</span>${addedTxt?`<span class="added" title="افزوده شده: ${esc(addedFull)}">📅 ${addedTxt}</span>`:''}</div> <div class="meta">${isNew(s)?'<span class="badge new">جدید ✦</span>':''}<span class="badge">${badge}</span><span class="sig"><i></i><i></i><i></i><i></i></span></div> </div> <div class="cfgrow"><code dir="ltr" class="cfg">${esc(maskCfg(s.config))}</code><button class="mini eye" data-id="${s.id}" title="نمایش کامل">👁</button></div> ${s.note?`<p class="note">📌 ${esc(s.note)}</p>`:''} <div class="actions"><button class="btn primary copybtn" data-id="${s.id}">📋 کپی کانفیگ</button><button class="btn ghost qrbtn" data-id="${s.id}">QR</button></div> <div class="apps"><span class="appslabel">افزودن مستقیم به اپلیکیشن${appList.length<APPS.length?' ('+faNum(appList.length)+' کلاینت)':''}:</span><div class="chips">${chips}</div></div> </article>`; }
+function cardHTML(s,i){ const p=protoOf(s);const pcls=p==='sub'?'sub':p==='vless'?'vless':'other'; const badge=p==='sub'?'ساب':p.toUpperCase();const sub=p==='sub'?'لینک سابسکریپشن':'کانفیگ '+p.toUpperCase(); const appList=(Array.isArray(s.apps)&&s.apps.length)?s.apps.map(id=>APPMAP[id]).filter(Boolean):APPS; const chips=appList.map(a=>`<button class="chip" data-app="${a.id}" data-id="${s.id}" style="--c:${a.color}" title="افزودن مستقیم به ${a.name}"><span class="chl">${a.ch}</span><span class="chn">${a.name}</span></button>`).join(''); const addedTxt=relTime(s.added); const addedFull=s.added?faDate(new Date(s.added).toISOString()):''; return `<article class="card rv p-${pcls}" data-id="${s.id}" style="transition-delay:${(i%6)*55}ms"> <span class="corner c-tl"></span><span class="corner c-br"></span> <div class="card-top"> <div class="flagwrap"><img class="flagimg" data-c="${s.country}" src="https://flagcdn.com/w40/${s.country.toLowerCase()}.png" alt="${cname(s.country)}"></div> <div class="cinfo"><h3>${esc(s.name)}</h3><span>${cname(s.country)} · ${sub}</span>${addedTxt?`<span class="added" title="افزوده شده: ${esc(addedFull)}">📅 ${addedTxt}</span>`:''}</div> <div class="meta">${isNew(s)?'<span class="badge new">جدید ✦</span>':''}<span class="badge">${badge}</span><span class="sig"><i></i><i></i><i></i><i></i></span></div> </div> <div class="cfgrow"><code dir="ltr" class="cfg">${esc(maskCfg(s.config))}</code><button class="mini eye" data-id="${s.id}" title="نمایش کامل">👁</button></div> ${s.note?`<p class="note">📌 ${esc(s.note)}</p>`:''} <div class="actions"><button class="btn primary copybtn" data-id="${s.id}">📋 کپی کانفیگ</button><button class="btn ghost qrbtn" data-id="${s.id}">QR</button><button class="btn ghost probe-btn" data-probe="${s.id}" data-st="idle" title="${PROBE_TIP.idle}"><span class="pb-ic">${IC_RADAR}</span><span class="pb-tx">تست اتصال</span></button></div> <div class="apps"><span class="appslabel">افزودن مستقیم به اپلیکیشن${appList.length<APPS.length?' ('+faNum(appList.length)+' کلاینت)':''}:</span><div class="chips">${chips}</div></div> </article>`; }
 function renderGrid(){ const g=$('#grid'); if(state.locked){g.innerHTML='';$('#empty').style.display='none';$('#visCount').textContent='—';return} const list=filtered();$('#visCount').textContent=faNum(list.length)+' سرور'; if(!list.length){g.innerHTML='';$('#empty').style.display='block'; if(state.servers.length===0){$('#emptyTitle').textContent='هنوز سروری ثبت نشده 🛰️';$('#emptySub').textContent='به‌محض اینکه سرور جدیدی اضافه بشه، همین‌جا ظاهر می‌شه'} else{$('#emptyTitle').textContent='چیزی پیدا نشد 🔍';$('#emptySub').textContent='فیلترها رو عوض کن یا عبارت دیگه‌ای جستجو کن'}return} $('#empty').style.display='none';g.innerHTML=list.map(cardHTML).join(''); g.querySelectorAll('.flagimg').forEach(im=>im.addEventListener('error',()=>{im.outerHTML=`<span class="flagemoji">${flag(im.dataset.c)}</span>`},{once:true})); observe(); }
 function renderTicker(){ const parts=['POM GATEWAY','VLESS','REALITY','SUBSCRIPTION','TROJAN','WS','GRPC','VISION','XRAY','KARING']; parts.push(...new Set(state.servers.map(s=>cname(s.country)))); const one=parts.map(p=>`<span>${esc(p)}</span>`).join('<i>◆</i>'); $('#tk').innerHTML=`<div class="half">${one}</div><div class="half">${one}</div>`; }
 function renderStats(){ countUp($('#stServers'),state.servers.length);countUp($('#stCountries'),new Set(state.servers.map(s=>s.country)).size); $('#stUpdated').textContent=faDate(state.generated);$('#fdate').textContent=faDate(state.generated); }
 function renderAll(){renderTicker();renderStats();renderGrid()}
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.08});
 function observe(){document.querySelectorAll('.rv:not(.in)').forEach(el=>io.observe(el))}
-$('#grid').addEventListener('click',e=>{ const chip=e.target.closest('.chip');if(chip){openApp(chip.dataset.app,chip.dataset.id);return} const cp=e.target.closest('.copybtn');if(cp){copyServer(cp.dataset.id,cp);return} const qr=e.target.closest('.qrbtn');if(qr){showQR(qr.dataset.id);return} const eye=e.target.closest('.eye');if(eye){toggleCfg(eye.dataset.id,eye);return} });
+$('#grid').addEventListener('click',e=>{ const pb=e.target.closest('.probe-btn'); if(pb){runProbe(pb,pb.dataset.probe);return} const chip=e.target.closest('.chip');if(chip){openApp(chip.dataset.app,chip.dataset.id);return} const cp=e.target.closest('.copybtn');if(cp){copyServer(cp.dataset.id,cp);return} const qr=e.target.closest('.qrbtn');if(qr){showQR(qr.dataset.id);return} const eye=e.target.closest('.eye');if(eye){toggleCfg(eye.dataset.id,eye);return} });
 $('#grid').addEventListener('pointermove',e=>{ const card=e.target.closest('.card');if(!card||reduced)return;const r=card.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height; card.style.setProperty('--mx',(e.clientX-r.left)+'px');card.style.setProperty('--my',(e.clientY-r.top)+'px'); card.style.transform=`translateY(-6px) rotateX(${(0.5-y)*4}deg) rotateY(${(x-0.5)*4}deg)`; });
 $('#grid').addEventListener('pointerout',e=>{const card=e.target.closest('.card');if(card&&!card.contains(e.relatedTarget))card.style.transform=''});
 async function copyServer(id,btn){ const s=state.servers.find(x=>x.id===id);if(!s)return;await copyText(s.config); btn.classList.add('ok');const old=btn.innerHTML;btn.innerHTML='✓ کپی شد'; setTimeout(()=>{btn.innerHTML=old;btn.classList.remove('ok')},1500); toast('کانفیگ کپی شد — حالا توی اپلیکیشن Paste کن 📋'); }
