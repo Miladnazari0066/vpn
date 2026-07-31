@@ -28,6 +28,10 @@ button,input,select,textarea{font-family:inherit}
 .login-box input{width:100%;background:#081a20;border:1.5px solid var(--line2);border-radius:11px;padding:13px;text-align:center;font-family:var(--mono);font-size:1.2rem;letter-spacing:.3em;color:var(--ink);margin-bottom:14px;transition:border-color .2s,box-shadow .2s}
 .login-box input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px rgba(47,214,172,.15)}
 #loginErr{color:var(--coral);font-size:.8rem;margin-top:12px;min-height:1.4em}
+.cooldown{margin-top:14px}
+.cd-bar{height:6px;border-radius:6px;background:#081a20;overflow:hidden;border:1px solid rgba(255,107,129,.3)}
+.cd-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--coral),var(--amber));border-radius:6px;transition:width 1s linear;width:100%}
+.cd-text{display:block;text-align:center;font-family:var(--mono);font-size:.72rem;color:var(--coral);margin-top:7px}
 .btn{cursor:pointer;border-radius:10px;padding:12px 19px;font-size:.87rem;font-weight:700;border:1px solid transparent;transition:transform .15s,box-shadow .2s,background .2s,border-color .2s,color .2s;display:inline-flex;align-items:center;justify-content:center;gap:7px}
 .btn:active{transform:scale(.95)}
 .btn:disabled{opacity:.55;cursor:wait}
@@ -155,6 +159,10 @@ button,input,select,textarea{font-family:inherit}
     <input type="password" id="loginPass" dir="ltr" placeholder="•••••" autocomplete="off">
     <button class="btn primary" id="loginBtn" style="width:100%">ورود به پنل</button>
     <p id="loginErr"></p>
+    <div class="cooldown" id="cooldown" style="display:none">
+      <div class="cd-bar"><i id="cdFill"></i></div>
+      <span class="cd-text" id="cdText"></span>
+    </div>
   </div>
 </div>
 <div id="panel">
@@ -262,11 +270,7 @@ const APPS = [
   {id:'happ',    name:'Happ',       ch:'H', color:'#c6e85a'},
 ];
 const APPMAP = Object.fromEntries(APPS.map(a=>[a.id,a]));
-const COUNTRIES = {
-  DE:'آلمان',NL:'هلند',SE:'سوئد',FR:'فرانسه',US:'آمریکا',UK:'انگلیس',TR:'ترکیه',AE:'امارات',
-  SG:'سنگاپور',JP:'ژاپن',CA:'کانادا',CH:'سوئیس',IT:'ایتالیا',ES:'اسپانیا',PL:'لهستان',FI:'فنلاند',
-  NO:'نروژ',AT:'اتریش',BE:'بلژیک',RU:'روسیه',KR:'کره جنوبی',AU:'استرالیا',IN:'هند',BR:'برزیل',IR:'ایران',
-};
+const COUNTRIES = { DE:'آلمان',NL:'هلند',SE:'سوئد',FR:'فرانسه',US:'آمریکا',UK:'انگلیس',TR:'ترکیه',AE:'امارات',SG:'سنگاپور',JP:'ژاپن',CA:'کانادا',CH:'سوئیس',IT:'ایتالیا',ES:'اسپانیا',PL:'لهستان',FI:'فنلاند',NO:'نروژ',AT:'اتریش',BE:'بلژیک',RU:'روسیه',KR:'کره جنوبی',AU:'استرالیا',IN:'هند',BR:'برزیل',IR:'ایران' };
 const DAY_OPTS=[1,10,15,20,30];
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
@@ -276,303 +280,63 @@ const flag=c=>COUNTRIES[c]?flagEmoji(c):'🌍';
 const cname=c=>COUNTRIES[c]||'ناشناخته';
 const faNum=n=>Number(n).toLocaleString('fa-IR');
 const faDate=iso=>{try{return new Intl.DateTimeFormat('fa-IR',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}).format(new Date(iso))}catch(e){return '—'}};
-function relTime(ts){
-  if(!ts)return '';
-  const d=Date.now()-ts;
-  if(d<45000)return 'همین الان';
-  if(d<3600000)return faNum(Math.floor(d/60000))+' دقیقه پیش';
-  if(d<864e5)return faNum(Math.floor(d/3600000))+' ساعت پیش';
-  if(d<30*864e5)return faNum(Math.floor(d/864e5))+' روز پیش';
-  return faDate(new Date(ts).toISOString());
-}
+function relTime(ts){ if(!ts)return ''; const d=Date.now()-ts; if(d<45000)return 'همین الان'; if(d<3600000)return faNum(Math.floor(d/60000))+' دقیقه پیش'; if(d<864e5)return faNum(Math.floor(d/3600000))+' ساعت پیش'; if(d<30*864e5)return faNum(Math.floor(d/864e5))+' روز پیش'; return faDate(new Date(ts).toISOString()); }
 const ZW_RE=new RegExp('[​-‏‪-‮⁠﻿]','g');
-function normCode(s){
-  return String(s==null?'':s)
-    .replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
-    .replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d))
-    .replace(/［﹫＠]/g,'@').replace(ZW_RE,'').replace(/\s+/g,' ').trim();
-}
-function parseUA(ua){
-  ua=ua||'';let os='دستگاه نامشخص',browser='',model='';
-  if(/android/i.test(ua)){os='Android';const m=ua.match(/;\s*([^;)]+?)\s*(?:Build\b|[);])/);if(m)model=m[1].trim()}
-  else if(/iphone/i.test(ua)){os='iOS';model='iPhone'}
-  else if(/ipad/i.test(ua)){os='iPadOS';model='iPad'}
-  else if(/windows/i.test(ua)){os='Windows'}
-  else if(/macintosh|mac os/i.test(ua)){os='macOS'}
-  else if(/linux/i.test(ua)){os='Linux'}
-  if(/edg\//i.test(ua))browser='Edge';else if(/chrome/i.test(ua))browser='Chrome';
-  else if(/safari/i.test(ua))browser='Safari';else if(/firefox/i.test(ua))browser='Firefox';
-  model=model.replace(/build\/.*/i,'').replace(/[);].*$/,'').trim();
-  const dev=[model,os].filter(Boolean).join(' · ')+(browser?' · '+browser:'');
-  return {os,browser,model,dev};
-}
-function deviceId(){
-  let id=localStorage.getItem('pomDevice');
-  if(!id){id='d-'+[...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('pomDevice',id)}
-  return id;
-}
+function normCode(s){ return String(s==null?'':s).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/［﹫＠]/g,'@').replace(ZW_RE,'').replace(/\s+/g,' ').trim(); }
+function parseUA(ua){ ua=ua||'';let os='دستگاه نامشخص',browser='',model=''; if(/android/i.test(ua)){os='Android';const m=ua.match(/;\s*([^;)]+?)\s*(?:Build\b|[);])/);if(m)model=m[1].trim()} else if(/iphone/i.test(ua)){os='iOS';model='iPhone'} else if(/ipad/i.test(ua)){os='iPadOS';model='iPad'} else if(/windows/i.test(ua)){os='Windows'} else if(/macintosh|mac os/i.test(ua)){os='macOS'} else if(/linux/i.test(ua)){os='Linux'} if(/edg\//i.test(ua))browser='Edge';else if(/chrome/i.test(ua))browser='Chrome'; else if(/safari/i.test(ua))browser='Safari';else if(/firefox/i.test(ua))browser='Firefox'; model=model.replace(/build\/.*/i,'').replace(/[);].*$/,'').trim(); const dev=[model,os].filter(Boolean).join(' · ')+(browser?' · '+browser:''); return {os,browser,model,dev}; }
+function deviceId(){ let id=localStorage.getItem('pomDevice'); if(!id){id='d-'+[...crypto.getRandomValues(new Uint8Array(8))].map(b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('pomDevice',id)} return id; }
 const DEVICE=deviceId();
-async function copyText(t){
-  try{await navigator.clipboard.writeText(t)}
-  catch(e){const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(_){}
-  ta.remove()}
-  return true;
-}
-function toast(msg,type='ok'){
-  const el=document.createElement('div');el.className='toast '+type;el.innerHTML=msg;
-  $('#toasts').appendChild(el);requestAnimationFrame(()=>el.classList.add('show'));
-  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),350)},3800);
-}
+async function copyText(t){ try{await navigator.clipboard.writeText(t)} catch(e){const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(_){} ta.remove()} return true; }
+function toast(msg,type='ok'){ const el=document.createElement('div');el.className='toast '+type;el.innerHTML=msg; $('#toasts').appendChild(el);requestAnimationFrame(()=>el.classList.add('show')); setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),350)},3800); }
 const state={servers:[],generated:null,passes:[],gateOn:true,gates:[],usersFilter:'all'};
 let editingId=null,editingGateId=null,pickedApps=new Set();
 function normalize(s){return{id:s.id||'s'+Math.random().toString(36).slice(2,8),name:s.name||'سرور',country:s.country||'DE',config:s.config||'',note:s.note||'',added:s.added||null,apps:Array.isArray(s.apps)?s.apps:[],active:s.active!==false}}
-function normalizeGatesList(arr){
-  if(!Array.isArray(arr))return [];
-  return arr.map(g=>({id:g.id||('g'+Math.random().toString(36).slice(2,8)),code:normCode(g.code||''),days:DAY_OPTS.includes(+g.days)?+g.days:1,maxUses:+g.maxUses>=0?+g.maxUses:1,enabled:g.enabled!==false,label:String(g.label||'')})).filter(g=>g.code);
-}
+function normalizeGatesList(arr){ if(!Array.isArray(arr))return []; return arr.map(g=>({id:g.id||('g'+Math.random().toString(36).slice(2,8)),code:normCode(g.code||''),days:DAY_OPTS.includes(+g.days)?+g.days:1,maxUses:+g.maxUses>=0?+g.maxUses:1,enabled:g.enabled!==false,label:String(g.label||'')})).filter(g=>g.code); }
 const workerBase=()=>CONFIG.workerUrl.replace(/\/+$/,'');
 function getAdminToken(){return sessionStorage.getItem('pomAdmin')}
 function setAdminToken(t){t?sessionStorage.setItem('pomAdmin',t):sessionStorage.removeItem('pomAdmin')}
 function protoOf(s){if(/^https?:\/\//i.test(s.config))return'sub';const m=s.config.match(/^([a-z]+):\/\//i);return m?m[1].toLowerCase():'other'}
-function guessCountry(n){
-  const up=n.toUpperCase();
-  const map={GERMANY:'DE',FRANKFURT:'DE',NETHERLANDS:'NL',AMSTERDAM:'NL',HOLLAND:'NL',SWEDEN:'SE',STOCKHOLM:'SE',FRANCE:'FR',PARIS:'FR',TURKEY:'TR',ISTANBUL:'TR',DUBAI:'AE',SINGAPORE:'SG',JAPAN:'JP',TOKYO:'JP',CANADA:'CA',SWISS:'CH',ZURICH:'CH',ITALY:'IT',MILAN:'IT',SPAIN:'ES',MADRID:'ES',POLAND:'PL',FINLAND:'FI',NORWAY:'NO',AUSTRIA:'AT',VIENNA:'AT',BELGIUM:'BE',RUSSIA:'RU',MOSCOW:'RU',KOREA:'KR',SEOUL:'KR',AUSTRALIA:'AU',SYDNEY:'AU',INDIA:'IN',MUMBAI:'IN',BRAZIL:'BR',LONDON:'UK',ENGLAND:'UK',MANCHESTER:'UK',NEWYORK:'US',LOSANGELES:'US',DALLAS:'US',SEATTLE:'US',CHICAGO:'US',SANJOSE:'US',VIRGINIA:'US'};
-  for(const k in map){if(up.includes(k))return map[k]}
-  for(const c in COUNTRIES){if(n.includes(COUNTRIES[c]))return c}
-  return 'DE';
-}
+function guessCountry(n){ const up=n.toUpperCase(); const map={GERMANY:'DE',FRANKFURT:'DE',NETHERLANDS:'NL',AMSTERDAM:'NL',HOLLAND:'NL',SWEDEN:'SE',STOCKHOLM:'SE',FRANCE:'FR',PARIS:'FR',TURKEY:'TR',ISTANBUL:'TR',DUBAI:'AE',SINGAPORE:'SG',JAPAN:'JP',TOKYO:'JP',CANADA:'CA',SWISS:'CH',ZURICH:'CH',ITALY:'IT',MILAN:'IT',SPAIN:'ES',MADRID:'ES',POLAND:'PL',FINLAND:'FI',NORWAY:'NO',AUSTRIA:'AT',VIENNA:'AT',BELGIUM:'BE',RUSSIA:'RU',MOSCOW:'RU',KOREA:'KR',SEOUL:'KR',AUSTRALIA:'AU',SYDNEY:'AU',INDIA:'IN',MUMBAI:'IN',BRAZIL:'BR',LONDON:'UK',ENGLAND:'UK',MANCHESTER:'UK',NEWYORK:'US',LOSANGELES:'US',DALLAS:'US',SEATTLE:'US',CHICAGO:'US',SANJOSE:'US',VIRGINIA:'US'}; for(const k in map){if(up.includes(k))return map[k]} for(const c in COUNTRIES){if(n.includes(COUNTRIES[c]))return c} return 'DE'; }
 function gateLabel(g){return g.label||g.code}
-function setSrvStat(s){
-  const el=$('#srvStat');if(!el)return;
-  const map={ok:['🟢 همگام','var(--teal)'],sync:['🟡 ارسال…','var(--amber)'],err:['🔴 خطا','var(--coral)'],off:['⚪ قطع','var(--faint)']};
-  el.textContent=map[s][0];el.style.color=map[s][1];
-}
-async function pushAdmin(){
-  const base=workerBase(),tok=getAdminToken();
-  if(!base||!tok){setSrvStat('off');return false}
-  setSrvStat('sync');
-  try{
-    const r=await fetch(base+'/api/admin',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},keepalive:true,body:JSON.stringify({servers:state.servers,gateOn:state.gateOn,gates:state.gates})});
-    setSrvStat(r.ok?'ok':'err');return r.ok;
-  }catch(e){setSrvStat('err');return false}
-}
-async function adminPassAction(action,id,extra){
-  const base=workerBase(),tok=getAdminToken();
-  if(!base||!tok)return false;
-  setSrvStat('sync');
-  try{const r=await fetch(base+'/api/admin/pass',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({action,id,...(extra||{})})});
-    if(!r.ok)throw 0;const j=await r.json();if(j.passes)state.passes=j.passes;setSrvStat('ok');renderUsers();return true}
-  catch(e){setSrvStat('err');toast('عملیات ناموفق','err');return false}
-}
-async function refreshAdmin(silent){
-  const base=workerBase(),tok=getAdminToken();
-  if(!base||!tok)return;
-  try{const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+tok}});
-    if(r.ok){const j=await r.json();if(j.passes)state.passes=j.passes;if(j.gateOn!==undefined)state.gateOn=j.gateOn;if(j.gates)state.gates=normalizeGatesList(j.gates);if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated}renderAll();if(!silent)toast('بروزرسانی شد 🔄')}
-    else{setAdminToken(null);location.reload()}
-  }catch(e){if(!silent)toast('خطا در بروزرسانی','err')}
-}
+function setSrvStat(s){ const el=$('#srvStat');if(!el)return; const map={ok:['🟢 همگام','var(--teal)'],sync:['🟡 ارسال…','var(--amber)'],err:['🔴 خطا','var(--coral)'],off:['⚪ قطع','var(--faint)']}; el.textContent=map[s][0];el.style.color=map[s][1]; }
+async function pushAdmin(){ const base=workerBase(),tok=getAdminToken(); if(!base||!tok){setSrvStat('off');return false} setSrvStat('sync'); try{ const r=await fetch(base+'/api/admin',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},keepalive:true,body:JSON.stringify({servers:state.servers,gateOn:state.gateOn,gates:state.gates})}); setSrvStat(r.ok?'ok':'err');return r.ok; }catch(e){setSrvStat('err');return false} }
+async function adminPassAction(action,id,extra){ const base=workerBase(),tok=getAdminToken(); if(!base||!tok)return false; setSrvStat('sync'); try{const r=await fetch(base+'/api/admin/pass',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({action,id,...(extra||{})})}); if(!r.ok)throw 0;const j=await r.json();if(j.passes)state.passes=j.passes;setSrvStat('ok');renderUsers();return true} catch(e){setSrvStat('err');toast('عملیات ناموفق','err');return false} }
+async function refreshAdmin(silent){ const base=workerBase(),tok=getAdminToken(); if(!base||!tok)return; try{const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+tok}}); if(r.ok){const j=await r.json();if(j.passes)state.passes=j.passes;if(j.gateOn!==undefined)state.gateOn=j.gateOn;if(j.gates)state.gates=normalizeGatesList(j.gates);if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated}renderAll();if(!silent)toast('بروزرسانی شد 🔄')} else{setAdminToken(null);location.reload()} }catch(e){if(!silent)toast('خطا در بروزرسانی','err')} }
 $('#refreshBtn').onclick=async()=>{const b=$('#refreshBtn');b.classList.add('spin');await refreshAdmin();setTimeout(()=>b.classList.remove('spin'),800)};
 $('#logoutAdmin').onclick=()=>{if(confirm('از پنل مدیریت خارج می‌شی؟')){setAdminToken(null);location.reload()}};
-$$('#pNav .p-tab').forEach(b=>b.addEventListener('click',()=>{
-  $$('#pNav .p-tab').forEach(x=>x.classList.remove('active'));
-  $$('.pane').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');
-  const pane=$(`.pane[data-pane="${b.dataset.tab}"]`);if(pane)pane.classList.add('active');
-  if(b.dataset.tab==='users'){renderUsersFilter();refreshAdmin(true)}
-}));
-function renderAppPick(){
-  $('#appPick').innerHTML=APPS.map(a=>`<div class="apk ${pickedApps.has(a.id)?'picked':''}" data-app="${a.id}" style="--c:${a.color}"><span class="dot"></span><span>${a.name}</span></div>`).join('');
-}
-$('#appPick').addEventListener('click',e=>{
-  const c=e.target.closest('.apk');if(!c)return;
-  const id=c.dataset.app;
-  if(pickedApps.has(id))pickedApps.delete(id);else pickedApps.add(id);
-  c.classList.toggle('picked',pickedApps.has(id));
-});
-function renderPanelList(){
-  $('#pCount').textContent=faNum(state.servers.length);
-  const onCount=state.servers.filter(s=>s.active!==false).length;
-  $('#pOnCount').textContent=`${faNum(onCount)} روشن / ${faNum(state.servers.length)}`;
-  $('#pList').innerHTML=state.servers.map((s,i)=>{
-    const off=s.active===false;
-    const appsN=(Array.isArray(s.apps)&&s.apps.length)?s.apps.length:APPS.length;
-    const dtxt=relTime(s.added);
-    return `<div class="prow ${off?'off':''}"><span class="srv-dot ${off?'red':'green'}" title="${off?'خاموش':'روشن'}"></span><span>${flag(s.country)}</span>
-      <div class="pinfo"><b>${esc(s.name)}</b><i>${protoOf(s)==='sub'?'SUB':protoOf(s).toUpperCase()} · ${faNum(appsN)} کلاینت${dtxt?` · <span class="pdate">${dtxt}</span>`:''}</i></div>
-      <div class="pacts">
-        <button data-a="toggle" data-i="${i}" title="${off?'روشن کردن':'خاموش کردن'}">${off?'🔴':'🟢'}</button>
-        <button data-a="up" data-i="${i}" title="بالا">↑</button><button data-a="down" data-i="${i}" title="پایین">↓</button>
-        <button data-a="edit" data-i="${i}" title="ویرایش">✎</button><button data-a="del" data-i="${i}" class="del" title="حذف">✕</button>
-      </div></div>`;
-  }).join('')||'<p class="hint">هنوز سروری اضافه نشده.</p>';
-}
-$('#pList').addEventListener('click',async e=>{
-  const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i,a=b.dataset.a;
-  if(a==='del'){const s=state.servers[i];if(confirm(`سرور «${s.name}» حذف بشه؟`)){state.servers.splice(i,1);afterChange()}}
-  if(a==='toggle'){const s=state.servers[i];s.active=s.active===false?true:false;afterChange();toast(s.active?'سرور روشن شد 🟢':'سرور خاموش شد 🔴')}
-  if(a==='edit'){const s=state.servers[i];$('#sName').value=s.name;$('#sCountry').value=s.country;$('#sCfg').value=s.config;$('#sNote').value=s.note||'';pickedApps=new Set(Array.isArray(s.apps)?s.apps:[]);renderAppPick();editingId=s.id;$('#addBtn').textContent='ذخیره ویرایش ✓';$('#cancelEdit').style.display='block';$('.p-body').scrollTop=0;$('#sName').focus()}
-  if(a==='up'&&i>0){[state.servers[i-1],state.servers[i]]=[state.servers[i],state.servers[i-1]];afterChange()}
-  if(a==='down'&&i<state.servers.length-1){[state.servers[i+1],state.servers[i]]=[state.servers[i],state.servers[i+1]];afterChange()}
-});
-$('#addForm').addEventListener('submit',async e=>{
-  e.preventDefault();const name=$('#sName').value.trim(),country=$('#sCountry').value,cfg=$('#sCfg').value.trim(),note=$('#sNote').value.trim();
-  if(!name||!cfg){toast('نام و کانفیگ الزامیه','err');return}
-  const apps=[...pickedApps];
-  if(editingId){const s=state.servers.find(x=>x.id===editingId);if(s)Object.assign(s,{name,country,config:cfg,note,apps});editingId=null;$('#addBtn').textContent='افزودن سرور';$('#cancelEdit').style.display='none';toast('ویرایش ذخیره شد')}
-  else{state.servers.unshift({id:'s'+Date.now(),name,country,config:cfg,note,added:Date.now(),apps,active:true});toast('سرور اضافه شد')}
-  e.target.reset();$('#sCountry').value='DE';pickedApps.clear();renderAppPick();
-  renderAll();const ok=await pushAdmin();toast(ok?'✓ همگام شد':'⚠ همگام‌سازی ناموفق',ok?'ok':'err');
-});
+$$('#pNav .p-tab').forEach(b=>b.addEventListener('click',()=>{ $$('#pNav .p-tab').forEach(x=>x.classList.remove('active')); $$('.pane').forEach(x=>x.classList.remove('active')); b.classList.add('active'); const pane=$(`.pane[data-pane="${b.dataset.tab}"]`);if(pane)pane.classList.add('active'); if(b.dataset.tab==='users'){renderUsersFilter();refreshAdmin(true)} }));
+function renderAppPick(){ $('#appPick').innerHTML=APPS.map(a=>`<div class="apk ${pickedApps.has(a.id)?'picked':''}" data-app="${a.id}" style="--c:${a.color}"><span class="dot"></span><span>${a.name}</span></div>`).join(''); }
+$('#appPick').addEventListener('click',e=>{ const c=e.target.closest('.apk');if(!c)return; const id=c.dataset.app; if(pickedApps.has(id))pickedApps.delete(id);else pickedApps.add(id); c.classList.toggle('picked',pickedApps.has(id)); });
+function renderPanelList(){ $('#pCount').textContent=faNum(state.servers.length); const onCount=state.servers.filter(s=>s.active!==false).length; $('#pOnCount').textContent=`${faNum(onCount)} روشن / ${faNum(state.servers.length)}`; $('#pList').innerHTML=state.servers.map((s,i)=>{ const off=s.active===false; const appsN=(Array.isArray(s.apps)&&s.apps.length)?s.apps.length:APPS.length; const dtxt=relTime(s.added); return `<div class="prow ${off?'off':''}"><span class="srv-dot ${off?'red':'green'}" title="${off?'خاموش':'روشن'}"></span><span>${flag(s.country)}</span> <div class="pinfo"><b>${esc(s.name)}</b><i>${protoOf(s)==='sub'?'SUB':protoOf(s).toUpperCase()} · ${faNum(appsN)} کلاینت${dtxt?` · <span class="pdate">${dtxt}</span>`:''}</i></div> <div class="pacts"> <button data-a="toggle" data-i="${i}" title="${off?'روشن کردن':'خاموش کردن'}">${off?'🔴':'🟢'}</button> <button data-a="up" data-i="${i}" title="بالا">↑</button><button data-a="down" data-i="${i}" title="پایین">↓</button> <button data-a="edit" data-i="${i}" title="ویرایش">✎</button><button data-a="del" data-i="${i}" class="del" title="حذف">✕</button> </div></div>`; }).join('')||'<p class="hint">هنوز سروری اضافه نشده.</p>'; }
+$('#pList').addEventListener('click',async e=>{ const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i,a=b.dataset.a; if(a==='del'){const s=state.servers[i];if(confirm(`سرور «${s.name}» حذف بشه؟`)){state.servers.splice(i,1);afterChange()}} if(a==='toggle'){const s=state.servers[i];s.active=s.active===false?true:false;afterChange();toast(s.active?'سرور روشن شد 🟢':'سرور خاموش شد 🔴')} if(a==='edit'){const s=state.servers[i];$('#sName').value=s.name;$('#sCountry').value=s.country;$('#sCfg').value=s.config;$('#sNote').value=s.note||'';pickedApps=new Set(Array.isArray(s.apps)?s.apps:[]);renderAppPick();editingId=s.id;$('#addBtn').textContent='ذخیره ویرایش ✓';$('#cancelEdit').style.display='block';$('.p-body').scrollTop=0;$('#sName').focus()} if(a==='up'&&i>0){[state.servers[i-1],state.servers[i]]=[state.servers[i],state.servers[i-1]];afterChange()} if(a==='down'&&i<state.servers.length-1){[state.servers[i+1],state.servers[i]]=[state.servers[i],state.servers[i+1]];afterChange()} });
+$('#addForm').addEventListener('submit',async e=>{ e.preventDefault();const name=$('#sName').value.trim(),country=$('#sCountry').value,cfg=$('#sCfg').value.trim(),note=$('#sNote').value.trim(); if(!name||!cfg){toast('نام و کانفیگ الزامیه','err');return} const apps=[...pickedApps]; if(editingId){const s=state.servers.find(x=>x.id===editingId);if(s)Object.assign(s,{name,country,config:cfg,note,apps});editingId=null;$('#addBtn').textContent='افزودن سرور';$('#cancelEdit').style.display='none';toast('ویرایش ذخیره شد')} else{state.servers.unshift({id:'s'+Date.now(),name,country,config:cfg,note,added:Date.now(),apps,active:true});toast('سرور اضافه شد')} e.target.reset();$('#sCountry').value='DE';pickedApps.clear();renderAppPick(); renderAll();const ok=await pushAdmin();toast(ok?'✓ همگام شد':'⚠ همگام‌سازی ناموفق',ok?'ok':'err'); });
 $('#cancelEdit').onclick=()=>{editingId=null;$('#addBtn').textContent='افزودن سرور';$('#cancelEdit').style.display='none';$('#addForm').reset();$('#sCountry').value='DE';pickedApps.clear();renderAppPick()};
-$('#bulkBtn').onclick=async()=>{
-  const lines=$('#bulkIn').value.split('\n').map(l=>l.trim()).filter(Boolean);let n=0;
-  lines.forEach(l=>{if(!(/^https?:\/\//i.test(l)||/^[a-z]+:\/\//i.test(l)))return;
-    let nm='';const h=l.indexOf('#');if(h>-1){try{nm=decodeURIComponent(l.slice(h+1))}catch(_){nm=l.slice(h+1)}}
-    if(!nm){try{nm=new URL(l.replace(/^[a-z]+:\/\//i,'https://')).hostname}catch(_){nm='سرور '+(state.servers.length+1)}}
-    state.servers.unshift({id:'s'+Date.now()+'_'+n,name:nm,country:guessCountry(nm),config:l,note:'',added:Date.now(),apps:[],active:true});n++});
-  if(n){$('#bulkIn').value='';renderAll();const ok=await pushAdmin();toast(ok?`✓ ${faNum(n)} سرور اضافه و همگام شد`:'⚠ همگام‌سازی ناموفق',ok?'ok':'err')}
-  else toast('هیچ کانفیگ معتبری پیدا نشد','err');
-};
+$('#bulkBtn').onclick=async()=>{ const lines=$('#bulkIn').value.split('\n').map(l=>l.trim()).filter(Boolean);let n=0; lines.forEach(l=>{if(!(/^https?:\/\//i.test(l)||/^[a-z]+:\/\//i.test(l)))return; let nm='';const h=l.indexOf('#');if(h>-1){try{nm=decodeURIComponent(l.slice(h+1))}catch(_){nm=l.slice(h+1)}} if(!nm){try{nm=new URL(l.replace(/^[a-z]+:\/\//i,'https://')).hostname}catch(_){nm='سرور '+(state.servers.length+1)}} state.servers.unshift({id:'s'+Date.now()+'_'+n,name:nm,country:guessCountry(nm),config:l,note:'',added:Date.now(),apps:[],active:true});n++}); if(n){$('#bulkIn').value='';renderAll();const ok=await pushAdmin();toast(ok?`✓ ${faNum(n)} سرور اضافه و همگام شد`:'⚠ همگام‌سازی ناموفق',ok?'ok':'err')} else toast('هیچ کانفیگ معتبری پیدا نشد','err'); };
 function renderGateCount(){$('#gateCount').textContent=faNum(state.gates.length);$('#tabGateBadge').textContent=faNum(state.gates.length)}
-function renderGates(){
-  const now=Date.now();
-  $('#gateList').innerHTML=state.gates.map(g=>{
-    const seats=new Set(state.passes.filter(p=>(p.gateId?p.gateId===g.id:p.codeRef===g.code)&&!p.banned&&p.exp>now).map(p=>p.deviceId)).size;
-    const cap=g.maxUses>0?g.maxUses:Infinity;
-    const pct=cap===Infinity?0:Math.min(100,(seats/cap)*100);
-    const full=cap!==Infinity&&seats>=cap;
-    const capTxt=g.maxUses>0?`${faNum(seats)}/${faNum(g.maxUses)} صندلی`:`${faNum(seats)} فعال · نامحدود`;
-    return `<div class="gc ${g.enabled?'':'off'}">
-      <div class="gc-top">
-        <span class="gc-dot"></span>
-        <div class="gc-info"><b>${g.label?esc(g.label):'<span style="color:var(--faint)">بدون برچسب</span>'}</b><i><span class="gc-code">${esc(g.code)}</span> · ${faNum(g.days)} روز · ${capTxt}</i></div>
-        <span class="gc-stat">${g.enabled?'فعال':'غیرفعال'}</span>
-      </div>
-      ${g.maxUses>0?`<div class="gc-bar ${full?'full':''}"><i style="width:${pct}%"></i></div>`:''}
-      <div class="gc-acts">
-        <button data-ga="edit" data-gid="${g.id}">✎ ویرایش</button>
-        <button data-ga="copy" data-gid="${g.id}">📋 کپی کد</button>
-        <button data-ga="toggle" data-gid="${g.id}">${g.enabled?'⏸ غیرفعال':'▶ فعال'}</button>
-        <button data-ga="del" data-gid="${g.id}" class="gdel">🗑 حذف</button>
-      </div>
-    </div>`;
-  }).join('')||'<p class="hint">هنوز کدی نساختی. با دکمهٔ زیر اولین کد رو بساز.</p>';
-}
-$('#gateList').addEventListener('click',async e=>{
-  const b=e.target.closest('button');if(!b)return;const gid=b.dataset.gid,ga=b.dataset.ga;
-  const g=state.gates.find(x=>x.id===gid);if(!g)return;
-  if(ga==='copy'){await copyText(g.code);toast('کد «'+g.code+'» کپی شد 📋')}
-  else if(ga==='toggle'){g.enabled=!g.enabled;renderAll();const ok=await pushAdmin();toast(ok?(g.enabled?'کد فعال شد ▶':'کد غیرفعال شد ⏸'):'⚠ همگام‌سازی ناموفق',ok?'ok':'err')}
-  else if(ga==='del'){if(confirm(`کد «${gateLabel(g)}» حذف بشه؟ (کارت‌های ورودش دیگه کار نمی‌کنن)`)){state.gates=state.gates.filter(x=>x.id!==gid);if(editingGateId===gid)resetGateForm();renderAll();const ok=await pushAdmin();toast(ok?'کد حذف شد 🗑':'⚠ همگام‌سازی ناموفق',ok?'ok':'err')}}
-  else if(ga==='edit'){editingGateId=gid;$('#gateLabel').value=g.label;$('#gateCode').value=g.code;$('#gateDays').value=String(g.days);$('#gateMax').value=String(g.maxUses);$('#gateFormTitle').textContent='✎ ویرایش کد';$('#gateSaveBtn').textContent='💾 ذخیره ویرایش';$('#gateCancelBtn').style.display='';$('#gateLabel').focus()}
-});
+function renderGates(){ const now=Date.now(); $('#gateList').innerHTML=state.gates.map(g=>{ const seats=new Set(state.passes.filter(p=>(p.gateId?p.gateId===g.id:p.codeRef===g.code)&&!p.banned&&p.exp>now).map(p=>p.deviceId)).size; const cap=g.maxUses>0?g.maxUses:Infinity; const pct=cap===Infinity?0:Math.min(100,(seats/cap)*100); const full=cap!==Infinity&&seats>=cap; const capTxt=g.maxUses>0?`${faNum(seats)}/${faNum(g.maxUses)} صندلی`:`${faNum(seats)} فعال · نامحدود`; return `<div class="gc ${g.enabled?'':'off'}"> <div class="gc-top"> <span class="gc-dot"></span> <div class="gc-info"><b>${g.label?esc(g.label):'<span style="color:var(--faint)">بدون برچسب</span>'}</b><i><span class="gc-code">${esc(g.code)}</span> · ${faNum(g.days)} روز · ${capTxt}</i></div> <span class="gc-stat">${g.enabled?'فعال':'غیرفعال'}</span> </div> ${g.maxUses>0?`<div class="gc-bar ${full?'full':''}"><i style="width:${pct}%"></i></div>`:''} <div class="gc-acts"> <button data-ga="edit" data-gid="${g.id}">✎ ویرایش</button> <button data-ga="copy" data-gid="${g.id}">📋 کپی کد</button> <button data-ga="toggle" data-gid="${g.id}">${g.enabled?'⏸ غیرفعال':'▶ فعال'}</button> <button data-ga="del" data-gid="${g.id}" class="gdel">🗑 حذف</button> </div> </div>`; }).join('')||'<p class="hint">هنوز کدی نساختی. با دکمهٔ زیر اولین کد رو بساز.</p>'; }
+$('#gateList').addEventListener('click',async e=>{ const b=e.target.closest('button');if(!b)return;const gid=b.dataset.gid,ga=b.dataset.ga; const g=state.gates.find(x=>x.id===gid);if(!g)return; if(ga==='copy'){await copyText(g.code);toast('کد «'+g.code+'» کپی شد 📋')} else if(ga==='toggle'){g.enabled=!g.enabled;renderAll();const ok=await pushAdmin();toast(ok?(g.enabled?'کد فعال شد ▶':'کد غیرفعال شد ⏸'):'⚠ همگام‌سازی ناموفق',ok?'ok':'err')} else if(ga==='del'){if(confirm(`کد «${gateLabel(g)}» حذف بشه؟ (کارت‌های ورودش دیگه کار نمی‌کنن)`)){state.gates=state.gates.filter(x=>x.id!==gid);if(editingGateId===gid)resetGateForm();renderAll();const ok=await pushAdmin();toast(ok?'کد حذف شد 🗑':'⚠ همگام‌سازی ناموفق',ok?'ok':'err')}} else if(ga==='edit'){editingGateId=gid;$('#gateLabel').value=g.label;$('#gateCode').value=g.code;$('#gateDays').value=String(g.days);$('#gateMax').value=String(g.maxUses);$('#gateFormTitle').textContent='✎ ویرایش کد';$('#gateSaveBtn').textContent='💾 ذخیره ویرایش';$('#gateCancelBtn').style.display='';$('#gateLabel').focus()} });
 function resetGateForm(){editingGateId=null;$('#gateLabel').value='';$('#gateCode').value='';$('#gateDays').value='1';$('#gateMax').value='1';$('#gateFormTitle').textContent='➕ کد جدید';$('#gateSaveBtn').textContent='💾 ذخیره کد';$('#gateCancelBtn').style.display='none'}
 $('#gateAddBtn').onclick=()=>{resetGateForm();$('#gateLabel').focus()};
 $('#gateCancelBtn').onclick=resetGateForm;
-$('#gateSaveBtn').onclick=async()=>{
-  const label=$('#gateLabel').value.trim(),code=normCode($('#gateCode').value),days=+$('#gateDays').value,maxUses=+$('#gateMax').value;
-  if(!code){toast('کد دسترسی رو بنویس','err');return}
-  if(editingGateId){const g=state.gates.find(x=>x.id===editingGateId);if(g)Object.assign(g,{label,code,days,maxUses})}
-  else{if(state.gates.some(x=>x.code===code)){toast('این کد قبلاً ساخته شده','err');return}state.gates.push({id:'g'+Date.now(),label,code,days,maxUses,enabled:true})}
-  resetGateForm();renderAll();
-  const ok=await pushAdmin();
-  toast(ok?'✓ کد ذخیره و همگام شد — الان قابل استفاده‌ست':'⚠ ذخیره شد ولی به سرور نرسید — دوباره تلاش کن',ok?'ok':'err');
-};
-function renderUsersFilter(){
-  const sel=$('#usersFilter');
-  const opts=['<option value="all">همهٔ کدها</option>'].concat(state.gates.map(g=>`<option value="${g.id}">${esc(gateLabel(g))}</option>`)).join('');
-  const cur=sel.value||state.usersFilter;sel.innerHTML=opts;
-  const valid=cur==='all'||state.gates.some(g=>g.id===cur);
-  sel.value=valid?cur:'all';state.usersFilter=sel.value;
-}
+$('#gateSaveBtn').onclick=async()=>{ const label=$('#gateLabel').value.trim(),code=normCode($('#gateCode').value),days=+$('#gateDays').value,maxUses=+$('#gateMax').value; if(!code){toast('کد دسترسی رو بنویس','err');return} if(editingGateId){const g=state.gates.find(x=>x.id===editingGateId);if(g)Object.assign(g,{label,code,days,maxUses})} else{if(state.gates.some(x=>x.code===code)){toast('این کد قبلاً ساخته شده','err');return}state.gates.push({id:'g'+Date.now(),label,code,days,maxUses,enabled:true})} resetGateForm();renderAll(); const ok=await pushAdmin(); toast(ok?'✓ کد ذخیره و همگام شد — الان قابل استفاده‌ست':'⚠ ذخیره شد ولی به سرور نرسید — دوباره تلاش کن',ok?'ok':'err'); };
+function renderUsersFilter(){ const sel=$('#usersFilter'); const opts=['<option value="all">همهٔ کدها</option>'].concat(state.gates.map(g=>`<option value="${g.id}">${esc(gateLabel(g))}</option>`)).join(''); const cur=sel.value||state.usersFilter;sel.innerHTML=opts; const valid=cur==='all'||state.gates.some(g=>g.id===cur); sel.value=valid?cur:'all';state.usersFilter=sel.value; }
 $('#usersFilter').addEventListener('change',e=>{state.usersFilter=e.target.value;renderUsers()});
 function gateOfPass(p){return state.gates.find(g=>g.id?(p.gateId?p.gateId===g.id:p.codeRef===g.code):false)}
-function renderUsers(){
-  const now=Date.now();
-  const matchGate=p=>state.usersFilter==='all'||(p.gateId?p.gateId===state.usersFilter:p.codeRef===(state.gates.find(g=>g.id===state.usersFilter)||{}).code);
-  const listF=state.passes.filter(matchGate);
-  const activeAll=state.passes.filter(p=>!p.banned&&p.exp>now).length;
-  $('#tabUsersBadge').textContent=faNum(activeAll);
-  if(state.usersFilter==='all'){const act=listF.filter(p=>!p.banned&&p.exp>now).length;$('#seatInfo').textContent=`${faNum(act)} کارت فعال`}
-  else{const g=state.gates.find(x=>x.id===state.usersFilter);const seats=new Set(listF.filter(p=>!p.banned&&p.exp>now).map(p=>p.deviceId)).size;const cap=g&&g.maxUses>0?faNum(g.maxUses):'∞';$('#seatInfo').textContent=`${faNum(seats)} / ${cap} صندلی`}
-  const list=[...listF].sort((a,b)=>(b.lastSeen||0)-(a.lastSeen||0));
-  $('#userList').innerHTML=list.map(p=>{
-    const online=p.lastSeen&&now-p.lastSeen<180000;const expired=p.exp<=now;
-    const dot=p.banned?'ban':(expired?'exp':(online?'on':''));
-    const st=p.banned?'<span class="ban">مسدود</span>':(expired?'<span class="off">منقضی</span>':(online?'<span class="on">آنلاین</span>':'<span class="off">آفلاین</span>'));
-    const name=p.label?`<span class="ulab">${esc(p.label)}</span>`:esc(p.deviceId.slice(0,10))+'…';
-    const dev=esc(parseUA(p.ua).dev||'—');
-    const gg=gateOfPass(p);const gtag=gg?`<span class="ugate">[${esc(gateLabel(gg))}]</span> `:(state.usersFilter==='all'?'<span class="ugate">[کد حذف‌شده]</span> ':'');
-    return `<div class="uro ${p.banned?'banned':''} ${expired?'expired':''}">
-      <span class="udot ${dot}"></span>
-      <div class="uinfo"><b>${gtag}${name}</b><i><span class="dev">${dev}</span> · انقضا ${faDate(new Date(p.exp).toISOString())}</i></div>
-      <div class="ust">${st}</div>
-      <div class="uacts">
-        <button data-a="label" data-id="${p.id}" title="برچسب">🏷</button>
-        <button data-a="${p.banned?'unban':'ban'}" data-id="${p.id}" class="ban" title="${p.banned?'رفع مسدودیت':'مسدودسازی موقت'}">${p.banned?'↩':'✋'}</button>
-        <button data-a="delete" data-id="${p.id}" class="del" title="حذف کامل">🗑</button>
-      </div></div>`;
-  }).join('')||'<p class="hint">هنوز کسی با این کد وارد نشده.</p>';
-}
-$('#userList').addEventListener('click',async e=>{
-  const b=e.target.closest('button');if(!b)return;const a=b.dataset.a,id=b.dataset.id;
-  if(a==='label'){const v=prompt('برچسب این دستگاه (مثلاً اسم مشتری):',((state.passes.find(p=>p.id===id)||{}).label)||'');if(v!==null){await adminPassAction('label',id,{label:v});toast('برچسب ذخیره شد 🏷')}}
-  else if(a==='ban'){await adminPassAction('ban',id);toast('دستگاه مسدود شد ✋')}
-  else if(a==='unban'){await adminPassAction('unban',id);toast('مسدودیت رفع شد ↩')}
-  else if(a==='delete'){if(confirm('این کارت ورود کامل حذف بشه؟')){await adminPassAction('delete',id);toast('حذف شد 🗑')}}
-});
+function renderUsers(){ const now=Date.now(); const matchGate=p=>state.usersFilter==='all'||(p.gateId?p.gateId===state.usersFilter:p.codeRef===(state.gates.find(g=>g.id===state.usersFilter)||{}).code); const listF=state.passes.filter(matchGate); const activeAll=state.passes.filter(p=>!p.banned&&p.exp>now).length; $('#tabUsersBadge').textContent=faNum(activeAll); if(state.usersFilter==='all'){const act=listF.filter(p=>!p.banned&&p.exp>now).length;$('#seatInfo').textContent=`${faNum(act)} کارت فعال`} else{const g=state.gates.find(x=>x.id===state.usersFilter);const seats=new Set(listF.filter(p=>!p.banned&&p.exp>now).map(p=>p.deviceId)).size;const cap=g&&g.maxUses>0?faNum(g.maxUses):'∞';$('#seatInfo').textContent=`${faNum(seats)} / ${cap} صندلی`} const list=[...listF].sort((a,b)=>(b.lastSeen||0)-(a.lastSeen||0)); $('#userList').innerHTML=list.map(p=>{ const online=p.lastSeen&&now-p.lastSeen<180000;const expired=p.exp<=now; const dot=p.banned?'ban':(expired?'exp':(online?'on':'')); const st=p.banned?'<span class="ban">مسدود</span>':(expired?'<span class="off">منقضی</span>':(online?'<span class="on">آنلاین</span>':'<span class="off">آفلاین</span>')); const name=p.label?`<span class="ulab">${esc(p.label)}</span>`:esc(p.deviceId.slice(0,10))+'…'; const dev=esc(parseUA(p.ua).dev||'—'); const gg=gateOfPass(p);const gtag=gg?`<span class="ugate">[${esc(gateLabel(gg))}]</span> `:(state.usersFilter==='all'?'<span class="ugate">[کد حذف‌شده]</span> ':''); return `<div class="uro ${p.banned?'banned':''} ${expired?'expired':''}"> <span class="udot ${dot}"></span> <div class="uinfo"><b>${gtag}${name}</b><i><span class="dev">${dev}</span> · انقضا ${faDate(new Date(p.exp).toISOString())}</i></div> <div class="ust">${st}</div> <div class="uacts"> <button data-a="label" data-id="${p.id}" title="برچسب">🏷</button> <button data-a="${p.banned?'unban':'ban'}" data-id="${p.id}" class="ban" title="${p.banned?'رفع مسدودیت':'مسدودسازی موقت'}">${p.banned?'↩':'✋'}</button> <button data-a="delete" data-id="${p.id}" class="del" title="حذف کامل">🗑</button> </div></div>`; }).join('')||'<p class="hint">هنوز کسی با این کد وارد نشده.</p>'; }
+$('#userList').addEventListener('click',async e=>{ const b=e.target.closest('button');if(!b)return;const a=b.dataset.a,id=b.dataset.id; if(a==='label'){const v=prompt('برچسب این دستگاه (مثلاً اسم مشتری):',((state.passes.find(p=>p.id===id)||{}).label)||'');if(v!==null){await adminPassAction('label',id,{label:v});toast('برچسب ذخیره شد 🏷')}} else if(a==='ban'){await adminPassAction('ban',id);toast('دستگاه مسدود شد ✋')} else if(a==='unban'){await adminPassAction('unban',id);toast('مسدودیت رفع شد ↩')} else if(a==='delete'){if(confirm('این کارت ورود کامل حذف بشه؟')){await adminPassAction('delete',id);toast('حذف شد 🗑')}} });
 $('#refreshUsers').onclick=async()=>{await refreshAdmin();toast('وضعیت بروزرسانی شد 🔄')};
 $('#clearExp').onclick=async()=>{if(confirm('کارت‌های منقضی پاک بشن؟')){await adminPassAction('clearExpired');toast('منقضی‌ها پاک شدن 🧹')}};
 function renderSrvSec(){$('#workerIn').value=workerBase();setSrvStat(workerBase()?'ok':'off')}
 function renderAll(){renderPanelList();renderGateCount();renderGates();renderUsersFilter();renderUsers();renderSrvSec()}
-function afterChange(){
-  renderAll();
-  const as=$('#autosave');as.classList.remove('flash');void as.offsetWidth;as.classList.add('flash');
-  pushAdmin();
-}
-function fillCountries(){
-  const opts=Object.keys(COUNTRIES).map(c=>`<option value="${c}">${flagEmoji(c)} ${COUNTRIES[c]}</option>`).join('');
-  $('#sCountry').innerHTML=opts;$('#sCountry').value='DE';
-}
-async function doLogin(){
-  const pass=$('#loginPass').value.trim();
-  if(!pass)return;
-  const base=workerBase();
-  if(!base){$('#loginErr').textContent='آدرس Worker تنظیم نشده';return}
-  $('#loginErr').textContent='';$('#loginBtn').disabled=true;$('#loginBtn').textContent='در حال بررسی…';
-  try{
-    const r=await fetch(base+'/api/unlock',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:pass,device:'panel-'+DEVICE})});
-    const j=await r.json().catch(()=>({}));
-    if(r.ok&&j.role==='admin'){
-      setAdminToken(j.token);
-      if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated}
-      if(j.gateOn!==undefined)state.gateOn=j.gateOn;
-      if(j.gates)state.gates=normalizeGatesList(j.gates);
-      if(j.passes)state.passes=j.passes;
-      showPanel();toast('خوش اومدی مدیر 👑');
-    }else{$('#loginErr').textContent='رمز اشتباهه ❌';$('#loginPass').value='';$('#loginPass').focus()}
-  }catch(e){$('#loginErr').textContent='خطا در اتصال — اینترنت رو چک کن'}
-  $('#loginBtn').disabled=false;$('#loginBtn').textContent='ورود به پنل';
-}
+function afterChange(){ renderAll(); const as=$('#autosave');as.classList.remove('flash');void as.offsetWidth;as.classList.add('flash'); pushAdmin(); }
+function fillCountries(){ const opts=Object.keys(COUNTRIES).map(c=>`<option value="${c}">${flagEmoji(c)} ${COUNTRIES[c]}</option>`).join(''); $('#sCountry').innerHTML=opts;$('#sCountry').value='DE'; }
+let cdTimer=null;
+function showCooldown(sec){ const wrap=$('#cooldown'),fill=$('#cdFill'),txt=$('#cdText'),btn=$('#loginBtn'),gi=$('#loginPass'); wrap.style.display='block';btn.disabled=true;gi.disabled=true; clearInterval(cdTimer); let left=sec;const total=sec; const tick=()=>{ txt.textContent=faNum(left)+' ثانیه تا باز شدن'; fill.style.width=(Math.max(0,left)/total*100)+'%'; if(left<=0){clearInterval(cdTimer);wrap.style.display='none';btn.disabled=false;gi.disabled=false;gi.focus();return} left--; }; tick();cdTimer=setInterval(tick,1000); }
+async function doLogin(){ const pass=$('#loginPass').value.trim(); if(!pass)return; const base=workerBase(); if(!base){$('#loginErr').textContent='آدرس Worker تنظیم نشده';return} $('#loginErr').textContent='';$('#loginBtn').disabled=true;$('#loginBtn').textContent='در حال بررسی…'; try{ const r=await fetch(base+'/api/unlock',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:pass,device:'panel-'+DEVICE})}); const j=await r.json().catch(()=>({})); if(r.status===429){$('#loginErr').textContent=j.error||'تلاش بیش از حد';showCooldown(j.retryAfter||10);$('#loginBtn').textContent='ورود به پنل';return} if(r.ok&&j.role==='admin'){ setAdminToken(j.token); if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated} if(j.gateOn!==undefined)state.gateOn=j.gateOn; if(j.gates)state.gates=normalizeGatesList(j.gates); if(j.passes)state.passes=j.passes; showPanel();toast('خوش اومدی مدیر 👑'); }else{ $('#loginErr').textContent=(j.triesLeft!==undefined&&j.triesLeft>0)?`رمز اشتباهه — ${faNum(j.triesLeft)} تلاش دیگه`:(j.error||'رمز اشتباهه ❌'); $('#loginPass').value='';$('#loginPass').focus(); } }catch(e){$('#loginErr').textContent='خطا در اتصال — اینترنت رو چک کن'} $('#loginBtn').disabled=false;$('#loginBtn').textContent='ورود به پنل'; }
 function showPanel(){$('#loginWrap').classList.add('hide');$('#panel').classList.add('open');renderAll()}
 $('#loginBtn').onclick=doLogin;
 $('#loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
-(async function init(){
-  fillCountries();renderAppPick();
-  const base=workerBase(),tok=getAdminToken();
-  if(base&&tok){
-    try{const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+tok}});
-      if(r.ok){const j=await r.json();
-        if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated}
-        if(j.gateOn!==undefined)state.gateOn=j.gateOn;
-        if(j.gates)state.gates=normalizeGatesList(j.gates);
-        if(j.passes)state.passes=j.passes;
-        showPanel();
-      }else setAdminToken(null);
-    }catch(e){setAdminToken(null)}
-  }
-})();
+(async function init(){ fillCountries();renderAppPick(); const base=workerBase(),tok=getAdminToken(); if(base&&tok){ try{const r=await fetch(base+'/api/data',{headers:{Authorization:'Bearer '+tok}}); if(r.ok){const j=await r.json(); if(j.servers){state.servers=(j.servers.servers||[]).map(normalize);state.generated=j.servers.generated} if(j.gateOn!==undefined)state.gateOn=j.gateOn; if(j.gates)state.gates=normalizeGatesList(j.gates); if(j.passes)state.passes=j.passes; showPanel(); }else setAdminToken(null); }catch(e){setAdminToken(null)} } })();
 </script>
 </body>
 </html>
