@@ -9,18 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg-1:#f5f5f7;--bg-2:#eef0f5;--surface:rgba(255,255,255,.72);--surface-solid:#fff;
-  --text:#1c1c1e;--text-2:#3a3a3c;--muted:#8e8e93;--border:rgba(0,0,0,.08);--glass-border:rgba(255,255,255,.6);
-  --primary:#007aff;--primary-2:#5856d6;--accent:#af52de;--pink:#ff2d55;--green:#34c759;--orange:#ff9500;--yellow:#ffcc00;--red:#ff3b30;
-  --shadow-sm:0 2px 8px rgba(0,0,0,.06);--shadow:0 10px 30px rgba(0,0,0,.08);--shadow-lg:0 25px 60px rgba(0,0,0,.14);
-  --ease:cubic-bezier(.22,1,.36,1);--ease-bounce:cubic-bezier(.34,1.56,.64,1);
-}
-[data-theme="dark"]{
-  --bg-1:#000;--bg-2:#0a0a0f;--surface:rgba(28,28,30,.72);--surface-solid:#1c1c1e;
-  --text:#f5f5f7;--text-2:#d1d1d6;--muted:#8e8e93;--border:rgba(255,255,255,.1);--glass-border:rgba(255,255,255,.12);
-  --shadow-sm:0 2px 8px rgba(0,0,0,.4);--shadow:0 10px 30px rgba(0,0,0,.5);--shadow-lg:0 25px 60px rgba(0,0,0,.6);
-}
+:root{--bg-1:#f5f5f7;--bg-2:#eef0f5;--surface:rgba(255,255,255,.72);--surface-solid:#fff;--text:#1c1c1e;--text-2:#3a3a3c;--muted:#8e8e93;--border:rgba(0,0,0,.08);--glass-border:rgba(255,255,255,.6);--primary:#007aff;--primary-2:#5856d6;--accent:#af52de;--pink:#ff2d55;--green:#34c759;--orange:#ff9500;--yellow:#ffcc00;--red:#ff3b30;--shadow-sm:0 2px 8px rgba(0,0,0,.06);--shadow:0 10px 30px rgba(0,0,0,.08);--shadow-lg:0 25px 60px rgba(0,0,0,.14);--ease:cubic-bezier(.22,1,.36,1);--ease-bounce:cubic-bezier(.34,1.56,.64,1)}
+[data-theme="dark"]{--bg-1:#000;--bg-2:#0a0a0f;--surface:rgba(28,28,30,.72);--surface-solid:#1c1c1e;--text:#f5f5f7;--text-2:#d1d1d6;--muted:#8e8e93;--border:rgba(255,255,255,.1);--glass-border:rgba(255,255,255,.12);--shadow-sm:0 2px 8px rgba(0,0,0,.4);--shadow:0 10px 30px rgba(0,0,0,.5);--shadow-lg:0 25px 60px rgba(0,0,0,.6)}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{font-family:'Vazirmatn',system-ui,sans-serif;background:var(--bg-1);color:var(--text);line-height:1.7;min-height:100vh;overflow-x:hidden;transition:background .5s var(--ease),color .5s var(--ease)}
@@ -39,7 +29,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:var(--surface);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:999px;font-size:.82rem;font-weight:600;color:var(--text-2);box-shadow:var(--shadow-sm);margin-bottom:24px}
 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(52,199,89,.6);animation:pulse 2s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,199,89,.7)}70%{box-shadow:0 0 0 12px rgba(52,199,89,0)}100%{box-shadow:0 0 0 0 rgba(52,199,89,0)}}
-
 .navbar{position:sticky;top:0;z-index:100;padding:12px 0;transition:all .4s var(--ease)}
 .navbar.scrolled{padding:8px 0}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;background:var(--surface);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border:1px solid var(--glass-border);border-radius:999px;box-shadow:var(--shadow-sm)}
@@ -61,7 +50,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .icon-btn svg{width:18px;height:18px}
 [data-theme="dark"] .sun-icon{display:none}
 [data-theme="light"] .moon-icon{display:none}
-
 .hero{padding:70px 0 40px}
 .hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:60px;align-items:center}
 .hero h1{font-size:clamp(2.2rem,5.2vw,4rem);font-weight:900;line-height:1.15;letter-spacing:-.03em;margin-bottom:20px}
@@ -83,7 +71,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .trust-row .avatars span:nth-child(2){background:linear-gradient(135deg,var(--pink),var(--orange))}
 .trust-row .avatars span:nth-child(3){background:linear-gradient(135deg,var(--green),#00c7be)}
 .trust-row .avatars span:nth-child(4){background:linear-gradient(135deg,var(--orange),var(--yellow))}
-
 .phone-wrap{display:flex;justify-content:center;position:relative}
 .phone{width:300px;height:610px;border-radius:48px;background:linear-gradient(160deg,#2a2a2e,#0a0a0f);padding:12px;box-shadow:0 40px 80px rgba(0,0,0,.25),0 0 0 2px rgba(255,255,255,.08) inset,0 0 60px rgba(0,122,255,.15);position:relative;animation:pf 6s ease-in-out infinite}
 @keyframes pf{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-16px) rotate(1deg)}}
@@ -120,7 +107,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .fw-3{bottom:5%;right:5%;animation-delay:4s;padding:10px 14px}
 .fw-3 .fw-icon{background:rgba(175,82,222,.15);color:var(--accent)}
 @keyframes fw{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:60px 0}
 .stat-box{background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:22px;padding:24px 20px;text-align:center;box-shadow:var(--shadow-sm);transition:all .4s var(--ease);position:relative;overflow:hidden}
 .stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
@@ -129,28 +115,22 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .stat-box .num{font-size:2rem;font-weight:900;letter-spacing:-.03em;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
 .stat-box .num small{font-size:1.1rem}
 .stat-box .lbl{color:var(--muted);font-size:.82rem;margin-top:4px;font-weight:500}
-
 .section{padding:60px 0}
 .section-head{text-align:center;margin-bottom:48px}
 .section-tag{display:inline-block;font-size:.78rem;font-weight:700;color:var(--primary);background:rgba(0,122,255,.1);padding:6px 14px;border-radius:999px;margin-bottom:14px;letter-spacing:.02em}
 .section-head h2{font-size:clamp(1.6rem,3.6vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.3;margin-bottom:12px}
 .section-head p{color:var(--muted);max-width:560px;margin:0 auto;font-size:1rem}
-
 .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .feature-card{background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:32px;padding:28px;box-shadow:var(--shadow-sm);transition:all .45s var(--ease);position:relative;overflow:hidden}
-.feature-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(0,122,255,.12),transparent 50%);opacity:0;transition:opacity .4s var(--ease);pointer-events:none}
-.feature-card:hover::before{opacity:1}
 .feature-card:hover{transform:translateY(-8px) scale(1.01);box-shadow:var(--shadow-lg)}
-.feature-icon{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:1.5rem;margin-bottom:18px;background:linear-gradient(135deg,rgba(0,122,255,.15),rgba(175,82,222,.15));color:var(--primary);transition:all .4s var(--ease-bounce)}
-.feature-card:hover .feature-icon{transform:scale(1.1) rotate(-6deg)}
+.feature-icon{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:1.5rem;margin-bottom:18px;background:linear-gradient(135deg,rgba(0,122,255,.15),rgba(175,82,222,.15));color:var(--primary)}
 .feature-card:nth-child(2) .feature-icon{background:linear-gradient(135deg,rgba(255,45,85,.15),rgba(255,149,0,.15));color:var(--pink)}
 .feature-card:nth-child(3) .feature-icon{background:linear-gradient(135deg,rgba(52,199,89,.15),rgba(0,199,190,.15));color:var(--green)}
 .feature-card:nth-child(4) .feature-icon{background:linear-gradient(135deg,rgba(255,149,0,.15),rgba(255,204,0,.15));color:var(--orange)}
 .feature-card:nth-child(5) .feature-icon{background:linear-gradient(135deg,rgba(175,82,222,.15),rgba(255,45,85,.15));color:var(--accent)}
 .feature-card:nth-child(6) .feature-icon{background:linear-gradient(135deg,rgba(0,199,190,.15),rgba(0,122,255,.15));color:#00c7be}
-.feature-card h3{font-size:1.15rem;font-weight:700;margin-bottom:8px;letter-spacing:-.02em}
+.feature-card h3{font-size:1.15rem;font-weight:700;margin-bottom:8px}
 .feature-card p{color:var(--muted);font-size:.9rem;line-height:1.85}
-
 .filter-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
 .chip{padding:8px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--glass-border);color:var(--text-2);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s var(--ease);backdrop-filter:blur(20px)}
 .chip:hover{border-color:var(--primary);color:var(--primary)}
@@ -183,16 +163,13 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .sc-star{width:42px;border-radius:12px;background:var(--surface-solid);border:1px solid var(--border);cursor:pointer;display:grid;place-items:center;color:var(--muted);transition:all .3s var(--ease)}
 .sc-star:hover,.sc-star.active{color:var(--yellow);border-color:var(--yellow)}
 .sc-star svg{width:16px;height:16px}
-
 .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
 .timeline::before{content:'';position:absolute;top:40px;right:10%;left:10%;height:2px;background:linear-gradient(90deg,transparent,var(--primary),var(--accent),transparent);opacity:.3;z-index:0}
 .step-card{background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:22px;padding:28px 22px;text-align:center;box-shadow:var(--shadow-sm);transition:all .4s var(--ease);position:relative;z-index:1}
 .step-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg)}
-.step-num{width:56px;height:56px;border-radius:20px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;display:grid;place-items:center;font-weight:900;font-size:1.3rem;margin:0 auto 16px;box-shadow:0 10px 24px rgba(0,122,255,.3);transition:all .4s var(--ease-bounce)}
-.step-card:hover .step-num{transform:scale(1.1) rotate(-8deg)}
+.step-num{width:56px;height:56px;border-radius:20px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;display:grid;place-items:center;font-weight:900;font-size:1.3rem;margin:0 auto 16px;box-shadow:0 10px 24px rgba(0,122,255,.3)}
 .step-card h4{font-size:1.02rem;font-weight:700;margin-bottom:8px}
 .step-card p{color:var(--muted);font-size:.85rem;line-height:1.8}
-
 .faq-list{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
 .faq-item{background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:22px;overflow:hidden;transition:all .35s var(--ease);box-shadow:var(--shadow-sm)}
 .faq-item.open{border-color:rgba(0,122,255,.3);box-shadow:var(--shadow)}
@@ -201,14 +178,12 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .faq-item.open .faq-icon{transform:rotate(45deg);background:var(--primary);color:#fff}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
 .faq-a-inner{padding:0 24px 22px;color:var(--muted);font-size:.9rem;line-height:2}
-
 .cta-card{background:linear-gradient(135deg,#0a84ff 0%,#5e5ce6 50%,#bf5af2 100%);border-radius:44px;padding:64px 40px;text-align:center;color:#fff;position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(94,92,230,.35)}
 .cta-card h2{font-size:clamp(1.6rem,3.6vw,2.6rem);font-weight:900;margin-bottom:14px;position:relative}
 .cta-card p{opacity:.9;max-width:520px;margin:0 auto 32px;position:relative}
 .cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
 .btn-white{background:#fff;color:#1c1c1e;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 .btn-ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(20px)}
-
 footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
 .footer-brand p{color:var(--muted);font-size:.88rem;margin-top:14px;line-height:1.9;max-width:320px}
@@ -219,9 +194,7 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;color:var(--muted);font-size:.82rem}
 .socials{display:flex;gap:8px}
 .socials a{width:38px;height:38px;border-radius:12px;background:var(--surface);border:1px solid var(--glass-border);display:grid;place-items:center;color:var(--text-2);transition:all .3s var(--ease)}
-.socials a:hover{transform:translateY(-4px) rotate(-6deg);color:var(--primary);border-color:var(--primary)}
 .socials svg{width:17px;height:17px}
-
 .toast-wrap{position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:11000;display:flex;flex-direction:column;gap:10px;pointer-events:none}
 .toast{background:var(--surface-solid);border:1px solid var(--glass-border);border-radius:18px;padding:14px 20px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;font-size:.9rem;font-weight:600;animation:ti .5s var(--ease-bounce) forwards;min-width:260px;backdrop-filter:blur(20px)}
 .toast.out{animation:to .4s var(--ease) forwards}
@@ -231,22 +204,19 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .toast-icon svg{width:17px;height:17px}
 @keyframes ti{from{opacity:0;transform:translateY(-20px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes to{to{opacity:0;transform:translateY(-16px) scale(.9)}}
-
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .reveal.in{opacity:1;transform:translateY(0)}
-
-/* GATE */
 .gate{position:fixed;inset:0;z-index:9000;background:linear-gradient(160deg,#0a0a0f 0%,#1a1a2e 50%,#2a1a3e 100%);display:grid;place-items:center;padding:24px;opacity:1;transition:opacity .5s var(--ease)}
 .gate.hidden{opacity:0;pointer-events:none}
 .gate-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .gate-bg span{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
 .gate-bg span:nth-child(1){width:500px;height:500px;background:radial-gradient(circle,#0a84ff,transparent 70%);top:-150px;right:-150px;animation:d1 20s ease-in-out infinite}
 .gate-bg span:nth-child(2){width:450px;height:450px;background:radial-gradient(circle,#bf5af2,transparent 70%);bottom:-100px;left:-100px;animation:d2 24s ease-in-out infinite}
-.gate-card{position:relative;width:min(420px,100%);background:rgba(20,20,28,.75);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.12);border-radius:32px;padding:40px 32px;text-align:center;box-shadow:0 40px 100px rgba(0,0,0,.6);color:#fff}
+.gate-card{position:relative;width:min(420px,100%);background:rgba(20,20,28,.75);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.12);border-radius:32px;padding:40px 32px;text-align:center;box-shadow:0 40px 100px rgba(0,0,0,.6);color:#fff}
 .gate-logo{width:80px;height:80px;border-radius:24px;margin:0 auto 20px;box-shadow:0 20px 50px rgba(94,92,230,.5);animation:gl 4s ease-in-out infinite}
 .gate-logo svg{width:100%;height:100%;display:block}
 @keyframes gl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.gate-card h2{font-size:1.5rem;font-weight:800;margin-bottom:8px;letter-spacing:-.02em}
+.gate-card h2{font-size:1.5rem;font-weight:800;margin-bottom:8px}
 .gate-card h2 .gr{background:linear-gradient(135deg,#0a84ff,#bf5af2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .gate-card p{color:rgba(255,255,255,.6);font-size:.9rem;margin-bottom:26px;line-height:1.85}
 .gate-input{width:100%;padding:16px 20px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-family:monospace;font-size:.95rem;text-align:center;letter-spacing:.05em;direction:ltr;transition:all .3s var(--ease)}
@@ -261,8 +231,6 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .gate-footer{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:.78rem;color:rgba(255,255,255,.4);display:flex;justify-content:space-between;align-items:center;gap:12px}
 .gate-footer a{color:#0a84ff;text-decoration:none;font-weight:600;cursor:pointer}
 .gate-footer a:hover{text-decoration:underline}
-
-/* ADMIN MODAL & PANEL — بالای گیت */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);z-index:9500;opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
 .overlay.show{opacity:1;pointer-events:auto}
 .modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);background:var(--surface-solid);border:1px solid var(--glass-border);border-radius:32px;box-shadow:var(--shadow-lg);z-index:9501;width:min(440px,calc(100vw - 40px));opacity:0;pointer-events:none;transition:all .4s var(--ease-bounce);padding:32px}
@@ -280,12 +248,11 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .field-hint{font-size:.72rem;color:var(--muted);margin-top:4px}
 .field-hint code{background:rgba(0,122,255,.1);color:var(--primary);padding:2px 6px;border-radius:6px;font-family:monospace;font-weight:700}
-
 .admin-panel{position:fixed;top:0;right:0;bottom:0;width:min(540px,100vw);background:var(--surface-solid);border-left:1px solid var(--glass-border);box-shadow:-20px 0 60px rgba(0,0,0,.2);z-index:9502;transform:translateX(100%);transition:transform .5s var(--ease);display:flex;flex-direction:column}
 .admin-panel.show{transform:translateX(0)}
 .admin-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .admin-header h3{font-size:1.1rem;font-weight:800;display:flex;align-items:center;gap:10px}
-.badge-admin{font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;letter-spacing:.04em}
+.badge-admin{font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
 .admin-body{flex:1;overflow-y:auto;padding:24px}
 .admin-body::-webkit-scrollbar{width:6px}
 .admin-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
@@ -302,61 +269,38 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .server-item .info{flex:1;min-width:0}
 .server-item .info .n{font-size:.9rem;font-weight:700}
 .server-item .info .m{font-size:.7rem;color:var(--muted);direction:ltr;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:monospace}
-.server-item .del{width:34px;height:34px;border-radius:10px;border:none;background:rgba(255,59,48,.1);color:var(--red);cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:all .3s var(--ease)}
-.server-item .del:hover{background:var(--red);color:#fff;transform:scale(1.08)}
+.server-item .del{width:34px;height:34px;border-radius:10px;border:none;background:rgba(255,59,48,.1);color:var(--red);cursor:pointer;display:grid;place-items:center;flex-shrink:0}
+.server-item .del:hover{background:var(--red);color:#fff}
 .server-item .del svg{width:15px;height:15px}
 .admin-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:.88rem}
 .admin-empty svg{width:40px;height:40px;opacity:.4;margin-bottom:12px}
 .admin-actions-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .admin-actions-row .btn{flex:1;min-width:130px;justify-content:center;font-size:.85rem;padding:12px 18px}
-
 .code-item{background:var(--bg-1);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
 .code-item.expired{border-color:rgba(255,59,48,.3);background:rgba(255,59,48,.04)}
-.code-item.used{border-color:rgba(142,142,147,.3);opacity:.75}
 .code-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:10px}
 .code-str{font-family:monospace;font-size:.8rem;font-weight:700;color:var(--primary);direction:ltr;text-align:left;word-break:break-all;flex:1;line-height:1.5}
 .code-status{font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:999px;flex-shrink:0}
 .code-status.active{background:rgba(52,199,89,.15);color:var(--green)}
 .code-status.expired{background:rgba(255,59,48,.15);color:var(--red)}
-.code-status.used{background:rgba(142,142,147,.15);color:var(--muted)}
 .code-meta{display:flex;gap:12px;font-size:.72rem;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
 .code-actions{display:flex;gap:6px}
 .code-actions button{flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:var(--surface-solid);color:var(--text-2);font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .3s var(--ease);display:flex;align-items:center;justify-content:center;gap:4px}
 .code-actions button:hover{border-color:var(--primary);color:var(--primary)}
 .code-actions button.danger:hover{border-color:var(--red);color:var(--red)}
 .code-actions svg{width:13px;height:13px}
-
-@media (max-width:1024px){
-  .hero-grid{grid-template-columns:1fr;gap:60px}
-  .phone-wrap{order:-1}
-  .stats-bar{grid-template-columns:repeat(2,1fr)}
-  .features-grid{grid-template-columns:repeat(2,1fr)}
-  .timeline{grid-template-columns:repeat(2,1fr)}
-  .timeline::before{display:none}
-  .footer-grid{grid-template-columns:1fr 1fr}
-}
-@media (max-width:640px){
-  .nav-links{display:none}
-  .stats-bar{grid-template-columns:1fr 1fr;gap:12px}
-  .features-grid{grid-template-columns:1fr}
-  .timeline{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr;gap:30px}
-  .hero{padding:40px 0 20px}
-  .phone{width:260px;height:530px}
-  .phone-screen{padding:50px 16px 16px}
-  .float-widget{font-size:.72rem;padding:10px 12px}
-  .fw-1{right:-10px}.fw-2{left:-10px}
-  .cta-card{padding:44px 24px}
-  .field-row{grid-template-columns:1fr}
-  .brand-text .en{display:none}
-  .gate-card{padding:32px 22px}
-}
+.sync-status{position:fixed;top:70px;right:20px;z-index:105;padding:8px 14px;border-radius:999px;font-size:.75rem;font-weight:700;background:var(--surface-solid);border:1px solid var(--glass-border);box-shadow:var(--shadow);display:none}
+.sync-status.show{display:block;animation:ti .4s var(--ease-bounce)}
+.sync-status.ok{color:var(--green);border-color:rgba(52,199,89,.4)}
+.sync-status.err{color:var(--red);border-color:rgba(255,59,48,.4)}
+.sync-status.loading{color:var(--primary)}
+@media (max-width:1024px){.hero-grid{grid-template-columns:1fr;gap:60px}.phone-wrap{order:-1}.stats-bar{grid-template-columns:repeat(2,1fr)}.features-grid{grid-template-columns:repeat(2,1fr)}.timeline{grid-template-columns:repeat(2,1fr)}.timeline::before{display:none}.footer-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:640px){.nav-links{display:none}.stats-bar{grid-template-columns:1fr 1fr;gap:12px}.features-grid{grid-template-columns:1fr}.timeline{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr;gap:30px}.hero{padding:40px 0 20px}.phone{width:260px;height:530px}.phone-screen{padding:50px 16px 16px}.float-widget{font-size:.72rem;padding:10px 12px}.fw-1{right:-10px}.fw-2{left:-10px}.cta-card{padding:44px 24px}.field-row{grid-template-columns:1fr}.brand-text .en{display:none}.gate-card{padding:32px 22px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body data-theme="light">
 
-<!-- GATE -->
 <div class="gate" id="gate">
   <div class="gate-bg"><span></span><span></span></div>
   <div class="gate-card">
@@ -370,7 +314,7 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
     </div>
     <h2>خوش آمدی به <span class="gr">پوم</span></h2>
     <p>برای ورود به پلتفرم، کد دسترسی خود را وارد کن.<br>کد را از مدیر دریافت کن.</p>
-    <input type="text" class="gate-input" id="gateInput" placeholder="POM-XXXX-XXXX" maxlength="200" autocomplete="off">
+    <input type="text" class="gate-input" id="gateInput" placeholder="POM-XXXX" maxlength="200" autocomplete="off">
     <button class="gate-btn" id="gateBtn">ورود به پوم</button>
     <div class="gate-msg" id="gateMsg"></div>
     <div class="gate-footer">
@@ -380,11 +324,10 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
   </div>
 </div>
 
-<!-- AURORA -->
+<div class="sync-status" id="syncStatus"></div>
 <div class="aurora"><span></span><span></span><span></span><span></span></div>
 <div class="toast-wrap" id="toastWrap"></div>
 
-<!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <div class="container">
     <div class="nav-inner">
@@ -410,29 +353,24 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </button>
         <button class="icon-btn" id="themeToggle">
-          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
       </div>
     </div>
   </div>
 </nav>
 
-<!-- HERO -->
 <header class="hero">
   <div class="container">
     <div class="hero-grid">
       <div>
         <div class="pill reveal"><span class="live-dot"></span><span id="heroCount">در انتظار افزودن سرور</span></div>
         <h1 class="reveal reveal-delay-1">پوم<br><span class="gradient-text">پلتفرم دریافت قندشکن</span></h1>
-        <p class="reveal reveal-delay-2">مجموعهای از کانفیگهای پرسرعت V2Ray، تستشده و بهروز. با یک کلیک، اینترنت آزاد و امن را تجربه کن — ساده، سریع، بیدردسر.</p>
+        <p class="reveal reveal-delay-2">مجموعه‌ای از کانفیگ‌های پرسرعت V2Ray، تست‌شده و به‌روز. با یک کلیک، اینترنت آزاد و امن را تجربه کن.</p>
         <div class="hero-actions reveal reveal-delay-3">
-          <a href="#servers" class="btn btn-primary">دریافت کانفیگ<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
-          <a href="#steps" class="btn btn-glass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>آموزش اتصال</a>
-        </div>
-        <div class="trust-row reveal reveal-delay-4">
-          <div class="avatars"><span>پ</span><span>و</span><span>م</span><span>•</span></div>
-          <div><strong style="color:var(--text);">+۱۲٬۰۰۰ کاربر</strong> در حال استفاده</div>
+          <a href="#servers" class="btn btn-primary">دریافت کانفیگ<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+          <a href="#steps" class="btn btn-glass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>آموزش اتصال</a>
         </div>
       </div>
       <div class="phone-wrap reveal reveal-delay-2">
@@ -445,9 +383,7 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
             <div class="phone-title">وضعیت اتصال</div>
             <div class="phone-ip" id="phoneIP">—</div>
             <div class="phone-loc" id="phoneLoc">در انتظار اتصال</div>
-            <div class="connect-btn" id="connectBtn">
-              <svg class="power-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
-            </div>
+            <div class="connect-btn" id="connectBtn"><svg class="power-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg></div>
             <div class="phone-stats">
               <div class="phone-stat"><div class="lbl">دانلود</div><div class="val" id="phoneDown">—</div></div>
               <div class="phone-stat"><div class="lbl">آپلود</div><div class="val" id="phoneUp">—</div></div>
@@ -468,33 +404,23 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
   </div>
 </header>
 
-<!-- FEATURES -->
 <section class="section" id="features">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="section-tag">چرا پوم؟</div>
-      <h2>امکاناتی که تجربهات را <span class="gradient-text">متفاوت</span> میکند</h2>
-      <p>هر چیزی که برای اتصال پایدار، سریع و امن نیاز داری — در یکجا.</p>
-    </div>
+    <div class="section-head reveal"><div class="section-tag">چرا پوم؟</div><h2>امکاناتی که تجربه‌ات را <span class="gradient-text">متفاوت</span> می‌کند</h2><p>هر چیزی که برای اتصال پایدار، سریع و امن نیاز داری — در یک‌جا.</p></div>
     <div class="features-grid">
-      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><h3>سرعت خیرهکننده</h3><p>سرورهای پرسرعت با پهنای باند نامحدود، برای استریم ۴K و دانلود بدون افت.</p></div>
-      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>رمزنگاری قوی</h3><p>پروتکلهای VLESS و REALITY با رمزنگاری AES-256، امنیت کامل دادهها.</p></div>
-      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg></div><h3>سرورهای جهانی</h3><p>در ۱۲ کشور دنیا — بهترین پینگ برای هر موقعیت جغرافیایی.</p></div>
-      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><path d="M12 2v6M12 16v6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M16 12h6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/></svg></div><h3>بهروزرسانی خودکار</h3><p>کانفیگها هر ۶ ساعت تست و بهروز میشوند تا همیشه فعال باشند.</p></div>
-      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><h3>رایگان و بیتبلیغ</h3><p>بدون هزینه، بدون تبلیغ، بدون ثبتنام. فقط کپی کن، وصل شو.</p></div>
-      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3>سازگاری کامل</h3><p>پشتیبانی از Karing، V2rayNG، Shadowrocket و بقیه کلاینتها.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><h3>سرعت خیره‌کننده</h3><p>سرورهای پرسرعت با پهنای باند نامحدود.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>رمزنگاری قوی</h3><p>VLESS و REALITY با AES-256.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20"/></svg></div><h3>سرورهای جهانی</h3><p>در ۱۲ کشور دنیا.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><path d="M12 2v6M12 16v6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24"/></svg></div><h3>به‌روزرسانی خودکار</h3><p>هر ۶ ساعت تست می‌شوند.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><h3>رایگان و بی‌تبلیغ</h3><p>بدون هزینه، بدون تبلیغ.</p></div>
+      <div class="feature-card reveal"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3>سازگاری کامل</h3><p>Karing، V2rayNG، Shadowrocket.</p></div>
     </div>
   </div>
 </section>
 
-<!-- SERVERS -->
 <section class="section" id="servers">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="section-tag">کانفیگها</div>
-      <h2>سرورهای <span class="gradient-text">پوم</span></h2>
-      <p>سرورهای اضافهشده توسط مدیر در این بخش نمایش داده میشوند.</p>
-    </div>
+    <div class="section-head reveal"><div class="section-tag">کانفیگ‌ها</div><h2>سرورهای <span class="gradient-text">پوم</span></h2><p>سرورهای اضافه‌شده توسط مدیر در این بخش نمایش داده می‌شوند.</p></div>
     <div class="search-wrap reveal">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" class="search-input" id="searchInput" placeholder="جستجوی سرور، کشور یا پروتکل...">
@@ -510,49 +436,30 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
   </div>
 </section>
 
-<!-- STEPS -->
 <section class="section" id="steps">
   <div class="container">
-    <div class="section-head reveal"><div class="section-tag">شروع سریع</div><h2>در <span class="gradient-text">۴ قدم</span> وصل شو</h2><p>بدون دانش فنی، بدون تنظیمات پیچیده — فقط چند ثانیه.</p></div>
+    <div class="section-head reveal"><div class="section-tag">شروع سریع</div><h2>در <span class="gradient-text">۴ قدم</span> وصل شو</h2></div>
     <div class="timeline">
-      <div class="step-card reveal"><div class="step-num">۱</div><h4>دانلود کلاینت</h4><p>اپلیکیشن Karing را از App Store، Google Play یا سایت رسمی نصب کن.</p></div>
-      <div class="step-card reveal"><div class="step-num">۲</div><h4>کپی کانفیگ</h4><p>روی دکمه «کپی» یکی از سرورهای بالا بزن تا در کلیپبورد ذخیره شود.</p></div>
-      <div class="step-card reveal"><div class="step-num">۳</div><h4>افزودن به کلاینت</h4><p>در Karing گزینه Import from Clipboard را انتخاب کن.</p></div>
-      <div class="step-card reveal"><div class="step-num">۴</div><h4>اتصال</h4><p>روی Connect بزن و از اینترنت آزاد لذت ببر. تمام!</p></div>
+      <div class="step-card reveal"><div class="step-num">۱</div><h4>دانلود کلاینت</h4><p>Karing را نصب کن.</p></div>
+      <div class="step-card reveal"><div class="step-num">۲</div><h4>کپی کانفیگ</h4><p>روی کپی یکی از سرورها بزن.</p></div>
+      <div class="step-card reveal"><div class="step-num">۳</div><h4>افزودن</h4><p>Import from Clipboard.</p></div>
+      <div class="step-card reveal"><div class="step-num">۴</div><h4>اتصال</h4><p>Connect و لذت ببر.</p></div>
     </div>
   </div>
 </section>
 
-<!-- FAQ -->
 <section class="section" id="faq">
   <div class="container">
     <div class="section-head reveal"><div class="section-tag">سوالات متداول</div><h2>هر چیزی که باید <span class="gradient-text">بدانی</span></h2></div>
     <div class="faq-list">
-      <div class="faq-item reveal"><button class="faq-q"><span>کد دسترسی را از کجا بگیرم؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">کد دسترسی توسط مدیر پوم ساخته میشود و به شما داده میشود. هر کد مدت اعتبار دارد و بعد از آن منقضی میشود.</div></div></div>
-      <div class="faq-item reveal"><button class="faq-q"><span>کانفیگها واقعاً رایگان هستند؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">بله، تمام کانفیگهای این صفحه رایگان هستند و نیازی به ثبتنام یا پرداخت ندارند.</div></div></div>
-      <div class="faq-item reveal"><button class="faq-q"><span>از کدام کلاینت استفاده کنم؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">پیشنهاد ما <strong>Karing</strong> است. اما V2rayNG، Shadowrocket و Streisand هم پشتیبانی میشوند.</div></div></div>
-      <div class="faq-item reveal"><button class="faq-q"><span>چرا بعضی سرورها کند هستند؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">سرعت هر سرور به فاصله جغرافیایی و شلوغی سرور بستگی دارد. چند سرور را تست کن و سریعترین را انتخاب کن.</div></div></div>
-      <div class="faq-item reveal"><button class="faq-q"><span>آیا استفاده امن است؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">برای کارهای حساس مثل بانکداری، حتماً از سرویسهای معتبر پولی استفاده کنید.</div></div></div>
-      <div class="faq-item reveal"><button class="faq-q"><span>روی چه دستگاههایی کار میکند؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">روی iOS، Android، Windows، macOS و Linux. حتی روی روتر.</div></div></div>
+      <div class="faq-item reveal"><button class="faq-q"><span>کد دسترسی را از کجا بگیرم؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">کد توسط مدیر ساخته می‌شود و به شما داده می‌شود. هر کد مدت اعتبار دارد.</div></div></div>
+      <div class="faq-item reveal"><button class="faq-q"><span>کانفیگ‌ها رایگان هستند؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">بله، کاملاً رایگان.</div></div></div>
+      <div class="faq-item reveal"><button class="faq-q"><span>از کدام کلاینت استفاده کنم؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">پیشنهاد ما Karing است. V2rayNG، Shadowrocket هم پشتیبانی می‌شوند.</div></div></div>
+      <div class="faq-item reveal"><button class="faq-q"><span>چرا بعضی سرورها کند هستند؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">بستگی به فاصله و شلوغی دارد. چند سرور تست کن.</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="section" style="padding-top:20px">
-  <div class="container">
-    <div class="cta-card reveal">
-      <h2>آمادهای اینترنت آزاد را تجربه کنی؟</h2>
-      <p>همین حالا یکی از کانفیگهای فعال را کپی کن و در کمتر از ۳۰ ثانیه وصل شو.</p>
-      <div class="cta-actions">
-        <a href="#servers" class="btn btn-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>دریافت کانفیگ</a>
-        <a href="#steps" class="btn btn-ghost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>راهنمای اتصال</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
   <div class="container">
     <div class="footer-grid">
@@ -568,23 +475,16 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
           </span>
           <span class="brand-text"><span class="fa">پوم</span><span class="en">POM</span></span>
         </a>
-        <p>پوم، پلتفرم دریافت قندشکن. کانفیگهای رایگان V2Ray، بهروز و تستشده برای اینترنت آزاد.</p>
+        <p>پوم، پلتفرم دریافت قندشکن. کانفیگ‌های رایگان V2Ray.</p>
       </div>
-      <div class="footer-col"><h5>دسترسی سریع</h5><ul><li><a href="#features">امکانات</a></li><li><a href="#servers">سرورها</a></li><li><a href="#steps">آموزش</a></li><li><a href="#faq">سوالات</a></li></ul></div>
-      <div class="footer-col"><h5>منابع</h5><ul><li><a href="#">آموزش Karing</a></li><li><a href="#">آموزش V2rayNG</a></li><li><a href="#">راهنمای پروتکلها</a></li></ul></div>
-      <div class="footer-col"><h5>قوانین</h5><ul><li><a href="#">حریم خصوصی</a></li><li><a href="#">شرایط استفاده</a></li><li><a href="#">سلب مسئولیت</a></li></ul></div>
+      <div class="footer-col"><h5>دسترسی سریع</h5><ul><li><a href="#features">امکانات</a></li><li><a href="#servers">سرورها</a></li><li><a href="#steps">آموزش</a></li></ul></div>
+      <div class="footer-col"><h5>منابع</h5><ul><li><a href="#">آموزش Karing</a></li><li><a href="#">آموزش V2rayNG</a></li></ul></div>
+      <div class="footer-col"><h5>قوانین</h5><ul><li><a href="#">حریم خصوصی</a></li><li><a href="#">شرایط</a></li></ul></div>
     </div>
-    <div class="footer-bottom">
-      <div>© ۱۴۰۴ پوم · POM — تمام حقوق محفوظ است.</div>
-      <div class="socials">
-        <a href="#" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 3L2 10.5l5 1.8L9 20l3-4 5.5 4L22 3zM9.5 14.5l7-6-5 7 .5 3-2.5-4z"/></svg></a>
-        <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.66-.22.66-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 6.8c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.16.58.67.48A10 10 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></svg></a>
-      </div>
-    </div>
+    <div class="footer-bottom"><div>© ۱۴۰۴ پوم · POM — تمام حقوق محفوظ است.</div></div>
   </div>
 </footer>
 
-<!-- LOGIN MODAL -->
 <div class="overlay" id="loginOverlay"></div>
 <div class="modal" id="loginModal">
   <button class="modal-close" id="loginClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
@@ -598,44 +498,33 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
   <div class="field">
     <label>رمز عبور</label>
     <input type="password" id="adminPassInput" placeholder="••••••••" autocomplete="off">
-    <div class="field-hint">رمز پیشفرض: <code>12345</code></div>
+    <div class="field-hint">رمز پیش‌فرض: <code>12345</code></div>
   </div>
   <button class="btn btn-primary" id="loginBtn" style="width:100%;justify-content:center">ورود به پنل</button>
 </div>
 
-<!-- ADMIN PANEL -->
 <div class="admin-panel" id="adminPanel">
   <div class="admin-header">
-    <h3>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--primary)"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      پنل پوم
-      <span class="badge-admin">ADMIN</span>
-    </h3>
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--primary)"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>پنل پوم <span class="badge-admin">ADMIN</span></h3>
     <button class="icon-btn" id="adminClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
   </div>
   <div class="admin-body">
     <div class="admin-tabs">
       <button class="admin-tab active" data-tab="codes">🔑 کدها</button>
       <button class="admin-tab" data-tab="add">افزودن سرور</button>
-      <button class="admin-tab" data-tab="list">لیست سرورها</button>
+      <button class="admin-tab" data-tab="list">لیست</button>
       <button class="admin-tab" data-tab="settings">تنظیمات</button>
     </div>
 
     <div class="tab-pane active" data-pane="codes">
-      <div class="info-note">
-        <strong>🔑 ساخت کد دسترسی</strong><br>
-        کد بساز، مدت اعتبار و تعداد کد را مشخص کن. کدها را به کاربران بده. بدون کد، ورود به پوم ممکن نیست.
-      </div>
+      <div class="info-note"><strong>🔑 ساخت کد دسترسی</strong><br>کد بساز، مدت اعتبار مشخص کن. کدها cryptographically امضا می‌شوند و روی هر دستگاهی کار می‌کنند.</div>
       <div class="field-row">
         <div class="field"><label>مدت اعتبار (روز)</label><input type="number" id="codeDays" value="30" min="1" max="3650"></div>
         <div class="field"><label>تعداد کد</label><input type="number" id="codeCount" value="1" min="1" max="100"></div>
       </div>
-      <button class="btn btn-primary" id="genCodesBtn" style="width:100%;justify-content:center;margin-bottom:20px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-        ساخت کد دسترسی
-      </button>
+      <button class="btn btn-primary" id="genCodesBtn" style="width:100%;justify-content:center;margin-bottom:20px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>ساخت کد</button>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <h4 style="font-size:.9rem;font-weight:700">کدهای ساختهشده</h4>
+        <h4 style="font-size:.9rem;font-weight:700">کدها</h4>
         <span id="codeStats" style="font-size:.75rem;color:var(--muted)"></span>
       </div>
       <div id="codeList"></div>
@@ -643,52 +532,51 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 
     <div class="tab-pane" data-pane="add">
       <div class="field-row">
-        <div class="field"><label>پرچم (ایموجی)</label><input type="text" id="fFlag" placeholder="🇩🇪" maxlength="4"></div>
+        <div class="field"><label>پرچم</label><input type="text" id="fFlag" placeholder="🇩🇪" maxlength="4"></div>
         <div class="field"><label>کشور</label><input type="text" id="fCountry" placeholder="آلمان"></div>
       </div>
       <div class="field-row">
         <div class="field"><label>شهر</label><input type="text" id="fCity" placeholder="Frankfurt"></div>
-        <div class="field"><label>نوع پروتکل</label>
-          <select id="fType"><option value="reality">REALITY</option><option value="trojan">TROJAN</option><option value="ws">WebSocket</option><option value="grpc">gRPC</option><option value="other">سایر</option></select>
-        </div>
+        <div class="field"><label>نوع</label><select id="fType"><option value="reality">REALITY</option><option value="trojan">TROJAN</option><option value="ws">WebSocket</option><option value="grpc">gRPC</option><option value="other">سایر</option></select></div>
       </div>
-      <div class="field"><label>نام پروتکل (نمایشی)</label><input type="text" id="fProto" placeholder="VLESS + REALITY" dir="ltr"></div>
+      <div class="field"><label>نام پروتکل</label><input type="text" id="fProto" placeholder="VLESS + REALITY" dir="ltr"></div>
       <div class="field-row">
         <div class="field"><label>پینگ (ms)</label><input type="number" id="fPing" placeholder="32" min="0"></div>
-        <div class="field"><label>سرعت دانلود (Mb/s)</label><input type="number" id="fDown" placeholder="124" min="0"></div>
+        <div class="field"><label>سرعت (Mb/s)</label><input type="number" id="fDown" placeholder="124" min="0"></div>
       </div>
-      <div class="field"><label>کانفیگ (لینک)</label><textarea id="fConfig" placeholder="vless://..."></textarea></div>
-      <button class="btn btn-primary" id="addServerBtn" style="width:100%;justify-content:center">افزودن سرور</button>
+      <div class="field"><label>کانفیگ</label><textarea id="fConfig" placeholder="vless://..."></textarea></div>
+      <button class="btn btn-primary" id="addServerBtn" style="width:100%;justify-content:center">افزودن و همگام‌سازی</button>
     </div>
 
-    <div class="tab-pane" data-pane="list">
-      <div id="adminServerList"></div>
-    </div>
+    <div class="tab-pane" data-pane="list"><div id="adminServerList"></div></div>
 
     <div class="tab-pane" data-pane="settings">
-      <div class="info-note"><strong>اشتراکگذاری:</strong> فایل JSON سرورها را دانلود کن و در اختیار بقیه قرار بده.</div>
+      <div class="info-note"><strong>Sync:</strong> همه‌ی سرورها خودکار با Cloudflare همگام می‌شوند و بین همه‌ی کاربرا share می‌شن.</div>
       <div class="admin-actions-row">
-        <button class="btn btn-primary" id="exportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>خروجی JSON</button>
-        <button class="btn btn-glass" id="importBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>ورودی JSON</button>
+        <button class="btn btn-primary" id="exportBtn">📤 خروجی JSON</button>
+        <button class="btn btn-glass" id="importBtn">📥 ورودی JSON</button>
+        <button class="btn btn-glass" id="forceSyncBtn">🔄 همگام‌سازی مجدد</button>
       </div>
       <input type="file" id="importFile" style="display:none" accept=".json">
-
       <div style="height:1px;background:var(--border);margin:24px 0"></div>
       <h4 style="font-size:.95rem;font-weight:700;margin-bottom:14px">تغییر رمز مدیر</h4>
       <div class="field"><label>رمز فعلی</label><input type="password" id="curPass"></div>
       <div class="field"><label>رمز جدید</label><input type="password" id="newPass"></div>
-      <button class="btn btn-glass" id="changePassBtn" style="width:100%;justify-content:center">تغییر رمز</button>
-
+      <button class="btn btn-glass" id="changePassBtn" style="width:100%;justify-content:center">تغییر رمز (لوکال)</button>
+      <div class="field-hint" style="margin-top:8px">⚠️ برای تغییر رمز واقعی سرور، توی Cloudflare Worker مقدار <code>ADMIN_PASS</code> رو عوض کن.</div>
       <div style="height:1px;background:var(--border);margin:24px 0"></div>
       <h4 style="font-size:.95rem;font-weight:700;margin-bottom:14px;color:var(--red)">منطقه خطر</h4>
-      <button class="btn btn-glass" id="clearServersBtn" style="width:100%;justify-content:center;border-color:var(--red);color:var(--red);margin-bottom:8px">🗑️ حذف تمام سرورها</button>
-      <button class="btn btn-glass" id="clearCodesBtn" style="width:100%;justify-content:center;border-color:var(--red);color:var(--red);margin-bottom:8px">🗑️ حذف تمام کدها</button>
-      <button class="btn btn-glass" id="logoutBtn" style="width:100%;justify-content:center">خروج از پنل</button>
+      <button class="btn btn-glass" id="clearServersBtn" style="width:100%;justify-content:center;border-color:var(--red);color:var(--red);margin-bottom:8px">🗑️ حذف همه سرورها</button>
+      <button class="btn btn-glass" id="clearCodesBtn" style="width:100%;justify-content:center;border-color:var(--red);color:var(--red);margin-bottom:8px">🗑️ حذف همه کدها</button>
+      <button class="btn btn-glass" id="logoutBtn" style="width:100%;justify-content:center">خروج</button>
     </div>
   </div>
 </div>
 
 <script>
+/* ⚠️ آدرس Cloudflare Worker خودت */
+const API_URL = 'https://pom-api.miladn46.workers.dev';
+
 /* ========== UTILS ========== */
 const faD=['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
 const toFa=n=>String(n).replace(/\d/g,d=>faD[d]);
@@ -698,37 +586,30 @@ const uid=()=>'pom-'+Date.now().toString(36)+Math.random().toString(36).slice(2,
 /* ========== THEME ========== */
 const body=document.body;
 function setTheme(t){body.setAttribute('data-theme',t);localStorage.setItem('pom-theme',t)}
-const savedTheme=localStorage.getItem('pom-theme');
-if(savedTheme)setTheme(savedTheme);
-else if(matchMedia('(prefers-color-scheme: dark)').matches)setTheme('dark');
-document.getElementById('themeToggle').addEventListener('click',()=>{setTheme(body.getAttribute('data-theme')==='dark'?'light':'dark')});
+const st=localStorage.getItem('pom-theme');
+if(st)setTheme(st);else if(matchMedia('(prefers-color-scheme: dark)').matches)setTheme('dark');
+document.getElementById('themeToggle').addEventListener('click',()=>setTheme(body.getAttribute('data-theme')==='dark'?'light':'dark'));
 
-/* ========== NAV SCROLL ========== */
 const navbar=document.getElementById('navbar');
 addEventListener('scroll',()=>navbar.classList.toggle('scrolled',scrollY>20),{passive:true});
 
-/* ========== REVEAL ========== */
-const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}})},{threshold:.12});
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 
-/* ========== COUNTER ========== */
-const co=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
-  const el=e.target,target=parseInt(el.dataset.target,10),dur=1600,st=performance.now();
-  function tick(now){const t=Math.min((now-st)/dur,1),ez=1-Math.pow(1-t,3);
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){
+  const el=e.target,target=parseInt(el.dataset.target,10),dur=1600,start=performance.now();
+  (function tick(now){const t=Math.min((now-start)/dur,1),ez=1-Math.pow(1-t,3);
     el.textContent=toFaNum(Math.floor(ez*target));
-    if(t<1)requestAnimationFrame(tick);else el.textContent=toFaNum(target)}
-  requestAnimationFrame(tick);co.unobserve(el);
-}})},{threshold:.5});
+    if(t<1)requestAnimationFrame(tick);else el.textContent=toFaNum(target)})(performance.now());
+  co.unobserve(el);
+}}),{threshold:.5});
 document.querySelectorAll('.count').forEach(el=>co.observe(el));
-
-/* ========== FEATURE GLOW ========== */
-document.querySelectorAll('.feature-card').forEach(c=>{c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%')})});
 
 /* ========== TOAST ========== */
 const toastWrap=document.getElementById('toastWrap');
 function showToast(msg,type='check'){
   const icons={
-    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>',
     warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
     info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
   };
@@ -739,6 +620,14 @@ function showToast(msg,type='check'){
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),400)},2400);
 }
 
+/* ========== SYNC STATUS ========== */
+const syncStatus=document.getElementById('syncStatus');
+function setSyncStatus(txt,cls='loading'){
+  syncStatus.textContent=txt;
+  syncStatus.className='sync-status show '+cls;
+  if(cls!=='loading')setTimeout(()=>syncStatus.classList.remove('show'),2500);
+}
+
 /* ========== STORAGE ========== */
 const SK={servers:'pom-servers',pass:'pom-pass',codes:'pom-codes',access:'pom-access'};
 const DEFAULT_PASS='12345';
@@ -746,15 +635,61 @@ const POM_SECRET='pom-vpn-secret-key-2025-change-me';
 
 let servers=JSON.parse(localStorage.getItem(SK.servers)||'[]');
 let codes=JSON.parse(localStorage.getItem(SK.codes)||'[]');
-function saveServers(){localStorage.setItem(SK.servers,JSON.stringify(servers));updateStats()}
-function saveCodes(){localStorage.setItem(SK.codes,JSON.stringify(codes));renderCodeList();updateStats()}
+
+function saveServersLocal(){localStorage.setItem(SK.servers,JSON.stringify(servers));updateStats()}
+function saveCodes(){localStorage.setItem(SK.codes,JSON.stringify(codes));renderCodeList()}
 function getPass(){return localStorage.getItem(SK.pass)||DEFAULT_PASS}
 
 function updateStats(){
   const el=document.getElementById('heroCount');
   if(el)el.textContent=servers.length?`${toFaNum(servers.length)} سرور فعال · آماده اتصال`:'در انتظار افزودن سرور';
-  const st=document.getElementById('statServers');
-  if(st)st.textContent=toFaNum(servers.length);
+  const sEl=document.getElementById('statServers');
+  if(sEl)sEl.textContent=toFaNum(servers.length);
+}
+
+/* ========== SERVER SYNC ========== */
+async function pullServers(){
+  setSyncStatus('⏳ دریافت از سرور...','loading');
+  try{
+    const r=await fetch(API_URL+'/servers',{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    if(Array.isArray(data.servers)){
+      servers=data.servers;
+      localStorage.setItem(SK.servers,JSON.stringify(servers));
+      renderServers();updateStats();
+      setSyncStatus(`✅ ${toFa(servers.length)} سرور همگام شد`,'ok');
+      return true;
+    }
+    throw new Error('bad response');
+  }catch(e){
+    console.warn('Pull failed:',e);
+    setSyncStatus('⚠️ اتصال به سرور برقرار نشد — از کش لوکال استفاده می‌کنم','err');
+    renderServers();updateStats();
+    return false;
+  }
+}
+
+async function pushServers(){
+  setSyncStatus('⏳ ارسال به سرور...','loading');
+  try{
+    const r=await fetch(API_URL+'/servers',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:getPass(),servers})
+    });
+    if(!r.ok){
+      const err=await r.json().catch(()=>({}));
+      throw new Error(err.error||('HTTP '+r.status));
+    }
+    setSyncStatus(`✅ ${toFa(servers.length)} سرور ارسال شد`,'ok');
+    return true;
+  }catch(e){
+    console.error('Push failed:',e);
+    setSyncStatus('⚠️ ارسال ناموفق — رمز Worker رو چک کن','err');
+    showToast('همگام‌سازی ناموفق. رمز ادمین با Cloudflare یکیه؟','warn');
+    return false;
+  }
 }
 
 /* ========== ACCESS CODE CRYPTO ========== */
@@ -764,6 +699,7 @@ async function signData(str){
   const hash=await crypto.subtle.digest('SHA-256',data);
   return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,10).toUpperCase();
 }
+
 async function generateCode(days){
   const expiry=Date.now()+days*86400000;
   const rand=Math.random().toString(36).slice(2,10).toUpperCase();
@@ -772,11 +708,13 @@ async function generateCode(days){
   const raw=btoa(`${payload}.${sig}`).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
   return 'POM-'+raw;
 }
+
 async function validateCode(code){
   try{
-    code=code.trim().toUpperCase();
-    if(!code.startsWith('POM-'))return{valid:false,reason:'invalid'};
-    let b64=code.slice(4).replace(/-/g,'+').replace(/_/g,'/');
+    code=code.trim();
+    if(!code.toUpperCase().startsWith('POM-'))return{valid:false,reason:'invalid'};
+    const payload=code.slice(4);
+    let b64=payload.replace(/-/g,'+').replace(/_/g,'/');
     while(b64.length%4)b64+='=';
     const raw=atob(b64);
     const parts=raw.split('.');
@@ -801,18 +739,14 @@ async function checkAccess(){
   try{
     const data=JSON.parse(saved);
     const result=await validateCode(data.code);
-    if(result.valid){
-      gate.classList.add('hidden');
-    }else{
+    if(result.valid)gate.classList.add('hidden');
+    else{
       localStorage.removeItem(SK.access);
       gate.classList.remove('hidden');
       gateMsg.className='gate-msg err';
-      gateMsg.textContent=result.reason==='expired'?'کد شما منقضی شده. کد جدید از مدیر بگیرید.':'کد نامعتبر است.';
+      gateMsg.textContent=result.reason==='expired'?'کد شما منقضی شده.':'کد نامعتبر است.';
     }
-  }catch{
-    localStorage.removeItem(SK.access);
-    gate.classList.remove('hidden');
-  }
+  }catch{localStorage.removeItem(SK.access);gate.classList.remove('hidden')}
 }
 
 async function tryEnter(){
@@ -823,27 +757,24 @@ async function tryEnter(){
   const result=await validateCode(code);
   if(result.valid){
     localStorage.setItem(SK.access,JSON.stringify({code,enteredAt:Date.now()}));
-    gateMsg.className='gate-msg ok';gateMsg.textContent='✓ کد معتبر است. خوش آمدی!';
+    gateMsg.className='gate-msg ok';gateMsg.textContent='✓ کد معتبر است!';
     setTimeout(()=>{gate.classList.add('hidden');showToast('خوش آمدی به پوم ✨','check')},600);
   }else{
     gateMsg.className='gate-msg err';
-    gateMsg.textContent=result.reason==='expired'?'این کد منقضی شده است.':'کد نامعتبر است. دوباره چک کن.';
+    gateMsg.textContent=result.reason==='expired'?'این کد منقضی شده است.':'کد نامعتبر است.';
     gateInput.style.borderColor='#ff453a';
     setTimeout(()=>gateInput.style.borderColor='',1200);
   }
   gateBtn.disabled=false;gateBtn.textContent='ورود به پوم';
 }
-
 gateBtn.addEventListener('click',tryEnter);
 gateInput.addEventListener('keydown',e=>{if(e.key==='Enter')tryEnter()});
-checkAccess();
 
 /* ========== RENDER SERVERS ========== */
 const grid=document.getElementById('serversGrid');
 let activeFilter='all',searchQuery='';
-
-function pingClass(p){if(p<=50)return'ping-good';if(p<=100)return'ping-mid';return'ping-bad'}
-function loadColor(l){if(l<=40)return'linear-gradient(90deg,#34c759,#007aff)';if(l<=65)return'linear-gradient(90deg,#ffcc00,#ff9500)';return'linear-gradient(90deg,#ff9500,#ff2d55)'}
+function pingClass(p){return p<=50?'ping-good':p<=100?'ping-mid':'ping-bad'}
+function loadColor(l){return l<=40?'linear-gradient(90deg,#34c759,#007aff)':l<=65?'linear-gradient(90deg,#ffcc00,#ff9500)':'linear-gradient(90deg,#ff9500,#ff2d55)'}
 
 function renderServers(){
   const filtered=servers.filter(s=>{
@@ -853,38 +784,24 @@ function renderServers(){
     return mf&&ms;
   });
   if(!servers.length){
-    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:70px 30px;background:var(--surface);backdrop-filter:blur(24px);border:2px dashed var(--border);border-radius:32px">
-      <div style="font-size:3rem;margin-bottom:14px">📡</div>
-      <h3 style="font-size:1.2rem;font-weight:800;margin-bottom:8px">هنوز سروری اضافه نشده</h3>
-      <p style="color:var(--muted);max-width:400px;margin:0 auto;line-height:1.9">مدیر باید از پنل، سرورها را اضافه کند.</p>
-    </div>`;
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:70px 30px;background:var(--surface);backdrop-filter:blur(24px);border:2px dashed var(--border);border-radius:32px"><div style="font-size:3rem;margin-bottom:14px">📡</div><h3 style="font-size:1.2rem;font-weight:800;margin-bottom:8px">هنوز سروری اضافه نشده</h3><p style="color:var(--muted);max-width:400px;margin:0 auto">مدیر باید از پنل، سرور اضافه کند.</p></div>`;
     return;
   }
   if(!filtered.length){
-    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)">
-      <div style="font-size:2.5rem;margin-bottom:12px">🔍</div>
-      <div style="font-size:1rem;font-weight:600">سروری پیدا نشد</div>
-      <div style="font-size:.85rem;margin-top:6px">فیلتر یا جستجو را تغییر دهید</div>
-    </div>`;
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)"><div style="font-size:2.5rem;margin-bottom:12px">🔍</div><div style="font-size:1rem;font-weight:600">سروری پیدا نشد</div></div>`;
     return;
   }
   grid.innerHTML=filtered.map((s,i)=>`
     <div class="server-card" style="animation-delay:${i*.06}s">
-      <div class="sc-top">
-        <div class="sc-flag">${s.flag||'🌐'}</div>
-        <div class="sc-ping ${pingClass(s.ping||0)}">${toFa(s.ping||0)}ms</div>
-      </div>
+      <div class="sc-top"><div class="sc-flag">${s.flag||'🌐'}</div><div class="sc-ping ${pingClass(s.ping||0)}">${toFa(s.ping||0)}ms</div></div>
       <div class="sc-name">${s.country||'?'} · ${s.city||''}</div>
       <div class="sc-proto">${s.proto||s.type||''}</div>
       <div class="sc-meter"><span style="width:${s.load||0}%;background:${loadColor(s.load||0)}"></span></div>
-      <div class="sc-meter-labels"><span>بار سرور</span><span>${toFa(s.load||0)}٪</span></div>
+      <div class="sc-meter-labels"><span>بار</span><span>${toFa(s.load||0)}٪</span></div>
       <div class="sc-meter" style="margin-bottom:6px"><span style="width:${Math.min(s.down||0,150)/1.5}%;background:linear-gradient(90deg,#007aff,#af52de)"></span></div>
       <div class="sc-meter-labels"><span>دانلود</span><span>${toFa(s.down||0)} Mb/s</span></div>
       <div class="sc-actions" style="margin-top:14px">
-        <button class="sc-copy" data-id="${s.id}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          کپی کانفیگ
-        </button>
+        <button class="sc-copy" data-id="${s.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>کپی کانفیگ</button>
         <button class="sc-star"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
       </div>
     </div>
@@ -893,7 +810,7 @@ function renderServers(){
   grid.querySelectorAll('.sc-star').forEach(b=>b.addEventListener('click',()=>{
     b.classList.toggle('active');
     const svg=b.querySelector('svg');
-    if(b.classList.contains('active')){svg.setAttribute('fill','currentColor');showToast('به علاقهمندیها اضافه شد','check')}
+    if(b.classList.contains('active')){svg.setAttribute('fill','currentColor');showToast('ذخیره شد','check')}
     else svg.setAttribute('fill','none');
   }));
 }
@@ -925,12 +842,12 @@ document.querySelectorAll('.faq-item').forEach(item=>{
   });
 });
 
-/* PHONE CONNECT */
+/* PHONE */
 const connectBtn=document.getElementById('connectBtn');
 const phoneIP=document.getElementById('phoneIP');
 const phoneLoc=document.getElementById('phoneLoc');
 let connected=false,timerInterval=null,seconds=0;
-function formatTime(s){const h=String(Math.floor(s/3600)).padStart(2,'0'),m=String(Math.floor((s%3600)/60)).padStart(2,'0'),sec=String(s%60).padStart(2,'0');return toFa(`${h}:${m}:${sec}`)}
+function fmtTime(s){const h=String(Math.floor(s/3600)).padStart(2,'0'),m=String(Math.floor((s%3600)/60)).padStart(2,'0'),sec=String(s%60).padStart(2,'0');return toFa(`${h}:${m}:${sec}`)}
 connectBtn.addEventListener('click',()=>{
   if(!servers.length){showToast('ابتدا سرور اضافه کنید','warn');return}
   connected=!connected;connectBtn.classList.toggle('connected',connected);
@@ -938,15 +855,15 @@ connectBtn.addEventListener('click',()=>{
     const s=servers[0];
     phoneIP.textContent='۸۵.۱۹۴.xx.xx';phoneIP.style.color='#34c759';
     phoneLoc.textContent=`${s.country||''} · ${s.city||''}`;
-    seconds=0;document.getElementById('phoneTime').textContent=formatTime(0);
+    seconds=0;document.getElementById('phoneTime').textContent=fmtTime(0);
     document.getElementById('phoneDown').textContent=toFa(s.down||0)+' Mb/s';
     document.getElementById('phoneUp').textContent=toFa(Math.floor((s.down||0)*.4))+' Mb/s';
     document.getElementById('phonePing').textContent=toFa(s.ping||0)+' ms';
-    timerInterval=setInterval(()=>{seconds++;document.getElementById('phoneTime').textContent=formatTime(seconds)},1000);
-    showToast(`اتصال برقرار شد — ${s.country||''}`,'check');
+    timerInterval=setInterval(()=>{seconds++;document.getElementById('phoneTime').textContent=fmtTime(seconds)},1000);
+    showToast(`اتصال — ${s.country||''}`,'check');
   }else{
     clearInterval(timerInterval);phoneIP.textContent='—';phoneIP.style.color='';
-    phoneLoc.textContent='در انتظار اتصال';showToast('اتصال قطع شد','info');
+    phoneLoc.textContent='در انتظار اتصال';showToast('قطع شد','info');
   }
 });
 
@@ -959,15 +876,10 @@ let isLoggedIn=sessionStorage.getItem('pom-logged')==='1';
 
 function openLogin(){
   if(isLoggedIn)return openAdmin();
-  loginOverlay.classList.add('show');
-  loginModal.classList.add('show');
+  loginOverlay.classList.add('show');loginModal.classList.add('show');
   setTimeout(()=>document.getElementById('adminPassInput').focus(),300);
 }
-function closeLogin(){
-  loginOverlay.classList.remove('show');
-  loginModal.classList.remove('show');
-  document.getElementById('adminPassInput').value='';
-}
+function closeLogin(){loginOverlay.classList.remove('show');loginModal.classList.remove('show');document.getElementById('adminPassInput').value=''}
 function openAdmin(){adminPanel.classList.add('show');renderAdminList();renderCodeList()}
 function closeAdmin(){adminPanel.classList.remove('show')}
 function updateAdminBtn(){adminOpenBtn.classList.toggle('admin-active',isLoggedIn)}
@@ -982,10 +894,7 @@ document.getElementById('gateAdminLink').addEventListener('click',()=>openLogin(
 document.getElementById('loginBtn').addEventListener('click',()=>{
   if(document.getElementById('adminPassInput').value===getPass()){
     isLoggedIn=true;sessionStorage.setItem('pom-logged','1');
-    updateAdminBtn();
-    closeLogin();
-    // بستن گیت تا پنل دیده بشه
-    gate.classList.add('hidden');
+    updateAdminBtn();closeLogin();gate.classList.add('hidden');
     setTimeout(openAdmin,200);
     showToast('خوش آمدی، مدیر پوم ✨','check');
   }else{
@@ -1005,60 +914,46 @@ document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()
   if(t.dataset.tab==='codes')renderCodeList();
 }));
 
-/* ========== CODES MANAGEMENT ========== */
+/* ========== CODES ========== */
 async function createCodes(days,count){
-  const newCodes=[];
+  const n=[];
   for(let i=0;i<count;i++){
     const code=await generateCode(days);
-    const entry={id:uid(),code,days,createdAt:Date.now(),expiry:Date.now()+days*86400000,used:false};
-    newCodes.push(entry);
-    codes.push(entry);
+    const entry={id:uid(),code,days,createdAt:Date.now(),expiry:Date.now()+days*86400000};
+    n.push(entry);codes.push(entry);
   }
-  saveCodes();
-  return newCodes;
+  saveCodes();return n;
 }
-
 document.getElementById('genCodesBtn').addEventListener('click',async()=>{
   const days=parseInt(document.getElementById('codeDays').value)||30;
   const count=parseInt(document.getElementById('codeCount').value)||1;
   if(days<1||count<1){showToast('مقادیر نامعتبر','warn');return}
-  if(count>100){showToast('حداکثر ۱۰۰ کد در هر بار','warn');return}
+  if(count>100){showToast('حداکثر ۱۰۰','warn');return}
   const btn=document.getElementById('genCodesBtn');
-  btn.disabled=true;btn.textContent='⏳ در حال ساخت...';
+  btn.disabled=true;btn.textContent='⏳...';
   const created=await createCodes(days,count);
   btn.disabled=false;
-  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> ساخت کد دسترسی';
+  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> ساخت کد';
   showToast(`${toFa(created.length)} کد ساخته شد ✓`,'check');
-  if(created.length===1){
-    try{await navigator.clipboard.writeText(created[0].code);showToast('کد خودکار کپی شد ✓','check')}catch{}
-  }
+  if(created.length===1){try{await navigator.clipboard.writeText(created[0].code);showToast('کد کپی شد ✓','check')}catch{}}
 });
 
 function renderCodeList(){
   const list=document.getElementById('codeList');
   const stats=document.getElementById('codeStats');
   if(!codes.length){
-    list.innerHTML='<div class="admin-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div>هنوز کدی ساخته نشده</div></div>';
-    stats.textContent='';
-    return;
+    list.innerHTML='<div class="admin-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/></svg><div>هنوز کدی ساخته نشده</div></div>';
+    stats.textContent='';return;
   }
-  const active=codes.filter(c=>!c.used&&Date.now()<c.expiry).length;
+  const active=codes.filter(c=>Date.now()<c.expiry).length;
   const expired=codes.filter(c=>Date.now()>=c.expiry).length;
   stats.textContent=`فعال: ${toFa(active)} · منقضی: ${toFa(expired)} · کل: ${toFa(codes.length)}`;
   list.innerHTML=codes.slice().reverse().map(c=>{
     const isExpired=Date.now()>=c.expiry;
-    const status=isExpired?'expired':(c.used?'used':'active');
-    const statusText=isExpired?'منقضی':(c.used?'استفادهشده':'فعال');
     const daysLeft=Math.max(0,Math.ceil((c.expiry-Date.now())/86400000));
-    return `<div class="code-item ${status}">
-      <div class="code-top">
-        <div class="code-str">${c.code}</div>
-        <div class="code-status ${status}">${statusText}</div>
-      </div>
-      <div class="code-meta">
-        <span>📅 ${toFa(daysLeft)} روز مانده</span>
-        <span>🗓 ${new Date(c.createdAt).toLocaleDateString('fa-IR')}</span>
-      </div>
+    return `<div class="code-item ${isExpired?'expired':''}">
+      <div class="code-top"><div class="code-str">${c.code}</div><div class="code-status ${isExpired?'expired':'active'}">${isExpired?'منقضی':'فعال'}</div></div>
+      <div class="code-meta"><span>📅 ${toFa(daysLeft)} روز</span><span>🗓 ${new Date(c.createdAt).toLocaleDateString('fa-IR')}</span></div>
       <div class="code-actions">
         <button data-copy="${c.code}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>کپی</button>
         <button class="danger" data-del="${c.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>حذف</button>
@@ -1071,12 +966,13 @@ function renderCodeList(){
   }));
   list.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{
     if(!confirm('این کد حذف شود؟'))return;
-    codes=codes.filter(c=>c.id!==b.dataset.del);
-    saveCodes();showToast('کد حذف شد','info');
+    codes=codes.filter(c=>c.id!==b.dataset.del);saveCodes();
+    showToast('حذف شد','info');
   }));
 }
 
-document.getElementById('addServerBtn').addEventListener('click',()=>{
+/* ========== SERVERS ADMIN ========== */
+document.getElementById('addServerBtn').addEventListener('click',async()=>{
   const flag=document.getElementById('fFlag').value.trim()||'🌐';
   const country=document.getElementById('fCountry').value.trim();
   const city=document.getElementById('fCity').value.trim();
@@ -1085,12 +981,13 @@ document.getElementById('addServerBtn').addEventListener('click',()=>{
   const ping=parseInt(document.getElementById('fPing').value)||0;
   const down=parseInt(document.getElementById('fDown').value)||0;
   const config=document.getElementById('fConfig').value.trim();
-  if(!country){showToast('کشور را وارد کن','warn');return}
-  if(!config){showToast('کانفیگ را وارد کن','warn');return}
+  if(!country){showToast('کشور لازم است','warn');return}
+  if(!config){showToast('کانفیگ لازم است','warn');return}
   servers.push({id:uid(),flag,country,city,type,proto,ping,down,load:30,config,source:'manual'});
-  saveServers();renderServers();renderAdminList();
+  saveServersLocal();renderServers();renderAdminList();
   ['fFlag','fCountry','fCity','fProto','fPing','fDown','fConfig'].forEach(id=>document.getElementById(id).value='');
   showToast(`سرور ${country} اضافه شد ✓`,'check');
+  await pushServers();
 });
 
 function renderAdminList(){
@@ -1099,34 +996,31 @@ function renderAdminList(){
   list.innerHTML=servers.map(s=>`
     <div class="server-item">
       <div class="flag-s">${s.flag||'🌐'}</div>
-      <div class="info">
-        <div class="n">${s.country||'?'} · ${s.city||''}</div>
-        <div class="m">${s.config||''}</div>
-      </div>
+      <div class="info"><div class="n">${s.country||'?'} · ${s.city||''}</div><div class="m">${s.config||''}</div></div>
       <button class="del" data-id="${s.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
     </div>
   `).join('');
-  list.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>{
+  list.querySelectorAll('.del').forEach(b=>b.addEventListener('click',async()=>{
     servers=servers.filter(x=>x.id!==b.dataset.id);
-    saveServers();renderServers();renderAdminList();
+    saveServersLocal();renderServers();renderAdminList();
     showToast('حذف شد','info');
+    await pushServers();
   }));
 }
 
 document.getElementById('exportBtn').addEventListener('click',()=>{
-  if(!servers.length){showToast('سروری وجود ندارد','warn');return}
+  if(!servers.length){showToast('سروری نیست','warn');return}
   const data={app:'POM',version:1,exportedAt:new Date().toISOString(),servers};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download=`pom-servers-${Date.now()}.json`;
-  a.click();URL.revokeObjectURL(url);
-  showToast('دانلود شد','check');
+  a.click();URL.revokeObjectURL(url);showToast('دانلود شد','check');
 });
 document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('importFile').click());
 document.getElementById('importFile').addEventListener('change',e=>{
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=ev=>{
+  reader.onload=async ev=>{
     try{
       const data=JSON.parse(ev.target.result);
       const incoming=Array.isArray(data)?data:(data.servers||[]);
@@ -1136,40 +1030,48 @@ document.getElementById('importFile').addEventListener('change',e=>{
         const ids=new Set(servers.map(s=>s.id));
         incoming.forEach(s=>{if(!s.id||ids.has(s.id))s.id=uid();servers.push(s)});
       }else servers=incoming.map(s=>({...s,id:s.id||uid()}));
-      saveServers();renderServers();renderAdminList();
-      showToast(`${incoming.length} سرور وارد شد ✓`,'check');
+      saveServersLocal();renderServers();renderAdminList();
+      showToast(`${incoming.length} وارد شد ✓`,'check');
+      await pushServers();
     }catch{showToast('فایل نامعتبر','warn')}
     e.target.value='';
   };
   reader.readAsText(file);
 });
 
+document.getElementById('forceSyncBtn').addEventListener('click',async()=>{
+  await pullServers();
+  await pushServers();
+});
+
 document.getElementById('changePassBtn').addEventListener('click',()=>{
   const cur=document.getElementById('curPass').value;
   const nw=document.getElementById('newPass').value;
   if(cur!==getPass()){showToast('رمز فعلی اشتباه','warn');return}
-  if(nw.length<4){showToast('رمز جدید حداقل ۴ کاراکتر','warn');return}
+  if(nw.length<4){showToast('حداقل ۴ کاراکتر','warn');return}
   localStorage.setItem(SK.pass,nw);
   document.getElementById('curPass').value='';document.getElementById('newPass').value='';
-  showToast('رمز تغییر کرد ✓','check');
+  showToast('رمز لوکال تغییر کرد ✓','check');
 });
+
 document.getElementById('logoutBtn').addEventListener('click',()=>{
   isLoggedIn=false;sessionStorage.removeItem('pom-logged');
-  updateAdminBtn();closeAdmin();
-  checkAccess();
+  updateAdminBtn();closeAdmin();checkAccess();
   showToast('خارج شدی','info');
 });
-document.getElementById('clearServersBtn').addEventListener('click',()=>{
-  if(!servers.length){showToast('سروری وجود ندارد','warn');return}
+
+document.getElementById('clearServersBtn').addEventListener('click',async()=>{
+  if(!servers.length){showToast('سروری نیست','warn');return}
   if(!confirm('همه سرورها حذف شوند؟'))return;
-  servers=[];saveServers();renderServers();renderAdminList();
-  showToast('همه سرورها حذف شدند','info');
+  servers=[];saveServersLocal();renderServers();renderAdminList();
+  showToast('حذف شدند','info');
+  await pushServers();
 });
+
 document.getElementById('clearCodesBtn').addEventListener('click',()=>{
-  if(!codes.length){showToast('کدی وجود ندارد','warn');return}
+  if(!codes.length){showToast('کدی نیست','warn');return}
   if(!confirm('همه کدها حذف شوند؟'))return;
-  codes=[];saveCodes();
-  showToast('همه کدها حذف شدند','info');
+  codes=[];saveCodes();showToast('حذف شدند','info');
 });
 
 /* LIVE WIDGETS */
@@ -1181,7 +1083,6 @@ setInterval(()=>{
   if(fs)fs.textContent=toFa(s.down||0)+' Mb/s';
 },3000);
 
-/* SMOOTH ANCHOR */
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click',e=>{
     const id=a.getAttribute('href');
@@ -1195,6 +1096,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 updateStats();
 renderServers();
 renderCodeList();
+checkAccess();
+pullServers();
 </script>
 
 </body>
