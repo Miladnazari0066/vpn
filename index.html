@@ -40,7 +40,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(52,199,89,.6);animation:pulse 2s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,199,89,.7)}70%{box-shadow:0 0 0 12px rgba(52,199,89,0)}100%{box-shadow:0 0 0 0 rgba(52,199,89,0)}}
 
-/* NAVBAR */
 .navbar{position:sticky;top:0;z-index:100;padding:12px 0;transition:all .4s var(--ease)}
 .navbar.scrolled{padding:8px 0}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;background:var(--surface);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border:1px solid var(--glass-border);border-radius:999px;box-shadow:var(--shadow-sm)}
@@ -63,7 +62,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 [data-theme="dark"] .sun-icon{display:none}
 [data-theme="light"] .moon-icon{display:none}
 
-/* HERO */
 .hero{padding:70px 0 40px}
 .hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:60px;align-items:center}
 .hero h1{font-size:clamp(2.2rem,5.2vw,4rem);font-weight:900;line-height:1.15;letter-spacing:-.03em;margin-bottom:20px}
@@ -86,7 +84,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .trust-row .avatars span:nth-child(3){background:linear-gradient(135deg,var(--green),#00c7be)}
 .trust-row .avatars span:nth-child(4){background:linear-gradient(135deg,var(--orange),var(--yellow))}
 
-/* PHONE */
 .phone-wrap{display:flex;justify-content:center;position:relative}
 .phone{width:300px;height:610px;border-radius:48px;background:linear-gradient(160deg,#2a2a2e,#0a0a0f);padding:12px;box-shadow:0 40px 80px rgba(0,0,0,.25),0 0 0 2px rgba(255,255,255,.08) inset,0 0 60px rgba(0,122,255,.15);position:relative;animation:pf 6s ease-in-out infinite}
 @keyframes pf{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-16px) rotate(1deg)}}
@@ -124,7 +121,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .fw-3 .fw-icon{background:rgba(175,82,222,.15);color:var(--accent)}
 @keyframes fw{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 
-/* STATS */
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:60px 0}
 .stat-box{background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:22px;padding:24px 20px;text-align:center;box-shadow:var(--shadow-sm);transition:all .4s var(--ease);position:relative;overflow:hidden}
 .stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease)}
@@ -134,14 +130,12 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .stat-box .num small{font-size:1.1rem}
 .stat-box .lbl{color:var(--muted);font-size:.82rem;margin-top:4px;font-weight:500}
 
-/* SECTION */
 .section{padding:60px 0}
 .section-head{text-align:center;margin-bottom:48px}
 .section-tag{display:inline-block;font-size:.78rem;font-weight:700;color:var(--primary);background:rgba(0,122,255,.1);padding:6px 14px;border-radius:999px;margin-bottom:14px;letter-spacing:.02em}
 .section-head h2{font-size:clamp(1.6rem,3.6vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.3;margin-bottom:12px}
 .section-head p{color:var(--muted);max-width:560px;margin:0 auto;font-size:1rem}
 
-/* FEATURES */
 .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .feature-card{background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:32px;padding:28px;box-shadow:var(--shadow-sm);transition:all .45s var(--ease);position:relative;overflow:hidden}
 .feature-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(0,122,255,.12),transparent 50%);opacity:0;transition:opacity .4s var(--ease);pointer-events:none}
@@ -157,7 +151,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .feature-card h3{font-size:1.15rem;font-weight:700;margin-bottom:8px;letter-spacing:-.02em}
 .feature-card p{color:var(--muted);font-size:.9rem;line-height:1.85}
 
-/* SERVERS */
 .filter-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
 .chip{padding:8px 18px;border-radius:999px;background:var(--surface);border:1px solid var(--glass-border);color:var(--text-2);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s var(--ease);backdrop-filter:blur(20px)}
 .chip:hover{border-color:var(--primary);color:var(--primary)}
@@ -191,7 +184,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .sc-star:hover,.sc-star.active{color:var(--yellow);border-color:var(--yellow)}
 .sc-star svg{width:16px;height:16px}
 
-/* STEPS */
 .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
 .timeline::before{content:'';position:absolute;top:40px;right:10%;left:10%;height:2px;background:linear-gradient(90deg,transparent,var(--primary),var(--accent),transparent);opacity:.3;z-index:0}
 .step-card{background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:22px;padding:28px 22px;text-align:center;box-shadow:var(--shadow-sm);transition:all .4s var(--ease);position:relative;z-index:1}
@@ -201,7 +193,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .step-card h4{font-size:1.02rem;font-weight:700;margin-bottom:8px}
 .step-card p{color:var(--muted);font-size:.85rem;line-height:1.8}
 
-/* FAQ */
 .faq-list{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
 .faq-item{background:var(--surface);backdrop-filter:blur(24px);border:1px solid var(--glass-border);border-radius:22px;overflow:hidden;transition:all .35s var(--ease);box-shadow:var(--shadow-sm)}
 .faq-item.open{border-color:rgba(0,122,255,.3);box-shadow:var(--shadow)}
@@ -211,7 +202,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .faq-a{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
 .faq-a-inner{padding:0 24px 22px;color:var(--muted);font-size:.9rem;line-height:2}
 
-/* CTA */
 .cta-card{background:linear-gradient(135deg,#0a84ff 0%,#5e5ce6 50%,#bf5af2 100%);border-radius:44px;padding:64px 40px;text-align:center;color:#fff;position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(94,92,230,.35)}
 .cta-card h2{font-size:clamp(1.6rem,3.6vw,2.6rem);font-weight:900;margin-bottom:14px;position:relative}
 .cta-card p{opacity:.9;max-width:520px;margin:0 auto 32px;position:relative}
@@ -219,7 +209,6 @@ body::before{content:'';position:fixed;inset:0;background:var(--bg-2);z-index:-3
 .btn-white{background:#fff;color:#1c1c1e;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 .btn-ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(20px)}
 
-/* FOOTER */
 footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
 .footer-brand p{color:var(--muted);font-size:.88rem;margin-top:14px;line-height:1.9;max-width:320px}
@@ -233,8 +222,7 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .socials a:hover{transform:translateY(-4px) rotate(-6deg);color:var(--primary);border-color:var(--primary)}
 .socials svg{width:17px;height:17px}
 
-/* TOAST */
-.toast-wrap{position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast-wrap{position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:11000;display:flex;flex-direction:column;gap:10px;pointer-events:none}
 .toast{background:var(--surface-solid);border:1px solid var(--glass-border);border-radius:18px;padding:14px 20px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;font-size:.9rem;font-weight:600;animation:ti .5s var(--ease-bounce) forwards;min-width:260px;backdrop-filter:blur(20px)}
 .toast.out{animation:to .4s var(--ease) forwards}
 .toast-icon{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;background:rgba(52,199,89,.15);color:var(--green)}
@@ -244,7 +232,6 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 @keyframes ti{from{opacity:0;transform:translateY(-20px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes to{to{opacity:0;transform:translateY(-16px) scale(.9)}}
 
-/* REVEAL */
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .reveal.in{opacity:1;transform:translateY(0)}
 
@@ -256,9 +243,9 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .gate-bg span:nth-child(1){width:500px;height:500px;background:radial-gradient(circle,#0a84ff,transparent 70%);top:-150px;right:-150px;animation:d1 20s ease-in-out infinite}
 .gate-bg span:nth-child(2){width:450px;height:450px;background:radial-gradient(circle,#bf5af2,transparent 70%);bottom:-100px;left:-100px;animation:d2 24s ease-in-out infinite}
 .gate-card{position:relative;width:min(420px,100%);background:rgba(20,20,28,.75);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,.12);border-radius:32px;padding:40px 32px;text-align:center;box-shadow:0 40px 100px rgba(0,0,0,.6);color:#fff}
-.gate-logo{width:80px;height:80px;border-radius:24px;margin:0 auto 20px;box-shadow:0 20px 50px rgba(94,92,230,.5);animation:gateLogoFloat 4s ease-in-out infinite}
+.gate-logo{width:80px;height:80px;border-radius:24px;margin:0 auto 20px;box-shadow:0 20px 50px rgba(94,92,230,.5);animation:gl 4s ease-in-out infinite}
 .gate-logo svg{width:100%;height:100%;display:block}
-@keyframes gateLogoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes gl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .gate-card h2{font-size:1.5rem;font-weight:800;margin-bottom:8px;letter-spacing:-.02em}
 .gate-card h2 .gr{background:linear-gradient(135deg,#0a84ff,#bf5af2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .gate-card p{color:rgba(255,255,255,.6);font-size:.9rem;margin-bottom:26px;line-height:1.85}
@@ -272,13 +259,13 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .gate-msg.err{color:#ff453a}
 .gate-msg.ok{color:#34c759}
 .gate-footer{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:.78rem;color:rgba(255,255,255,.4);display:flex;justify-content:space-between;align-items:center;gap:12px}
-.gate-footer a{color:#0a84ff;text-decoration:none;font-weight:600}
+.gate-footer a{color:#0a84ff;text-decoration:none;font-weight:600;cursor:pointer}
 .gate-footer a:hover{text-decoration:underline}
 
-/* ADMIN MODAL */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);z-index:8000;opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+/* ADMIN MODAL & PANEL — بالای گیت */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);z-index:9500;opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
 .overlay.show{opacity:1;pointer-events:auto}
-.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);background:var(--surface-solid);border:1px solid var(--glass-border);border-radius:32px;box-shadow:var(--shadow-lg);z-index:8001;width:min(440px,calc(100vw - 40px));opacity:0;pointer-events:none;transition:all .4s var(--ease-bounce);padding:32px}
+.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);background:var(--surface-solid);border:1px solid var(--glass-border);border-radius:32px;box-shadow:var(--shadow-lg);z-index:9501;width:min(440px,calc(100vw - 40px));opacity:0;pointer-events:none;transition:all .4s var(--ease-bounce);padding:32px}
 .modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
 .modal h3{font-size:1.3rem;font-weight:800;margin-bottom:8px}
 .modal p.sub{color:var(--muted);font-size:.88rem;margin-bottom:24px;line-height:1.8}
@@ -292,9 +279,9 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .field textarea{resize:vertical;min-height:80px;font-family:monospace;font-size:.82rem;direction:ltr;text-align:left}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .field-hint{font-size:.72rem;color:var(--muted);margin-top:4px}
+.field-hint code{background:rgba(0,122,255,.1);color:var(--primary);padding:2px 6px;border-radius:6px;font-family:monospace;font-weight:700}
 
-/* ADMIN PANEL */
-.admin-panel{position:fixed;top:0;right:0;bottom:0;width:min(540px,100vw);background:var(--surface-solid);border-left:1px solid var(--glass-border);box-shadow:-20px 0 60px rgba(0,0,0,.2);z-index:8002;transform:translateX(100%);transition:transform .5s var(--ease);display:flex;flex-direction:column}
+.admin-panel{position:fixed;top:0;right:0;bottom:0;width:min(540px,100vw);background:var(--surface-solid);border-left:1px solid var(--glass-border);box-shadow:-20px 0 60px rgba(0,0,0,.2);z-index:9502;transform:translateX(100%);transition:transform .5s var(--ease);display:flex;flex-direction:column}
 .admin-panel.show{transform:translateX(0)}
 .admin-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .admin-header h3{font-size:1.1rem;font-weight:800;display:flex;align-items:center;gap:10px}
@@ -323,7 +310,6 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .admin-actions-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .admin-actions-row .btn{flex:1;min-width:130px;justify-content:center;font-size:.85rem;padding:12px 18px}
 
-/* ACCESS CODE */
 .code-item{background:var(--bg-1);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
 .code-item.expired{border-color:rgba(255,59,48,.3);background:rgba(255,59,48,.04)}
 .code-item.used{border-color:rgba(142,142,147,.3);opacity:.75}
@@ -334,14 +320,12 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
 .code-status.expired{background:rgba(255,59,48,.15);color:var(--red)}
 .code-status.used{background:rgba(142,142,147,.15);color:var(--muted)}
 .code-meta{display:flex;gap:12px;font-size:.72rem;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}
-.code-meta span{display:flex;align-items:center;gap:4px}
 .code-actions{display:flex;gap:6px}
 .code-actions button{flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:var(--surface-solid);color:var(--text-2);font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .3s var(--ease);display:flex;align-items:center;justify-content:center;gap:4px}
 .code-actions button:hover{border-color:var(--primary);color:var(--primary)}
 .code-actions button.danger:hover{border-color:var(--red);color:var(--red)}
 .code-actions svg{width:13px;height:13px}
 
-/* RESPONSIVE */
 @media (max-width:1024px){
   .hero-grid{grid-template-columns:1fr;gap:60px}
   .phone-wrap{order:-1}
@@ -391,7 +375,7 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
     <div class="gate-msg" id="gateMsg"></div>
     <div class="gate-footer">
       <span>پوم · POM © ۱۴۰۴</span>
-      <a href="#" id="gateAdminLink">ورود مدیر</a>
+      <a id="gateAdminLink">ورود مدیر</a>
     </div>
   </div>
 </div>
@@ -439,7 +423,7 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
   <div class="container">
     <div class="hero-grid">
       <div>
-        <div class="pill reveal"><span class="live-dot"></span><span id="heroCount">۱۲ سرور فعال · آنلاین در این لحظه</span></div>
+        <div class="pill reveal"><span class="live-dot"></span><span id="heroCount">در انتظار افزودن سرور</span></div>
         <h1 class="reveal reveal-delay-1">پوم<br><span class="gradient-text">پلتفرم دریافت قندشکن</span></h1>
         <p class="reveal reveal-delay-2">مجموعهای از کانفیگهای پرسرعت V2Ray، تستشده و بهروز. با یک کلیک، اینترنت آزاد و امن را تجربه کن — ساده، سریع، بیدردسر.</p>
         <div class="hero-actions reveal reveal-delay-3">
@@ -452,8 +436,8 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
         </div>
       </div>
       <div class="phone-wrap reveal reveal-delay-2">
-        <div class="float-widget fw-1"><div class="fw-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="M12 2v20M2 12h20"/></svg></div><div><div class="fw-val" id="fwPing">۳۲ms</div><div class="fw-lbl">پینگ</div></div></div>
-        <div class="float-widget fw-2"><div class="fw-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div><div><div class="fw-val" id="fwSpeed">۱۲۴ Mb/s</div><div class="fw-lbl">دانلود</div></div></div>
+        <div class="float-widget fw-1"><div class="fw-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="M12 2v20M2 12h20"/></svg></div><div><div class="fw-val" id="fwPing">—</div><div class="fw-lbl">پینگ</div></div></div>
+        <div class="float-widget fw-2"><div class="fw-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div><div><div class="fw-val" id="fwSpeed">—</div><div class="fw-lbl">دانلود</div></div></div>
         <div class="float-widget fw-3"><div class="fw-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="fw-val">AES-256</div><div class="fw-lbl">رمزنگاری</div></div></div>
         <div class="phone">
           <div class="phone-screen">
@@ -476,7 +460,7 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
       </div>
     </div>
     <div class="stats-bar reveal">
-      <div class="stat-box"><div class="num"><span class="count" data-target="12">۰</span></div><div class="lbl">سرور فعال</div></div>
+      <div class="stat-box"><div class="num"><span class="count" data-target="0" id="statServers">۰</span></div><div class="lbl">سرور فعال</div></div>
       <div class="stat-box"><div class="num"><span class="count" data-target="99">۰</span><small>٪</small></div><div class="lbl">آپتایم</div></div>
       <div class="stat-box"><div class="num"><span class="count" data-target="12000">۰</span><small>+</small></div><div class="lbl">کاربر فعال</div></div>
       <div class="stat-box"><div class="num"><span class="count" data-target="45">۰</span><small>ms</small></div><div class="lbl">میانگین پینگ</div></div>
@@ -544,7 +528,7 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
   <div class="container">
     <div class="section-head reveal"><div class="section-tag">سوالات متداول</div><h2>هر چیزی که باید <span class="gradient-text">بدانی</span></h2></div>
     <div class="faq-list">
-      <div class="faq-item reveal"><button class="faq-q"><span>کد دسترسی را از کجا بگیرم؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">کد دسترسی توسط مدیر پوم ساخته میشود و به شما داده میشود. هر کد مدت اعتبار دارد (مثلاً ۳۰ روز) و بعد از آن منقضی میشود.</div></div></div>
+      <div class="faq-item reveal"><button class="faq-q"><span>کد دسترسی را از کجا بگیرم؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">کد دسترسی توسط مدیر پوم ساخته میشود و به شما داده میشود. هر کد مدت اعتبار دارد و بعد از آن منقضی میشود.</div></div></div>
       <div class="faq-item reveal"><button class="faq-q"><span>کانفیگها واقعاً رایگان هستند؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">بله، تمام کانفیگهای این صفحه رایگان هستند و نیازی به ثبتنام یا پرداخت ندارند.</div></div></div>
       <div class="faq-item reveal"><button class="faq-q"><span>از کدام کلاینت استفاده کنم؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">پیشنهاد ما <strong>Karing</strong> است. اما V2rayNG، Shadowrocket و Streisand هم پشتیبانی میشوند.</div></div></div>
       <div class="faq-item reveal"><button class="faq-q"><span>چرا بعضی سرورها کند هستند؟</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">سرعت هر سرور به فاصله جغرافیایی و شلوغی سرور بستگی دارد. چند سرور را تست کن و سریعترین را انتخاب کن.</div></div></div>
@@ -611,7 +595,11 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
     <h3>ورود به پنل مدیریت</h3>
     <p class="sub">رمز عبور مدیر را وارد کنید.</p>
   </div>
-  <div class="field"><label>رمز عبور</label><input type="password" id="adminPassInput" placeholder="••••••••" autocomplete="off"><div class="field-hint">رمز پیشفرض: <code style="direction:ltr;display:inline-block">pom1234</code></div></div>
+  <div class="field">
+    <label>رمز عبور</label>
+    <input type="password" id="adminPassInput" placeholder="••••••••" autocomplete="off">
+    <div class="field-hint">رمز پیشفرض: <code>12345</code></div>
+  </div>
   <button class="btn btn-primary" id="loginBtn" style="width:100%;justify-content:center">ورود به پنل</button>
 </div>
 
@@ -633,37 +621,26 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
       <button class="admin-tab" data-tab="settings">تنظیمات</button>
     </div>
 
-    <!-- CODES TAB -->
     <div class="tab-pane active" data-pane="codes">
       <div class="info-note">
         <strong>🔑 ساخت کد دسترسی</strong><br>
         کد بساز، مدت اعتبار و تعداد کد را مشخص کن. کدها را به کاربران بده. بدون کد، ورود به پوم ممکن نیست.
       </div>
-
       <div class="field-row">
-        <div class="field">
-          <label>مدت اعتبار (روز)</label>
-          <input type="number" id="codeDays" value="30" min="1" max="3650">
-        </div>
-        <div class="field">
-          <label>تعداد کد</label>
-          <input type="number" id="codeCount" value="1" min="1" max="100">
-        </div>
+        <div class="field"><label>مدت اعتبار (روز)</label><input type="number" id="codeDays" value="30" min="1" max="3650"></div>
+        <div class="field"><label>تعداد کد</label><input type="number" id="codeCount" value="1" min="1" max="100"></div>
       </div>
-
       <button class="btn btn-primary" id="genCodesBtn" style="width:100%;justify-content:center;margin-bottom:20px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
         ساخت کد دسترسی
       </button>
-
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <h4 style="font-size:.9rem;font-weight:700">کدهای فعال</h4>
+        <h4 style="font-size:.9rem;font-weight:700">کدهای ساختهشده</h4>
         <span id="codeStats" style="font-size:.75rem;color:var(--muted)"></span>
       </div>
       <div id="codeList"></div>
     </div>
 
-    <!-- ADD SERVER -->
     <div class="tab-pane" data-pane="add">
       <div class="field-row">
         <div class="field"><label>پرچم (ایموجی)</label><input type="text" id="fFlag" placeholder="🇩🇪" maxlength="4"></div>
@@ -684,12 +661,10 @@ footer{padding:60px 0 120px;border-top:1px solid var(--border);margin-top:60px}
       <button class="btn btn-primary" id="addServerBtn" style="width:100%;justify-content:center">افزودن سرور</button>
     </div>
 
-    <!-- LIST -->
     <div class="tab-pane" data-pane="list">
       <div id="adminServerList"></div>
     </div>
 
-    <!-- SETTINGS -->
     <div class="tab-pane" data-pane="settings">
       <div class="info-note"><strong>اشتراکگذاری:</strong> فایل JSON سرورها را دانلود کن و در اختیار بقیه قرار بده.</div>
       <div class="admin-actions-row">
@@ -766,8 +741,8 @@ function showToast(msg,type='check'){
 
 /* ========== STORAGE ========== */
 const SK={servers:'pom-servers',pass:'pom-pass',codes:'pom-codes',access:'pom-access'};
-const DEFAULT_PASS='pom1234';
-const POM_SECRET='pom-vpn-secret-key-2025-please-change-in-production';
+const DEFAULT_PASS='12345';
+const POM_SECRET='pom-vpn-secret-key-2025-change-me';
 
 let servers=JSON.parse(localStorage.getItem(SK.servers)||'[]');
 let codes=JSON.parse(localStorage.getItem(SK.codes)||'[]');
@@ -778,6 +753,8 @@ function getPass(){return localStorage.getItem(SK.pass)||DEFAULT_PASS}
 function updateStats(){
   const el=document.getElementById('heroCount');
   if(el)el.textContent=servers.length?`${toFaNum(servers.length)} سرور فعال · آماده اتصال`:'در انتظار افزودن سرور';
+  const st=document.getElementById('statServers');
+  if(st)st.textContent=toFaNum(servers.length);
 }
 
 /* ========== ACCESS CODE CRYPTO ========== */
@@ -787,17 +764,14 @@ async function signData(str){
   const hash=await crypto.subtle.digest('SHA-256',data);
   return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,10).toUpperCase();
 }
-
 async function generateCode(days){
   const expiry=Date.now()+days*86400000;
   const rand=Math.random().toString(36).slice(2,10).toUpperCase();
   const payload=`${expiry}.${rand}`;
   const sig=await signData(payload);
-  // Base64url encode
   const raw=btoa(`${payload}.${sig}`).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
   return 'POM-'+raw;
 }
-
 async function validateCode(code){
   try{
     code=code.trim().toUpperCase();
@@ -882,7 +856,7 @@ function renderServers(){
     grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:70px 30px;background:var(--surface);backdrop-filter:blur(24px);border:2px dashed var(--border);border-radius:32px">
       <div style="font-size:3rem;margin-bottom:14px">📡</div>
       <h3 style="font-size:1.2rem;font-weight:800;margin-bottom:8px">هنوز سروری اضافه نشده</h3>
-      <p style="color:var(--muted);max-width:400px;margin:0 auto 22px;line-height:1.9">مدیر باید از پنل، سرورها را اضافه کند.</p>
+      <p style="color:var(--muted);max-width:400px;margin:0 auto;line-height:1.9">مدیر باید از پنل، سرورها را اضافه کند.</p>
     </div>`;
     return;
   }
@@ -936,14 +910,12 @@ async function handleCopy(btn){
   setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML=orig},1800);
 }
 
-/* FILTERS */
 document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
   document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
   c.classList.add('active');activeFilter=c.dataset.filter;renderServers();
 }));
 document.getElementById('searchInput').addEventListener('input',e=>{searchQuery=e.target.value.trim();renderServers()});
 
-/* FAQ */
 document.querySelectorAll('.faq-item').forEach(item=>{
   const q=item.querySelector('.faq-q'),a=item.querySelector('.faq-a');
   q.addEventListener('click',()=>{
@@ -987,10 +959,15 @@ let isLoggedIn=sessionStorage.getItem('pom-logged')==='1';
 
 function openLogin(){
   if(isLoggedIn)return openAdmin();
-  loginOverlay.classList.add('show');loginModal.classList.add('show');
+  loginOverlay.classList.add('show');
+  loginModal.classList.add('show');
   setTimeout(()=>document.getElementById('adminPassInput').focus(),300);
 }
-function closeLogin(){loginOverlay.classList.remove('show');loginModal.classList.remove('show');document.getElementById('adminPassInput').value=''}
+function closeLogin(){
+  loginOverlay.classList.remove('show');
+  loginModal.classList.remove('show');
+  document.getElementById('adminPassInput').value='';
+}
 function openAdmin(){adminPanel.classList.add('show');renderAdminList();renderCodeList()}
 function closeAdmin(){adminPanel.classList.remove('show')}
 function updateAdminBtn(){adminOpenBtn.classList.toggle('admin-active',isLoggedIn)}
@@ -1000,12 +977,16 @@ adminOpenBtn.addEventListener('click',openLogin);
 document.getElementById('loginClose').addEventListener('click',closeLogin);
 loginOverlay.addEventListener('click',closeLogin);
 document.getElementById('adminClose').addEventListener('click',closeAdmin);
-document.getElementById('gateAdminLink').addEventListener('click',e=>{e.preventDefault();openLogin()});
+document.getElementById('gateAdminLink').addEventListener('click',()=>openLogin());
 
 document.getElementById('loginBtn').addEventListener('click',()=>{
   if(document.getElementById('adminPassInput').value===getPass()){
     isLoggedIn=true;sessionStorage.setItem('pom-logged','1');
-    updateAdminBtn();closeLogin();setTimeout(openAdmin,200);
+    updateAdminBtn();
+    closeLogin();
+    // بستن گیت تا پنل دیده بشه
+    gate.classList.add('hidden');
+    setTimeout(openAdmin,200);
     showToast('خوش آمدی، مدیر پوم ✨','check');
   }else{
     showToast('رمز اشتباه است','warn');
@@ -1015,7 +996,6 @@ document.getElementById('loginBtn').addEventListener('click',()=>{
 });
 document.getElementById('adminPassInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('loginBtn').click()});
 
-/* TABS */
 document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>{
   document.querySelectorAll('.admin-tab').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
@@ -1030,12 +1010,7 @@ async function createCodes(days,count){
   const newCodes=[];
   for(let i=0;i<count;i++){
     const code=await generateCode(days);
-    const entry={
-      id:uid(),code,days,
-      createdAt:Date.now(),
-      expiry:Date.now()+days*86400000,
-      used:false
-    };
+    const entry={id:uid(),code,days,createdAt:Date.now(),expiry:Date.now()+days*86400000,used:false};
     newCodes.push(entry);
     codes.push(entry);
   }
@@ -1054,8 +1029,9 @@ document.getElementById('genCodesBtn').addEventListener('click',async()=>{
   btn.disabled=false;
   btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> ساخت کد دسترسی';
   showToast(`${toFa(created.length)} کد ساخته شد ✓`,'check');
-  // نمایش اولین کد برای کپی سریع
-  if(created.length===1)copyCode(created[0].code);
+  if(created.length===1){
+    try{await navigator.clipboard.writeText(created[0].code);showToast('کد خودکار کپی شد ✓','check')}catch{}
+  }
 });
 
 function renderCodeList(){
@@ -1084,27 +1060,22 @@ function renderCodeList(){
         <span>🗓 ${new Date(c.createdAt).toLocaleDateString('fa-IR')}</span>
       </div>
       <div class="code-actions">
-        <button onclick="copyCode('${c.code}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>کپی</button>
-        <button class="danger" onclick="deleteCode('${c.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>حذف</button>
+        <button data-copy="${c.code}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>کپی</button>
+        <button class="danger" data-del="${c.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>حذف</button>
       </div>
     </div>`;
   }).join('');
+  list.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',async()=>{
+    try{await navigator.clipboard.writeText(b.dataset.copy)}catch{}
+    showToast('کد کپی شد ✓','check');
+  }));
+  list.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{
+    if(!confirm('این کد حذف شود؟'))return;
+    codes=codes.filter(c=>c.id!==b.dataset.del);
+    saveCodes();showToast('کد حذف شد','info');
+  }));
 }
 
-async function copyCode(code){
-  try{await navigator.clipboard.writeText(code)}
-  catch{const ta=document.createElement('textarea');ta.value=code;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}
-  showToast('کد کپی شد ✓','check');
-}
-
-function deleteCode(id){
-  if(!confirm('این کد حذف شود؟'))return;
-  codes=codes.filter(c=>c.id!==id);
-  saveCodes();
-  showToast('کد حذف شد','info');
-}
-
-/* ========== SERVERS ADMIN ========== */
 document.getElementById('addServerBtn').addEventListener('click',()=>{
   const flag=document.getElementById('fFlag').value.trim()||'🌐';
   const country=document.getElementById('fCountry').value.trim();
@@ -1142,7 +1113,6 @@ function renderAdminList(){
   }));
 }
 
-/* EXPORT/IMPORT */
 document.getElementById('exportBtn').addEventListener('click',()=>{
   if(!servers.length){showToast('سروری وجود ندارد','warn');return}
   const data={app:'POM',version:1,exportedAt:new Date().toISOString(),servers};
@@ -1174,7 +1144,6 @@ document.getElementById('importFile').addEventListener('change',e=>{
   reader.readAsText(file);
 });
 
-/* PASS / LOGOUT / CLEAR */
 document.getElementById('changePassBtn').addEventListener('click',()=>{
   const cur=document.getElementById('curPass').value;
   const nw=document.getElementById('newPass').value;
@@ -1186,7 +1155,9 @@ document.getElementById('changePassBtn').addEventListener('click',()=>{
 });
 document.getElementById('logoutBtn').addEventListener('click',()=>{
   isLoggedIn=false;sessionStorage.removeItem('pom-logged');
-  updateAdminBtn();closeAdmin();showToast('خارج شدی','info');
+  updateAdminBtn();closeAdmin();
+  checkAccess();
+  showToast('خارج شدی','info');
 });
 document.getElementById('clearServersBtn').addEventListener('click',()=>{
   if(!servers.length){showToast('سروری وجود ندارد','warn');return}
@@ -1205,8 +1176,9 @@ document.getElementById('clearCodesBtn').addEventListener('click',()=>{
 setInterval(()=>{
   if(!servers.length)return;
   const s=servers[0];
-  document.getElementById('fwPing').textContent=toFa(s.ping||0)+'ms';
-  document.getElementById('fwSpeed').textContent=toFa(s.down||0)+' Mb/s';
+  const fp=document.getElementById('fwPing'),fs=document.getElementById('fwSpeed');
+  if(fp)fp.textContent=toFa(s.ping||0)+'ms';
+  if(fs)fs.textContent=toFa(s.down||0)+' Mb/s';
 },3000);
 
 /* SMOOTH ANCHOR */
