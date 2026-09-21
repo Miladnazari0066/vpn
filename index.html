@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>پوم</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230A84FF'/%3E%3Cstop offset='1' stop-color='%23BF5AF2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='6' y='6' width='36' height='36' rx='12' fill='url(%23g)'/%3E%3Cpath d='M16 26l5 5 12-13' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0A84FF;--purple:#BF5AF2;--pink:#FF375F;--orange:#FF9F0A;
+  --green:#30D158;--teal:#64D2FF;--indigo:#5E5CE6;--red:#FF453A;--yellow:#FFD60A;
+  --radius-xl:32px;--radius-lg:24px;--radius-md:18px;--radius-sm:14px;
+  --ease-spring:cubic-bezier(.2,.9,.3,1.1);
+  --ease-smooth:cubic-bezier(.32,.72,0,1);
+}
+/* Dark theme */
+[data-theme="dark"]{
+  --bg:#000;--bg-soft:#0a0a0c;
+  --surface:rgba(28,28,30,.72);--surface-2:rgba(44,44,46,.55);
+  --surface-solid:#1c1c1e;--surface-solid-2:#2c2c2e;
+  --ink:#fff;--ink-2:rgba(235,235,245,.85);--ink-3:rgba(235,235,245,.6);--ink-4:rgba(235,235,245,.35);
+  --separator:rgba(84,84,88,.4);--border:rgba(255,255,255,.08);
+  --glass-hl:rgba(255,255,255,.14);--glass-sh:rgba(0,0,0,.6);
+  --sheet-bg:rgba(28,28,30,.92);
+  color-scheme:dark;
+}
+/* Light theme */
+[data-theme="light"]{
+  --bg:#f2f2f7;--bg-soft:#fff;
+  --surface:rgba(255,255,255,.72);--surface-2:rgba(255,255,255,.55);
+  --surface-solid:#fff;--surface-solid-2:#f2f2f7;
+  --ink:#000;--ink-2:rgba(60,60,67,.85);--ink-3:rgba(60,60,67,.55);--ink-4:rgba(60,60,67,.3);
+  --separator:rgba(60,60,67,.18);--border:rgba(0,0,0,.06);
+  --glass-hl:rgba(255,255,255,.9);--glass-sh:rgba(0,0,0,.08);
+  --sheet-bg:rgba(255,255,255,.92);
+  color-scheme:light;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overscroll-behavior:none}
+body{
+  font-family:'Vazirmatn',-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);
+  min-height:100vh;overflow-x:hidden;
+  transition:background .6s var(--ease-smooth),color .3s;
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:"ss01","cv01";
+}
+/* animated ambient background */
+body::before{
+  content:'';position:fixed;inset:-20%;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(10,132,255,.35),transparent 45%),
+    radial-gradient(circle at 85% 20%,rgba(191,90,242,.3),transparent 45%),
+    radial-gradient(circle at 50% 90%,rgba(100,210,255,.25),transparent 50%);
+  filter:blur(60px);
+  animation:bg-float 22s ease-in-out infinite alternate;
+  opacity:.9;
+}
+[data-theme="light"] body::before{opacity:.65}
+@keyframes bg-float{
+  0%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(3%,-2%) scale(1.08)}
+  100%{transform:translate(-2%,3%) scale(1.05)}
+}
+/* fine grain */
+body::after{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.055;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+}
+button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit;outline:none;border:none;background:none;color:inherit}
+::-webkit-scrollbar{width:0;height:0}
+::selection{background:rgba(10,132,255,.35);color:#fff}
+
+/* ============ DYNAMIC ISLAND ============ */
+#island{
+  position:fixed;top:max(env(safe-area-inset-top),12px);left:50%;transform:translateX(-50%);
+  z-index:200;background:#000;border-radius:32px;color:#fff;
+  height:36px;min-width:126px;padding:0 16px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:all .55s var(--ease-spring);
+  box-shadow:0 6px 24px rgba(0,0,0,.4);
+  font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;
+  cursor:pointer;user-select:none;
+}
+[data-theme="light"] #island{box-shadow:0 6px 28px rgba(0,0,0,.22)}
+#island.expand{height:auto;min-height:100px;min-width:280px;padding:14px 20px;flex-direction:column;gap:10px;border-radius:28px}
+.isl-row{display:flex;align-items:center;gap:8px;justify-content:center}
+.isl-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.4;transform:scale(.85)}}
+.isl-live{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em}
+.isl-expand-content{display:none;width:100%;flex-direction:column;gap:10px}
+#island.expand .isl-expand-content{display:flex;animation:fade-up .4s var(--ease-smooth)}
+.isl-stat{display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.7)}
+.isl-stat b{color:#fff;font-family:'JetBrains Mono',monospace;font-weight:700}
+.isl-chev{width:14px;height:14px;transition:transform .4s var(--ease-spring);opacity:.65}
+#island.expand .isl-chev{transform:rotate(180deg)}
+@keyframes fade-up{from{opacity:0;transform:translateY(-4px)}}
+
+/* ============ APP CONTAINER ============ */
+.app{
+  max-width:520px;margin:0 auto;padding:max(env(safe-area-inset-top), 0) 0 max(env(safe-area-inset-bottom), 0);
+  padding-top:calc(max(env(safe-area-inset-top), 0px) + 72px);
+  padding-bottom:calc(max(env(safe-area-inset-bottom), 0px) + 110px);
+  min-height:100vh;position:relative;
+}
+
+/* ============ HEADER ============ */
+.header{padding:8px 22px 18px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.hi{font-size:14px;color:var(--ink-3);font-weight:500;margin-bottom:4px}
+.title{font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.title span{background:linear-gradient(120deg,var(--blue),var(--purple),var(--pink));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.theme-btn{
+  width:44px;height:44px;border-radius:16px;display:grid;place-items:center;flex-shrink:0;
+  background:var(--surface);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid var(--border);box-shadow:inset 0 1px 0 var(--glass-hl),0 4px 14px var(--glass-sh);
+  transition:transform .25s var(--ease-spring);font-size:20px;
+}
+.theme-btn:active{transform:scale(.9)}
+
+/* ============ LIQUID GLASS CARD ============ */
+.glass{
+  position:relative;
+  background:var(--surface);
+  backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  box-shadow:inset 0 1px 0 var(--glass-hl),0 12px 40px -12px var(--glass-sh);
+  overflow:hidden;
+}
+.glass::before{
+  content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(135deg,rgba(255,255,255,.12) 0%,transparent 40%,transparent 60%,rgba(255,255,255,.06) 100%);
+  opacity:.7;
+}
+
+/* ============ WIDGET GRID ============ */
+.widgets{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 22px 22px}
+.widget{padding:16px;border-radius:var(--radius-lg);position:relative;overflow:hidden;transition:transform .3s var(--ease-spring)}
+.widget:active{transform:scale(.97)}
+.w-clock{grid-column:1/-1;background:linear-gradient(135deg,#0A84FF 0%,#5E5CE6 100%);color:#fff;border:none}
+.w-clock::before{display:none}
+.w-clock .w-time{font-family:'JetBrains Mono',monospace;font-size:52px;font-weight:700;line-height:1;letter-spacing:-.03em;font-feature-settings:"tnum"}
+.w-clock .w-date{font-size:13px;opacity:.85;margin-top:6px;font-weight:500}
+.w-clock .w-tz{position:absolute;top:16px;left:16px;font-size:10px;letter-spacing:.15em;opacity:.7;font-family:'JetBrains Mono',monospace}
+
+.w-battery{padding:16px;display:flex;flex-direction:column;justify-content:space-between;min-height:120px}
+.wb-ring{position:relative;width:62px;height:62px}
+.wb-ring svg{transform:rotate(-90deg);width:100%;height:100%}
+.wb-ring .rb-t{fill:none;stroke:var(--separator);stroke-width:7}
+.wb-ring .rb-p{fill:none;stroke:url(#ringGrad);stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1.2s var(--ease-spring)}
+.wb-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;font-feature-settings:"tnum"}
+.wb-label{font-size:11px;color:var(--ink-3);margin-top:8px;font-weight:600}
+
+.w-stat{padding:16px;display:flex;flex-direction:column;justify-content:space-between;min-height:120px}
+.ws-num{font-size:38px;font-weight:800;line-height:1;letter-spacing:-.03em;font-feature-settings:"tnum"}
+.ws-num.blue{color:var(--blue)}.ws-num.green{color:var(--green)}.ws-num.purple{color:var(--purple)}.ws-num.orange{color:var(--orange)}
+.ws-lbl{font-size:12px;color:var(--ink-3);margin-top:6px;font-weight:600}
+.ws-ico{position:absolute;top:14px;left:14px;font-size:20px;opacity:.9}
+
+/* ============ SECTION HEAD ============ */
+.sec-head{padding:26px 22px 12px;display:flex;align-items:baseline;justify-content:space-between}
+.sec-title{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.sec-count{font-size:13px;color:var(--ink-3);font-weight:600}
+
+/* ============ SERVER CARD ============ */
+.servers{display:flex;flex-direction:column;gap:12px;padding:0 22px}
+.server{
+  padding:16px;border-radius:var(--radius-lg);position:relative;overflow:hidden;
+  transition:transform .3s var(--ease-spring);
+  animation:slide-in .5s var(--ease-spring) backwards;
+}
+@keyframes slide-in{from{opacity:0;transform:translateY(18px) scale(.96)}}
+.server:active{transform:scale(.98)}
+.srv-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.flag{
+  width:54px;height:54px;border-radius:18px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(10,132,255,.15),rgba(191,90,242,.15));
+  border:1px solid var(--border);display:grid;place-items:center;font-size:28px;
+}
+.srv-info{flex:1;min-width:0}
+.srv-name{font-size:16px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srv-meta{font-size:12px;color:var(--ink-3);margin-top:2px;display:flex;align-items:center;gap:6px;font-weight:500}
+.pill{padding:3px 8px;border-radius:7px;font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+.pill.vless{background:rgba(100,210,255,.15);color:var(--teal);border:1px solid rgba(100,210,255,.3)}
+.pill.sub{background:rgba(255,159,10,.15);color:var(--orange);border:1px solid rgba(255,159,10,.3)}
+.pill.other{background:rgba(191,90,242,.15);color:var(--purple);border:1px solid rgba(191,90,242,.3)}
+.pill.new{background:rgba(48,209,88,.15);color:var(--green);border:1px solid rgba(48,209,88,.35);animation:new-blink 2s infinite}
+@keyframes new-blink{50%{opacity:.65}}
+.srv-signal{display:flex;align-items:flex-end;gap:2px;height:16px}
+.srv-signal i{width:3px;border-radius:2px;background:var(--teal);animation:sig-blink 1.5s infinite}
+.srv-signal i:nth-child(1){height:5px}
+.srv-signal i:nth-child(2){height:8px;animation-delay:.15s}
+.srv-signal i:nth-child(3){height:11px;animation-delay:.3s}
+.srv-signal i:nth-child(4){height:14px;animation-delay:.45s}
+@keyframes sig-blink{50%{opacity:.3}}
+
+.srv-config{
+  background:var(--surface-2);border-radius:12px;padding:10px 12px;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;border:1px solid var(--border);
+}
+.srv-code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-2);word-break:break-all;flex:1;line-height:1.5;direction:ltr;text-align:left}
+.eye-btn{flex-shrink:0;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--border);font-size:14px;transition:transform .2s var(--ease-spring)}
+.eye-btn:active{transform:scale(.85)}
+
+.srv-actions{display:flex;gap:8px}
+.btn{
+  flex:1;height:46px;border-radius:14px;font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .2s var(--ease-spring);letter-spacing:-.01em;
+}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.45;pointer-events:none}
+.btn.primary{background:var(--blue);color:#fff;box-shadow:0 6px 20px -4px rgba(10,132,255,.5)}
+.btn.primary.ok{background:var(--green);box-shadow:0 6px 20px -4px rgba(48,209,88,.5)}
+.btn.ghost{background:var(--surface-2);color:var(--ink-2);border:1px solid var(--border)}
+.btn.ghost:active{background:var(--surface-solid-2)}
+.btn.probe{flex:0 0 auto;padding:0 14px;font-family:'JetBrains Mono',monospace;font-size:12px}
+.btn.probe[data-st="probing"]{color:var(--orange);border-color:rgba(255,159,10,.4);background:rgba(255,159,10,.1)}
+.btn.probe[data-st="up"]{color:var(--green);border-color:rgba(48,209,88,.4);background:rgba(48,209,88,.1)}
+.btn.probe[data-st="down"]{color:var(--red);border-color:rgba(255,69,58,.4);background:rgba(255,69,58,.1)}
+.btn.probe .spn{width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.app-chips{display:flex;gap:10px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--separator);flex-wrap:wrap}
+.chip{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border-radius:12px;transition:all .2s var(--ease-spring)}
+.chip:active{transform:scale(.9);background:var(--surface-2)}
+.chip-ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;border:1.8px solid;transition:all .2s}
+.chip:active .chip-ic{background:currentColor;color:#000}
+.chip-nm{font-size:10px;color:var(--ink-3);font-weight:600}
+
+/* ============ BOTTOM TAB BAR ============ */
+#tabbar{
+  position:fixed;bottom:calc(env(safe-area-inset-bottom) + 14px);left:50%;transform:translateX(-50%);
+  z-index:100;display:flex;gap:4px;padding:6px;border-radius:26px;
+  background:var(--surface);backdrop-filter:blur(36px) saturate(1.8);-webkit-backdrop-filter:blur(36px) saturate(1.8);
+  border:1px solid var(--border);box-shadow:inset 0 1px 0 var(--glass-hl),0 18px 48px -12px var(--glass-sh);
+  transition:transform .5s var(--ease-spring),opacity .3s;
+  max-width:calc(100% - 32px);
+}
+#tabbar.hidden{transform:translate(-50%,140%);opacity:0;pointer-events:none}
+.tab{
+  position:relative;padding:9px 18px;border-radius:20px;
+  display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px;
+  color:var(--ink-3);font-size:10px;font-weight:600;transition:color .3s;
+}
+.tab.active{color:var(--ink)}
+.tab-ic{font-size:20px;line-height:1;transition:transform .35s var(--ease-spring)}
+.tab.active .tab-ic{transform:translateY(-1px) scale(1.1)}
+.tab-bg{
+  position:absolute;inset:0;border-radius:20px;z-index:-1;
+  background:var(--surface-2);border:1px solid var(--border);
+  opacity:0;transform:scale(.8);transition:all .35s var(--ease-spring);
+}
+.tab.active .tab-bg{opacity:1;transform:scale(1)}
+
+/* ============ BOTTOM SHEET ============ */
+#overlay{
+  position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#overlay.show{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;bottom:0;left:0;right:0;z-index:160;
+  background:var(--sheet-bg);backdrop-filter:blur(40px) saturate(1.8);-webkit-backdrop-filter:blur(40px) saturate(1.8);
+  border-top-left-radius:36px;border-top-right-radius:36px;
+  border-top:1px solid var(--border);
+  transform:translateY(100%);transition:transform .5s var(--ease-spring);
+  max-height:92vh;overflow:hidden;display:flex;flex-direction:column;
+  max-width:520px;margin:0 auto;
+}
+.sheet.show{transform:translateY(0)}
+.sheet-grab{padding:10px 0 4px;display:grid;place-items:center;cursor:grab}
+.sheet-grab i{display:block;width:36px;height:5px;border-radius:3px;background:var(--ink-4)}
+.sheet-head{padding:6px 22px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--separator)}
+.sheet-title{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.sheet-close{
+  width:32px;height:32px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border);
+  display:grid;place-items:center;font-size:14px;color:var(--ink-3);
+}
+.sheet-body{padding:18px 22px 30px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--ink-3);margin-bottom:8px;letter-spacing:.02em;padding-right:4px}
+.inp{
+  width:100%;height:50px;border-radius:14px;padding:0 16px;font-size:15px;
+  background:var(--surface-2);border:1px solid var(--border);color:var(--ink);
+  transition:all .2s;font-family:inherit;
+}
+.inp:focus{border-color:var(--blue);background:var(--surface);box-shadow:0 0 0 4px rgba(10,132,255,.15)}
+textarea.inp{height:auto;padding:14px 16px;min-height:110px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;resize:vertical;direction:ltr;text-align:left}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.submit-btn{
+  width:100%;height:56px;border-radius:16px;font-size:16px;font-weight:800;color:#fff;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  box-shadow:0 10px 28px -6px rgba(10,132,255,.55);
+  transition:all .2s var(--ease-spring);margin-top:8px;letter-spacing:-.01em;
+}
+.submit-btn:active{transform:scale(.97)}
+.submit-btn:disabled{opacity:.5;pointer-events:none}
+
+/* ============ ACCESS CODE FIELD ============ */
+.code-input{
+  text-align:center;font-family:'JetBrains Mono',monospace;font-size:26px;
+  letter-spacing:.5em;text-indent:.5em;font-weight:700;
+  height:72px;border-radius:20px;
+}
+.code-dots{display:flex;justify-content:center;gap:6px;margin-top:14px;min-height:10px}
+.code-dots i{width:8px;height:8px;border-radius:50%;background:var(--separator);transition:all .3s var(--ease-spring)}
+.code-dots i.on{background:var(--blue);box-shadow:0 0 10px var(--blue);transform:scale(1.15)}
+
+/* ============ GATE SCREEN ============ */
+.gate-screen{
+  position:fixed;inset:0;z-index:180;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 24px;background:var(--bg);overflow-y:auto;
+}
+.gate-lock{
+  width:96px;height:96px;margin-bottom:24px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.gate-lock .ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(10,132,255,.4);animation:ring-pulse 2.6s ease-out infinite}
+.gate-lock .ring.r2{animation-delay:1.3s;border-color:rgba(191,90,242,.35)}
+@keyframes ring-pulse{to{transform:scale(1.6);opacity:0}}
+.gate-ic{
+  width:64px;height:64px;border-radius:22px;display:grid;place-items:center;font-size:30px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  box-shadow:0 16px 44px -12px rgba(10,132,255,.6),inset 0 2px 0 rgba(255,255,255,.35);
+  animation:lock-float 4s ease-in-out infinite;
+}
+@keyframes lock-float{50%{transform:translateY(-8px)}}
+.gate-title{font-size:30px;font-weight:800;letter-spacing:-.03em;margin-bottom:8px;text-align:center}
+.gate-sub{font-size:14px;color:var(--ink-3);text-align:center;margin-bottom:28px;line-height:1.7;font-weight:500}
+.gate-card{width:100%;max-width:420px;padding:26px;border-radius:var(--radius-xl)}
+.gate-err{
+  margin-top:12px;padding:12px 16px;border-radius:12px;
+  background:rgba(255,69,58,.12);border:1px solid rgba(255,69,58,.3);
+  color:var(--red);font-size:13px;text-align:center;font-weight:600;
+  animation:shake .5s;
+}
+@keyframes shake{25%{transform:translateX(8px)}50%{transform:translateX(-8px)}75%{transform:translateX(4px)}}
+.shake{animation:shake .5s}
+
+/* ============ ADMIN PANEL ============ */
+.tab-row{
+  display:flex;gap:4px;padding:5px;border-radius:18px;margin:0 22px 18px;
+  background:var(--surface-2);border:1px solid var(--border);position:relative;
+}
+.tab-btn{flex:1;height:42px;border-radius:14px;font-size:13px;font-weight:700;color:var(--ink-3);position:relative;z-index:1;transition:color .3s}
+.tab-btn.active{color:var(--ink)}
+.tab-pill{
+  position:absolute;top:5px;bottom:5px;border-radius:14px;background:var(--surface);
+  border:1px solid var(--border);box-shadow:inset 0 1px 0 var(--glass-hl),0 4px 12px var(--glass-sh);
+  transition:right .35s var(--ease-spring),left .35s var(--ease-spring);z-index:0;
+}
+.admin-list{display:flex;flex-direction:column;gap:12px;padding:0 22px}
+
+.code-row{padding:16px;border-radius:var(--radius-lg);animation:slide-in .4s var(--ease-spring) backwards}
+.cr-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
+.cr-code{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;letter-spacing:.14em;color:var(--ink)}
+.cr-copy{width:36px;height:36px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);display:grid;place-items:center;font-size:14px;flex-shrink:0}
+.cr-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.cr-badge{padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;background:var(--surface-2);border:1px solid var(--border);color:var(--ink-3)}
+.cr-badge.ok{color:var(--green);border-color:rgba(48,209,88,.3);background:rgba(48,209,88,.1)}
+.cr-badge.warn{color:var(--orange);border-color:rgba(255,159,10,.3);background:rgba(255,159,10,.1)}
+.cr-badge.err{color:var(--red);border-color:rgba(255,69,58,.3);background:rgba(255,69,58,.1)}
+.cr-actions{display:flex;gap:8px}
+
+.fab{
+  position:fixed;bottom:calc(env(safe-area-inset-bottom) + 92px);left:50%;transform:translateX(-50%);
+  z-index:90;height:54px;padding:0 24px;border-radius:27px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+  font-size:15px;font-weight:800;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 16px 40px -10px rgba(10,132,255,.65),inset 0 1px 0 rgba(255,255,255,.3);
+  transition:all .25s var(--ease-spring);
+}
+.fab:active{transform:translateX(-50%) scale(.94)}
+.fab.hidden{transform:translate(-50%,140%);opacity:0;pointer-events:none}
+
+/* ============ TOASTS ============ */
+#toasts{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 180px);left:16px;right:16px;z-index:900;display:flex;flex-direction:column;gap:8px;pointer-events:none;align-items:center}
+.toast{
+  padding:12px 20px;border-radius:16px;font-size:14px;font-weight:600;
+  background:var(--sheet-bg);backdrop-filter:blur(30px);border:1px solid var(--border);
+  box-shadow:0 12px 32px -8px rgba(0,0,0,.35),inset 0 1px 0 var(--glass-hl);
+  opacity:0;transform:translateY(16px) scale(.9);
+  transition:all .4s var(--ease-spring);max-width:100%;text-align:center;
+}
+.toast.show{opacity:1;transform:translateY(0) scale(1)}
+.toast.ok::before{content:'✓ ';color:var(--green);font-weight:800}
+.toast.err::before{content:'✕ ';color:var(--red);font-weight:800}
+.toast.warn::before{content:'! ';color:var(--orange);font-weight:800}
+
+/* ============ ENTRY FX ============ */
+#entryfx{
+  position:fixed;inset:0;z-index:850;display:none;align-items:center;justify-content:center;flex-direction:column;
+  background:radial-gradient(circle at 50% 40%,rgba(10,18,38,.98),rgba(0,0,0,.99));
+  transition:transform 1s cubic-bezier(.85,0,.15,1),opacity .6s;
+}
+#entryfx.show{display:flex}
+#entryfx.go{transform:translateY(-100%);opacity:.2}
+.fx-hi{font-size:38px;font-weight:800;letter-spacing:-.03em;color:#fff;animation:fx-pop .8s var(--ease-spring)}
+.fx-ring{position:relative;width:180px;height:180px;margin-top:24px}
+.fx-ring svg{transform:rotate(-90deg);width:100%;height:100%}
+.fx-ring .ft{fill:none;stroke:rgba(255,255,255,.12);stroke-width:6}
+.fx-ring .fp{fill:none;stroke:url(#fgrad);stroke-width:6;stroke-linecap:round;stroke-dasharray:502;stroke-dashoffset:502;transition:stroke-dashoffset 1.6s var(--ease-spring)}
+#entryfx.show .fp{stroke-dashoffset:0}
+.fx-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.fx-num{font-size:56px;font-weight:800;color:#fff;line-height:1;font-feature-settings:"tnum"}
+.fx-unit{font-size:13px;color:var(--teal);font-weight:700;margin-top:2px}
+@keyframes fx-pop{from{opacity:0;transform:scale(.6)}}
+.conf{position:absolute;top:-10px;width:8px;height:14px;border-radius:2px;opacity:0;animation:conf 1.8s ease-in forwards}
+@keyframes conf{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(90vh) translateX(var(--rx)) rotate(560deg)}}
+
+/* ============ EMPTY ============ */
+.empty{padding:60px 22px;text-align:center}
+.empty-ic{font-size:54px;margin-bottom:14px;opacity:.35}
+.empty-t{font-size:18px;font-weight:800;margin-bottom:6px}
+.empty-s{font-size:14px;color:var(--ink-3);line-height:1.6}
+
+/* utility */
+.hidden{display:none!important}
+.fade-in{animation:fade-in .5s var(--ease-smooth)}
+@keyframes fade-in{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}}
+</style>
+</head>
+<body data-theme="dark">
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#30D158"/><stop offset="1" stop-color="#64D2FF"/>
+    </linearGradient>
+    <linearGradient id="fgrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A84FF"/><stop offset="1" stop-color="#BF5AF2"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- Dynamic Island -->
+<div id="island" onclick="toggleIsland()">
+  <div class="isl-row">
+    <span class="isl-dot"></span>
+    <span class="isl-live" id="islText">POM · ONLINE</span>
+    <svg class="isl-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+  <div class="isl-expand-content">
+    <div class="isl-stat"><span>سرورهای فعال</span><b id="islSrvs">0</b></div>
+    <div class="isl-stat"><span>کاربران متصل</span><b id="islUsers">0</b></div>
+    <div class="isl-stat"><span>وضعیت</span><b style="color:var(--green)">آنلاین</b></div>
+  </div>
+</div>
+
+<!-- Main app root -->
+<div class="app" id="app"></div>
+
+<!-- Bottom Tab Bar -->
+<nav id="tabbar" class="hidden">
+  <button class="tab active" data-tab="home" onclick="switchTab('home')">
+    <span class="tab-bg"></span>
+    <span class="tab-ic">🏠</span>
+    <span>خانه</span>
+  </button>
+  <button class="tab" data-tab="servers" onclick="switchTab('servers')">
+    <span class="tab-bg"></span>
+    <span class="tab-ic">🌐</span>
+    <span>سرورها</span>
+  </button>
+  <button class="tab" data-tab="stats" onclick="switchTab('stats')">
+    <span class="tab-bg"></span>
+    <span class="tab-ic">📊</span>
+    <span>آمار</span>
+  </button>
+  <button class="tab" data-tab="admin" onclick="switchTab('admin')">
+    <span class="tab-bg"></span>
+    <span class="tab-ic">⚙️</span>
+    <span>مدیریت</span>
+  </button>
+</nav>
+
+<!-- FAB (admin only) -->
+<button class="fab hidden" id="fab" onclick="openAddSheet()">
+  <span style="font-size:22px">+</span> <span>افزودن</span>
+</button>
+
+<!-- Overlay + Bottom Sheet -->
+<div id="overlay" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-grab" onclick="closeSheet()"><i></i></div>
+  <div class="sheet-head">
+    <div class="sheet-title" id="sheetTitle">عنوان</div>
+    <button class="sheet-close" onclick="closeSheet()">✕</button>
+  </div>
+  <div class="sheet-body" id="sheetBody"></div>
+</div>
+
+<!-- Entry FX -->
+<div id="entryfx">
+  <div class="fx-hi">خوش اومدی 👋</div>
+  <div class="fx-ring">
+    <svg viewBox="0 0 200 200">
+      <circle class="ft" cx="100" cy="100" r="80"/>
+      <circle class="fp" cx="100" cy="100" r="80"/>
+    </svg>
+    <div class="fx-center">
+      <div class="fx-num" id="fxNum">۰</div>
+      <div class="fx-unit">روز دسترسی</div>
+    </div>
+  </div>
+</div>
+
+<!-- Toasts -->
+<div id="toasts"></div>
+
+<script>
+/* ============================================================
+   STATE & STORAGE
+   ============================================================ */
+const DEFAULTS = {
+  servers: [
+    { id:'s1', name:'آلمان — فرانکفورت', country:'DE', flag:'🇩🇪', host:'de1.example.com', port:443,
+      config:'vless://demo-uuid-1@de1.example.com:443?type=ws&security=tls#POM-DE-1', active:true, added:Date.now() },
+    { id:'s2', name:'هلند — آمستردام', country:'NL', flag:'🇳🇱', host:'nl1.example.com', port:443,
+      config:'vless://demo-uuid-2@nl1.example.com:443?type=grpc&security=reality#POM-NL-1', active:true, added:Date.now() },
+    { id:'s3', name:'ترکیه — استانبول', country:'TR', flag:'🇹🇷', host:'tr1.example.com', port:8443,
+      config:'vmess://eyJhZGQiOiJ0cjEuZXhhbXBsZS5jb20ifQ==#POM-TR-1', active:true, added:Date.now() }
+  ],
+  codes: [
+    { id:'c1', code:'POM2024', maxUsers:5, active:true, note:'کد نمایشی', expiresAt:Date.now()+30*864e5, createdAt:Date.now() }
+  ],
+  updated: Date.now()
+};
+
+const ADMIN_PASS = 'Pom@1404';
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} }
+};
+
+const S = {
+  data: null,
+  session: null,
+  view: 'home',
+  theme: store.get('pom_theme', 'dark'),
+  isAdmin: false,
+  adminTab: 'codes',
+  probeCache: {},
+  filters: { q:'', country:'', proto:'' }
+};
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const fa = n => Number(n||0).toLocaleString('fa-IR');
+const esc = s => String(s??'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const enc = s => btoa(unescape(encodeURIComponent(s))).replace(/=+$/,'').replace(/\+/g,'-').replace(/\//g,'_');
+const dec = s => { try { s = s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4)s+='='; return decodeURIComponent(escape(atob(s))); } catch { return null; } };
+const randId = () => Math.random().toString(36).slice(2,10);
+const flagEmoji = cc => String(cc||'').toUpperCase().replace(/[^A-Z]/g,'').replace(/./g, c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65));
+const faDate = ts => { try { return new Intl.DateTimeFormat('fa-IR',{day:'numeric',month:'long',year:'numeric'}).format(new Date(ts)); } catch { return '—'; } };
+const faTime = d => String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+const COUNTRIES = { DE:'آلمان',NL:'هلند',SE:'سوئد',FR:'فرانسه',US:'آمریکا',UK:'انگلیس',TR:'ترکیه',AE:'امارات',SG:'سنگاپور',JP:'ژاپن',CA:'کانادا',CH:'سوئیس',IT:'ایتالیا',ES:'اسپانیا',PL:'لهستان',FI:'فنلاند',NO:'نروژ',AT:'اتریش',BE:'بلژیک',RU:'روسیه',KR:'کره',AU:'استرالیا',IN:'هند',BR:'برزیل',IR:'ایران' };
+
+function protoOf(cfg) {
+  if (/^https?:\/\//i.test(cfg)) return 'sub';
+  const m = cfg.match(/^([a-z]+):\/\//i);
+  return m ? m[1].toLowerCase() : 'other';
+}
+function protoClass(p) { return p==='sub'?'sub':p==='vless'?'vless':'other'; }
+function maskCfg(c) { if (c.length <= 48) return c; const h = c.indexOf('#'); return c.slice(0,40)+'…'+(h>-1?' '+c.slice(h):''); }
+function daysLeft(exp) { if (!exp) return null; return Math.ceil((exp - Date.now())/864e5); }
+
+function toast(msg, type='ok') {
+  const el = document.createElement('div');
+  el.className = 'toast '+type;
+  el.textContent = msg;
+  $('#toasts').appendChild(el);
+  requestAnimationFrame(()=>el.classList.add('show'));
+  setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(), 400); }, 2800);
+}
+
+async function copy(txt) {
+  try { await navigator.clipboard.writeText(txt); }
+  catch { const t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
+}
+
+/* ============================================================
+   INIT DATA
+   ============================================================ */
+function initData() {
+  // 1) URL hash
+  const hash = location.hash.replace(/^#/,'');
+  if (hash.startsWith('d=')) {
+    const parsed = dec(hash.slice(2));
+    if (parsed) {
+      try { S.data = JSON.parse(parsed); store.set('pom_data', S.data); return; } catch {}
+    }
+  }
+  // 2) localStorage
+  S.data = store.get('pom_data', null);
+  // 3) default
+  if (!S.data) { S.data = JSON.parse(JSON.stringify(DEFAULTS)); store.set('pom_data', S.data); }
+  // 4) session
+  S.session = store.get('pom_session', null);
+}
+function saveData() { S.data.updated = Date.now(); store.set('pom_data', S.data); }
+
+/* ============================================================
+   THEME
+   ============================================================ */
+function applyTheme() {
+  document.body.dataset.theme = S.theme;
+  const meta = document.querySelector('meta[name=theme-color]');
+  if (meta) meta.content = S.theme === 'dark' ? '#000000' : '#f2f2f7';
+}
+function toggleTheme() {
+  S.theme = S.theme === 'dark' ? 'light' : 'dark';
+  store.set('pom_theme', S.theme);
+  applyTheme();
+  toast(S.theme === 'dark' ? 'حالت شبانه 🌙' : 'حالت روزانه ☀️', 'ok');
+}
+
+/* ============================================================
+   DYNAMIC ISLAND
+   ============================================================ */
+let islandTimer;
+function toggleIsland() {
+  const el = $('#island');
+  el.classList.toggle('expand');
+}
+function updateIsland() {
+  if (!S.data) return;
+  const activeSrvs = S.data.servers.filter(s=>s.active).length;
+  const activeCodes = S.data.codes.filter(c=>c.active).length;
+  $('#islSrvs').textContent = fa(activeSrvs);
+  $('#islUsers').textContent = fa(activeCodes);
+}
+
+/* ============================================================
+   SCREEN ROUTER
+   ============================================================ */
+function render() {
+  applyTheme();
+  updateIsland();
+
+  if (S.isAdmin) { renderAdmin(); showTabbar(true); return; }
+
+  if (!S.session) { renderGate(); showTabbar(false); return; }
+
+  // Validate session against data codes
+  const code = S.data.codes.find(c => c.code === S.session.code);
+  if (!code || !code.active || (code.expiresAt && code.expiresAt < Date.now())) {
+    store.del('pom_session'); S.session = null;
+    renderGate('دسترسی شما منقضی شده'); showTabbar(false); return;
+  }
+
+  showTabbar(true);
+  if (S.view === 'home') renderUserHome();
+  else if (S.view === 'servers') renderUserServers();
+  else if (S.view === 'stats') renderUserStats();
+  else if (S.view === 'admin') renderAdminLogin();
+}
+
+function showTabbar(show) {
+  $('#tabbar').classList.toggle('hidden', !show);
+}
+
+function switchTab(tab) {
+  S.view = tab;
+  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  render();
+}
+
+/* ============================================================
+   GATE SCREEN
+   ============================================================ */
+let gateError = '';
+function renderGate(err) {
+  if (err !== undefined) gateError = err;
+  const html = `
+    <div class="gate-screen fade-in">
+      <div class="gate-lock">
+        <span class="ring"></span>
+        <span class="ring r2"></span>
+        <div class="gate-ic">🔐</div>
+      </div>
+      <h1 class="gate-title">ورود به پوم</h1>
+      <p class="gate-sub">کد دسترسی خود را وارد کنید<br>تا به سرورها وصل شوید</p>
+      <div class="gate-card glass">
+        <div class="field" style="margin-bottom:0">
+          <input id="gateCode" class="inp code-input" type="text" dir="ltr" placeholder="••••••" maxlength="20" autocomplete="off" spellcheck="false" oninput="onGateInput(this)" onkeydown="if(event.key==='Enter')submitGate()">
+          <div class="code-dots" id="gateDots"></div>
+        </div>
+        ${gateError ? `<div class="gate-err">${esc(gateError)}</div>` : ''}
+        <button class="submit-btn" id="gateBtn" onclick="submitGate()" style="margin-top:20px">🔓 ورود</button>
+      </div>
+      <div style="margin-top:24px;font-size:11px;color:var(--ink-4);font-family:'JetBrains Mono',monospace;letter-spacing:.2em">POM · GATEWAY</div>
+    </div>
+  `;
+  $('#app').innerHTML = html;
+  renderDots(0);
+  setTimeout(()=>$('#gateCode')?.focus(), 200);
+}
+
+function onGateInput(el) {
+  el.value = el.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  renderDots(el.value.length);
+}
+function renderDots(len) {
+  const max = Math.min(Math.max(len, 6), 12);
+  let h = '';
+  for (let i = 0; i < max; i++) h += `<i class="${i<len?'on':''}"></i>`;
+  const el = $('#gateDots'); if (el) el.innerHTML = h;
+}
+
+async function submitGate() {
+  const inp = $('#gateCode'); if (!inp) return;
+  const code = inp.value.trim().toUpperCase();
+  if (!code) return;
+  const btn = $('#gateBtn');
+  btn.disabled = true; btn.textContent = 'در حال بررسی…';
+
+  await new Promise(r => setTimeout(r, 500));
+
+  const found = S.data.codes.find(c => c.code === code);
+  if (!found) {
+    gateError = 'کد نامعتبر است'; renderGate(gateError);
+    $('#app .gate-card')?.classList.add('shake');
+    setTimeout(()=>$('#app .gate-card')?.classList.remove('shake'), 600);
+    return;
+  }
+  if (!found.active) { gateError = 'این کد غیرفعال شده'; renderGate(gateError); return; }
+  if (found.expiresAt && found.expiresAt < Date.now()) { gateError = 'این کد منقضی شده'; renderGate(gateError); return; }
+
+  S.session = { code, deviceId: randId(), startedAt: Date.now(), expiresAt: found.expiresAt || Date.now() + 365*864e5 };
+  store.set('pom_session', S.session);
+  gateError = '';
+
+  // Entry FX
+  playEntryFX(found.expiresAt);
+}
+
+function playEntryFX(exp) {
+  const fx = $('#entryfx');
+  fx.classList.add('show');
+  const days = exp ? Math.ceil((exp - Date.now())/864e5) : 30;
+  $('#fxNum').textContent = fa(days);
+  // Confetti
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('span');
+    c.className = 'conf';
+    c.style.left = Math.random()*100 + '%';
+    c.style.background = ['#0A84FF','#BF5AF2','#FF375F','#30D158','#FF9F0A','#64D2FF'][i%6];
+    c.style.animationDelay = (Math.random()*.6) + 's';
+    c.style.setProperty('--rx', (Math.random()*220-110) + 'px');
+    fx.appendChild(c);
+    setTimeout(()=>c.remove(), 2400);
+  }
+  setTimeout(() => {
+    fx.classList.add('go');
+    S.view = 'home';
+    render();
+    $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'home'));
+  }, 1900);
+  setTimeout(() => { fx.classList.remove('show','go'); }, 2900);
+}
+
+/* ============================================================
+   USER HOME
+   ============================================================ */
+function renderUserHome() {
+  const activeServers = S.data.servers.filter(s => s.active);
+  const code = S.data.codes.find(c => c.code === S.session.code);
+  const days = code?.expiresAt ? daysLeft(code.expiresAt) : null;
+
+  const html = `
+    <div class="header fade-in">
+      <div>
+        <div class="hi">سلام 👋 خوش برگشتی</div>
+        <h1 class="title">پوم<span>.</span></h1>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()">${S.theme === 'dark' ? '☀️' : '🌙'}</button>
+    </div>
+
+    <div class="widgets fade-in">
+      <div class="widget w-clock glass">
+        <div class="w-tz">TEHRAN</div>
+        <div class="w-time" id="clockTime">--:--</div>
+        <div class="w-date" id="clockDate">—</div>
+      </div>
+
+      <div class="widget glass w-battery">
+        <div class="wb-ring">
+          <svg viewBox="0 0 100 100">
+            <circle class="rb-t" cx="50" cy="50" r="42"/>
+            <circle class="rb-p" cx="50" cy="50" r="42" id="ringProgress" stroke-dasharray="264" stroke-dashoffset="264"/>
+          </svg>
+          <div class="wb-val" id="ringVal">0</div>
+        </div>
+        <div class="wb-label">روزهای باقی‌مانده</div>
+      </div>
+
+      <div class="widget glass w-stat">
+        <div class="ws-ico">🌐</div>
+        <div class="ws-num blue">${fa(activeServers.length)}</div>
+        <div class="ws-lbl">سرور فعال</div>
+      </div>
+
+      <div class="widget glass w-stat">
+        <div class="ws-ico">🔑</div>
+        <div class="ws-num purple" style="font-size:20px;letter-spacing:.08em;font-family:'JetBrains Mono',monospace">${esc(S.session.code)}</div>
+        <div class="ws-lbl">کد فعال شما</div>
+      </div>
+
+      <div class="widget glass w-stat" style="grid-column:1/-1">
+        <div class="ws-ico" style="top:12px;left:14px;position:absolute">⚡</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+          <div>
+            <div class="ws-num green" style="font-size:26px">${days !== null ? fa(days) : '∞'}</div>
+            <div class="ws-lbl" style="margin-top:2px">روز باقی‌مانده از دسترسی</div>
+          </div>
+          <div style="font-size:34px;opacity:.85">${days !== null && days < 3 ? '⚠️' : '✨'}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-head fade-in">
+      <div class="sec-title">سرورهای پیشنهادی</div>
+      <div class="sec-count" onclick="switchTab('servers')" style="color:var(--blue);cursor:pointer">همه →</div>
+    </div>
+    <div class="servers" id="homeServers"></div>
+  `;
+  $('#app').innerHTML = html;
+
+  // Fill servers (max 2 on home)
+  const homeServers = activeServers.slice(0, 2);
+  if (homeServers.length === 0) {
+    $('#homeServers').innerHTML = `<div class="empty"><div class="empty-ic">🛰️</div><div class="empty-t">سروری موجود نیست</div><div class="empty-s">به‌زودی اضافه میشه</div></div>`;
+  } else {
+    $('#homeServers').innerHTML = homeServers.map((s, i) => serverCardHTML(s, i)).join('');
+    attachServerEvents();
+  }
+
+  // Animate ring
+  setTimeout(() => {
+    const pct = days !== null ? Math.max(0, Math.min(100, days / 30 * 100)) : 100;
+    const ring = $('#ringProgress');
+    if (ring) {
+      ring.style.strokeDashoffset = (264 * (1 - pct/100)).toFixed(1);
+      $('#ringVal').textContent = days !== null ? fa(days) : '∞';
+    }
+  }, 150);
+
+  startClock();
+}
+
+function startClock() {
+  clearInterval(window._clockTimer);
+  const tick = () => {
+    const now = new Date();
+    const t = $('#clockTime'); const d = $('#clockDate');
+    if (t) t.textContent = faTime(now).replace(/[0-9]/g, x => '۰۱۲۳۴۵۶۷۸۹'[x]);
+    if (d) {
+      try { d.textContent = new Intl.DateTimeFormat('fa-IR',{weekday:'long',day:'numeric',month:'long'}).format(now); } catch { d.textContent = ''; }
+    }
+  };
+  tick();
+  window._clockTimer = setInterval(tick, 30000);
+}
+
+/* ============================================================
+   USER SERVERS
+   ============================================================ */
+function renderUserServers() {
+  const all = S.data.servers.filter(s => s.active);
+  const filtered = all.filter(s => {
+    if (S.filters.country && s.country !== S.filters.country) return false;
+    if (S.filters.proto && protoClass(protoOf(s.config)) !== S.filters.proto) return false;
+    if (S.filters.q && !s.name.toLowerCase().includes(S.filters.q.toLowerCase())) return false;
+    return true;
+  });
+  const countries = [...new Set(all.map(s => s.country))];
+
+  const html = `
+    <div class="header fade-in">
+      <div>
+        <div class="hi">${fa(all.length)} سرور فعال</div>
+        <h1 class="title">سرورها<span>.</span></h1>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()">${S.theme === 'dark' ? '☀️' : '🌙'}</button>
+    </div>
+
+    <div style="padding:0 22px 16px" class="fade-in">
+      <input class="inp" placeholder="🔍 جستجو…" value="${esc(S.filters.q)}" oninput="S.filters.q=this.value;renderUserServers();setTimeout(()=>document.querySelector('.inp').focus(),0)">
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <select class="inp" style="height:44px;flex:1;padding:0 12px" onchange="S.filters.country=this.value;renderUserServers()">
+          <option value="">🌍 همه کشورها</option>
+          ${countries.map(c => `<option value="${c}" ${S.filters.country===c?'selected':''}>${flagEmoji(c)} ${COUNTRIES[c]||c}</option>`).join('')}
+        </select>
+        <select class="inp" style="height:44px;flex:1;padding:0 12px" onchange="S.filters.proto=this.value;renderUserServers()">
+          <option value="">همه پروتکل‌ها</option>
+          <option value="vless" ${S.filters.proto==='vless'?'selected':''}>VLESS</option>
+          <option value="sub" ${S.filters.proto==='sub'?'selected':''}>ساب</option>
+          <option value="other" ${S.filters.proto==='other'?'selected':''}>سایر</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="servers" id="allServers"></div>
+  `;
+  $('#app').innerHTML = html;
+
+  if (filtered.length === 0) {
+    $('#allServers').innerHTML = `<div class="empty"><div class="empty-ic">🔍</div><div class="empty-t">نتیجه‌ای یافت نشد</div><div class="empty-s">فیلترها را تغییر دهید</div></div>`;
+  } else {
+    $('#allServers').innerHTML = filtered.map((s,i) => serverCardHTML(s, i)).join('');
+    attachServerEvents();
+  }
+}
+
+/* ============================================================
+   USER STATS
+   ============================================================ */
+function renderUserStats() {
+  const total = S.data.servers.length;
+  const active = S.data.servers.filter(s=>s.active).length;
+  const countries = new Set(S.data.servers.map(s=>s.country)).size;
+  const protoCount = { vless:0, sub:0, other:0 };
+  S.data.servers.forEach(s => protoCount[protoClass(protoOf(s.config))]++);
+
+  const html = `
+    <div class="header fade-in">
+      <div>
+        <div class="hi">آمار و اطلاعات</div>
+        <h1 class="title">آمار<span>.</span></h1>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()">${S.theme === 'dark' ? '☀️' : '🌙'}</button>
+    </div>
+
+    <div class="widgets fade-in">
+      <div class="widget glass w-stat">
+        <div class="ws-ico">🌐</div>
+        <div class="ws-num blue">${fa(active)}</div>
+        <div class="ws-lbl">سرور فعال از ${fa(total)}</div>
+      </div>
+      <div class="widget glass w-stat">
+        <div class="ws-ico">🌍</div>
+        <div class="ws-num green">${fa(countries)}</div>
+        <div class="ws-lbl">کشور مختلف</div>
+      </div>
+      <div class="widget glass w-stat">
+        <div class="ws-ico">📡</div>
+        <div class="ws-num purple">${fa(protoCount.vless)}</div>
+        <div class="ws-lbl">VLESS</div>
+      </div>
+      <div class="widget glass w-stat">
+        <div class="ws-ico">🔗</div>
+        <div class="ws-num orange">${fa(protoCount.sub + protoCount.other)}</div>
+        <div class="ws-lbl">ساب و سایر</div>
+      </div>
+    </div>
+
+    <div class="sec-head fade-in">
+      <div class="sec-title">راهنمای استفاده</div>
+    </div>
+    <div class="servers fade-in">
+      <div class="glass" style="padding:18px;border-radius:var(--radius-lg)">
+        ${[['۱','روی «کپی کانفیگ» بزن'],['۲','اپ Karing یا V2rayNG رو باز کن'],['۳','Paste from clipboard رو بزن'],['۴','دکمه اتصال رو بزن 🎉']].map(([n,t]) => `
+          <div style="display:flex;gap:12px;padding:10px 0;align-items:center;${n!=='۱'?'border-top:1px solid var(--separator);':''}">
+            <div style="width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px">${n}</div>
+            <div style="font-size:14px;font-weight:600">${t}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+  $('#app').innerHTML = html;
+}
+
+/* ============================================================
+   SERVER CARD
+   ============================================================ */
+function serverCardHTML(s, i) {
+  const p = protoOf(s.config);
+  const pc = protoClass(p);
+  const badge = p === 'sub' ? 'ساب' : p.toUpperCase();
+  const isNew = s.added && Date.now() - s.added < 3*864e5;
+
+  const APPS = [
+    { id:'v2rayng', name:'V2rayNG', ch:'V', color:'#fb7185', scheme:'v2rayng://install-config?url=' },
+    { id:'mahsang', name:'MahsaNG', ch:'M', color:'#22d3ee', scheme:'mahsang://install-config?url=' },
+    { id:'karing', name:'Karing', ch:'K', color:'#f59e0b', scheme:'karing://install-config?url=' },
+    { id:'nvp', name:'NVP', ch:'N', color:'#60a5fa', scheme:'nvptunnel://install-config?url=' }
+  ];
+
+  return `
+    <article class="server glass" data-id="${s.id}" style="animation-delay:${i*70}ms">
+      <div class="srv-head">
+        <div class="flag">${s.flag || flagEmoji(s.country)}</div>
+        <div class="srv-info">
+          <div class="srv-name">${esc(s.name)}</div>
+          <div class="srv-meta">
+            <span>${COUNTRIES[s.country]||s.country}</span>
+            <span class="pill ${pc}">${badge}</span>
+            ${isNew ? '<span class="pill new">جدید</span>' : ''}
+          </div>
+        </div>
+        <div class="srv-signal"><i></i><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="srv-config">
+        <code class="srv-code" data-full="${esc(s.config)}">${esc(maskCfg(s.config))}</code>
+        <button class="eye-btn" onclick="toggleReveal(this)">👁</button>
+      </div>
+
+      <div class="srv-actions">
+        <button class="btn primary" onclick="copyConfig('${s.id}', this)">📋 کپی</button>
+        <button class="btn ghost probe" data-st="idle" onclick="probeServer('${s.id}', this)">
+          <span class="spn hidden"></span>
+          <span class="prb-txt">📡 تست</span>
+        </button>
+        <button class="btn ghost" style="flex:0 0 46px" onclick="openQR('${s.id}')">QR</button>
+      </div>
+
+      <div class="app-chips">
+        ${APPS.map(a => `
+          <button class="chip" onclick="openInApp('${a.id}','${s.id}')" style="--c:${a.color}">
+            <span class="chip-ic" style="color:${a.color}">${a.ch}</span>
+            <span class="chip-nm">${a.name}</span>
+          </button>
+        `).join('')}
+      </div>
+    </article>
+  `;
+}
+
+function attachServerEvents() {}
+
+function toggleReveal(btn) {
+  const code = btn.previousElementSibling;
+  const full = code.dataset.full;
+  if (code.dataset.revealed === '1') {
+    code.textContent = maskCfg(full);
+    code.dataset.revealed = '0';
+    btn.textContent = '👁';
+  } else {
+    code.textContent = full;
+    code.dataset.revealed = '1';
+    btn.textContent = '🙈';
+  }
+}
+
+async function copyConfig(id, btn) {
+  const s = S.data.servers.find(x => x.id === id); if (!s) return;
+  await copy(s.config);
+  const o = btn.innerHTML;
+  btn.classList.add('ok'); btn.innerHTML = '✓ کپی شد';
+  toast('کانفیگ کپی شد 📋', 'ok');
+  setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = o; }, 1500);
+}
+
+async function probeServer(id, btn) {
+  const s = S.data.servers.find(x => x.id === id); if (!s) return;
+  if (btn.dataset.st === 'probing') return;
+  btn.dataset.st = 'probing';
+  btn.querySelector('.spn').classList.remove('hidden');
+  btn.querySelector('.prb-txt').textContent = '…';
+
+  const t0 = performance.now();
+  let ok = false, ms = 0;
+  try {
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 5000);
+    const r = await fetch('/api/ping', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({host:s.host,port:s.port}), signal: ctrl.signal }).catch(()=>null);
+    clearTimeout(to);
+    if (r && r.ok) { const d = await r.json(); ok = !!d.ok; ms = d.ms ?? 0; }
+    else throw 0;
+  } catch {
+    // Fallback: try fetching host with no-cors
+    try {
+      const ctrl = new AbortController();
+      const to = setTimeout(() => ctrl.abort(), 4000);
+      await fetch('https://' + s.host + ':' + s.port + '/', { mode:'no-cors', signal: ctrl.signal, cache:'no-store' }).catch(()=>{ throw 0; });
+      clearTimeout(to);
+      ok = true; ms = Math.max(1, Math.round(performance.now() - t0));
+    } catch { ok = false; }
+  }
+
+  btn.querySelector('.spn').classList.add('hidden');
+  if (ok) {
+    btn.dataset.st = 'up';
+    btn.querySelector('.prb-txt').textContent = '✓ ' + fa(ms) + 'ms';
+    toast('آنلاین · ' + fa(ms) + 'ms', 'ok');
+  } else {
+    btn.dataset.st = 'down';
+    btn.querySelector('.prb-txt').textContent = '✕ آفلاین';
+    toast('سرور پاسخ نداد', 'err');
+  }
+  setTimeout(() => {
+    btn.dataset.st = 'idle';
+    btn.querySelector('.prb-txt').textContent = '📡 تست';
+  }, 5000);
+}
+
+function openInApp(appId, srvId) {
+  const s = S.data.servers.find(x => x.id === srvId); if (!s) return;
+  const APPS = {
+    v2rayng:'v2rayng://install-config?url=',
+    mahsang:'mahsang://install-config?url=',
+    karing:'karing://install-config?url=',
+    nvp:'nvptunnel://install-config?url='
+  };
+  copy(s.config);
+  const isMobile = /android|iphone|ipad/i.test(navigator.userAgent);
+  if (!isMobile) { toast('کانفیگ کپی شد — از QR استفاده کن', 'ok'); openQR(srvId); return; }
+  const url = APPS[appId] + encodeURIComponent(s.config);
+  const f = document.createElement('iframe');
+  f.style.display = 'none'; f.src = url;
+  document.body.appendChild(f);
+  setTimeout(() => f.remove(), 2600);
+  toast('در حال باز کردن اپ… 📲', 'ok');
+}
+
+function openQR(id) {
+  const s = S.data.servers.find(x => x.id === id); if (!s) return;
+  const url = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(s.config);
+  const body = `
+    <div style="text-align:center">
+      <div style="background:#fff;padding:16px;border-radius:20px;display:inline-block;margin-bottom:16px">
+        <img src="${url}" width="220" height="220" style="display:block;border-radius:8px" alt="QR">
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);word-break:break-all;direction:ltr;text-align:left;padding:14px;background:var(--surface-2);border-radius:12px;border:1px solid var(--border)">${esc(s.config)}</div>
+      <button class="submit-btn" style="margin-top:16px" onclick="copy('${esc(s.config).replace(/'/g,'&#39;')}');toast('کپی شد 📋','ok')">📋 کپی کانفیگ</button>
+    </div>
+  `;
+  openSheet('اسکن QR', body);
+}
+
+/* ============================================================
+   BOTTOM SHEET
+   ============================================================ */
+function openSheet(title, bodyHTML) {
+  $('#sheetTitle').textContent = title;
+  $('#sheetBody').innerHTML = bodyHTML;
+  $('#overlay').classList.add('show');
+  $('#sheet').classList.add('show');
+}
+function closeSheet() {
+  $('#overlay').classList.remove('show');
+  $('#sheet').classList.remove('show');
+}
+
+/* ============================================================
+   ADMIN LOGIN
+   ============================================================ */
+function renderAdminLogin() {
+  const html = `
+    <div class="header fade-in">
+      <div>
+        <div class="hi">ورود مدیر</div>
+        <h1 class="title">مدیریت<span>.</span></h1>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()">${S.theme === 'dark' ? '☀️' : '🌙'}</button>
+    </div>
+    <div style="padding:0 22px" class="fade-in">
+      <div class="glass" style="padding:24px;border-radius:var(--radius-xl)">
+        <div style="text-align:center;margin-bottom:20px">
+          <div class="gate-ic" style="margin:0 auto 16px;background:linear-gradient(135deg,var(--purple),var(--pink))">🔑</div>
+          <div style="font-size:18px;font-weight:800">رمز مدیریت را وارد کنید</div>
+        </div>
+        <input id="adminPass" class="inp" type="password" dir="ltr" placeholder="••••••••" style="text-align:center;height:56px;font-size:18px;letter-spacing:.2em" onkeydown="if(event.key==='Enter')doAdminLogin()">
+        <button class="submit-btn" style="margin-top:16px" onclick="doAdminLogin()">ورود به پنل</button>
+      </div>
+    </div>
+  `;
+  $('#app').innerHTML = html;
+  setTimeout(() => $('#adminPass')?.focus(), 200);
+}
+
+function doAdminLogin() {
+  const pass = $('#adminPass')?.value;
+  if (pass === ADMIN_PASS) {
+    S.isAdmin = true;
+    S.view = 'admin';
+    toast('خوش آمدی مدیر 👑', 'ok');
+    render();
+  } else {
+    toast('رمز اشتباه است', 'err');
+    $('#adminPass')?.classList.add('shake');
+    setTimeout(() => $('#adminPass')?.classList.remove('shake'), 600);
+  }
+}
+
+/* ============================================================
+   ADMIN PANEL
+   ============================================================ */
+function renderAdmin() {
+  const activeCodes = S.data.codes.filter(c=>c.active).length;
+  const totalServers = S.data.servers.length;
+  const activeServers = S.data.servers.filter(s=>s.active).length;
+
+  const header = `
+    <div class="header fade-in">
+      <div>
+        <div class="hi">پنل مدیریت · ${fa(S.data.codes.length)} کد</div>
+        <h1 class="title">مدیریت<span>.</span></h1>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="theme-btn" onclick="shareData()" title="اشتراک">🔗</button>
+        <button class="theme-btn" onclick="adminLogout()" title="خروج" style="background:rgba(255,69,58,.15);border-color:rgba(255,69,58,.3);color:var(--red)">⏻</button>
+      </div>
+    </div>
+
+    <div class="widgets fade-in" style="padding-bottom:16px">
+      <div class="widget glass w-stat">
+        <div class="ws-ico">🔑</div>
+        <div class="ws-num purple">${fa(activeCodes)}</div>
+        <div class="ws-lbl">کد فعال</div>
+      </div>
+      <div class="widget glass w-stat">
+        <div class="ws-ico">🌐</div>
+        <div class="ws-num blue">${fa(activeServers)}</div>
+        <div class="ws-lbl">سرور از ${fa(totalServers)}</div>
+      </div>
+    </div>
+
+    <div class="tab-row fade-in">
+      <button class="tab-btn ${S.adminTab==='codes'?'active':''}" onclick="adminTab('codes')">🔑 کدها</button>
+      <button class="tab-btn ${S.adminTab==='servers'?'active':''}" onclick="adminTab('servers')">🌐 سرورها</button>
+    </div>
+  `;
+
+  let list = '';
+  if (S.adminTab === 'codes') {
+    if (S.data.codes.length === 0) {
+      list = `<div class="empty"><div class="empty-ic">🔑</div><div class="empty-t">کدی ساخته نشده</div><div class="empty-s">روی + بزن تا اولین کد رو بسازی</div></div>`;
+    } else {
+      list = S.data.codes.map((c, i) => codeRowHTML(c, i)).join('');
+    }
+  } else {
+    if (S.data.servers.length === 0) {
+      list = `<div class="empty"><div class="empty-ic">🌐</div><div class="empty-t">سروری اضافه نشده</div><div class="empty-s">روی + بزن تا اولین سرور رو اضافه کنی</div></div>`;
+    } else {
+      list = S.data.servers.map((s, i) => adminServerRowHTML(s, i)).join('');
+    }
+  }
+
+  $('#app').innerHTML = header + `<div class="admin-list fade-in">${list}</div>`;
+
+  $('#fab').classList.remove('hidden');
+  $('#fab').onclick = () => S.adminTab === 'codes' ? openAddCodeSheet() : openAddServerSheet();
+}
+
+function adminTab(t) {
+  S.adminTab = t;
+  renderAdmin();
+}
+
+function adminLogout() {
+  S.isAdmin = false;
+  S.view = 'home';
+  $('#fab').classList.add('hidden');
+  toast('از پنل خارج شدی 👋', 'ok');
+  render();
+  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'home'));
+}
+
+function codeRowHTML(c, i) {
+  const days = daysLeft(c.expiresAt);
+  const expired = days !== null && days <= 0;
+  const statusCls = !c.active ? 'err' : expired ? 'err' : 'ok';
+  const statusTxt = !c.active ? 'غیرفعال' : expired ? 'منقضی' : 'فعال';
+
+  return `
+    <div class="code-row glass" style="animation-delay:${i*50}ms">
+      <div class="cr-top">
+        <div class="cr-code">${esc(c.code)}</div>
+        <button class="cr-copy" onclick="copy('${esc(c.code)}');toast('کپی شد 📋','ok')">📋</button>
+      </div>
+      ${c.note ? `<div style="font-size:12px;color:var(--ink-3);margin-bottom:10px">📌 ${esc(c.note)}</div>` : ''}
+      <div class="cr-meta">
+        <span class="cr-badge ${statusCls}">${statusTxt}</span>
+        <span class="cr-badge">👥 ${fa(c.maxUsers)} کاربر</span>
+        ${c.expiresAt ? `<span class="cr-badge ${expired?'err':'warn'}">⏰ ${expired ? 'منقضی' : fa(days)+' روز'}</span>` : '<span class="cr-badge">∞ نامحدود</span>'}
+      </div>
+      <div class="cr-actions">
+        <button class="btn ghost" style="height:40px;font-size:13px" onclick="toggleCode('${c.id}')">${c.active ? '⏸ غیرفعال' : '▶ فعال'}</button>
+        <button class="btn ghost" style="height:40px;font-size:13px;color:var(--red);border-color:rgba(255,69,58,.3)" onclick="delCode('${c.id}')">🗑 حذف</button>
+      </div>
+    </div>
+  `;
+}
+
+function adminServerRowHTML(s, i) {
+  const p = protoOf(s.config);
+  const pc = protoClass(p);
+  return `
+    <div class="code-row glass" style="animation-delay:${i*50}ms">
+      <div class="cr-top">
+        <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
+          <div class="flag" style="width:44px;height:44px;font-size:22px;border-radius:14px">${s.flag||flagEmoji(s.country)}</div>
+          <div style="min-width:0;flex:1">
+            <div style="font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.name)}</div>
+            <div style="font-size:11px;color:var(--ink-3);margin-top:2px;display:flex;gap:6px;align-items:center">
+              <span>${COUNTRIES[s.country]||s.country}</span>
+              <span class="pill ${pc}">${p==='sub'?'ساب':p.toUpperCase()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cr-meta">
+        <span class="cr-badge ${s.active?'ok':'err'}">${s.active?'فعال':'خاموش'}</span>
+        <span class="cr-badge" style="font-family:'JetBrains Mono',monospace">${esc(s.host)}:${s.port}</span>
+      </div>
+      <div class="cr-actions">
+        <button class="btn ghost" style="height:40px;font-size:13px" onclick="toggleServer('${s.id}')">${s.active?'⏸':'▶'}</button>
+        <button class="btn ghost" style="height:40px;font-size:13px;color:var(--red);border-color:rgba(255,69,58,.3)" onclick="delServer('${s.id}')">🗑 حذف</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   ADMIN ACTIONS
+   ============================================================ */
+function toggleCode(id) {
+  const c = S.data.codes.find(x => x.id === id); if (!c) return;
+  c.active = !c.active; saveData();
+  toast(c.active ? 'فعال شد' : 'غیرفعال شد', 'ok');
+  renderAdmin();
+}
+function delCode(id) {
+  if (!confirm('این کد حذف شود؟')) return;
+  S.data.codes = S.data.codes.filter(c => c.id !== id);
+  saveData();
+  toast('حذف شد', 'warn');
+  renderAdmin();
+}
+function toggleServer(id) {
+  const s = S.data.servers.find(x => x.id === id); if (!s) return;
+  s.active = !s.active; saveData();
+  toast(s.active ? 'فعال شد' : 'غیرفعال شد', 'ok');
+  renderAdmin();
+}
+function delServer(id) {
+  if (!confirm('این سرور حذف شود؟')) return;
+  S.data.servers = S.data.servers.filter(s => s.id !== id);
+  saveData();
+  toast('حذف شد', 'warn');
+  renderAdmin();
+}
+
+/* ============================================================
+   ADD CODE SHEET
+   ============================================================ */
+function openAddCodeSheet() {
+  const body = `
+    <div class="field">
+      <label>کد دسترسی (خالی = خودکار)</label>
+      <input id="newCodeVal" class="inp" dir="ltr" placeholder="مثلاً POM2024" style="text-transform:uppercase">
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>حداکثر کاربر</label>
+        <input id="newMaxUsers" class="inp" type="number" min="1" value="5">
+      </div>
+      <div class="field">
+        <label>مدت (روز) — ۰ نامحدود</label>
+        <input id="newDays" class="inp" type="number" min="0" value="30">
+      </div>
+    </div>
+    <div class="field">
+      <label>یادداشت (اختیاری)</label>
+      <input id="newNote" class="inp" placeholder="مثلاً: برای علی">
+    </div>
+    <button class="submit-btn" onclick="createCode()">+ ایجاد کد</button>
+  `;
+  openSheet('کد جدید', body);
+}
+
+function createCode() {
+  let code = ($('#newCodeVal').value || '').trim().toUpperCase();
+  if (!code) code = generateCode();
+  const maxUsers = Math.max(1, +$('#newMaxUsers').value || 1);
+  const days = Math.max(0, +$('#newDays').value || 0);
+  const note = ($('#newNote').value || '').trim() || null;
+
+  if (S.data.codes.some(c => c.code === code)) { toast('این کد قبلاً وجود دارد', 'err'); return; }
+  S.data.codes.unshift({
+    id: randId(), code, maxUsers, note,
+    active: true,
+    expiresAt: days > 0 ? Date.now() + days*864e5 : null,
+    createdAt: Date.now()
+  });
+  saveData();
+  closeSheet();
+  toast('کد ساخته شد ✅', 'ok');
+  renderAdmin();
+}
+
+function generateCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let out = '';
+  for (let i = 0; i < 8; i++) out += chars[Math.floor(Math.random()*chars.length)];
+  return out;
+}
+
+/* ============================================================
+   ADD SERVER SHEET
+   ============================================================ */
+function openAddServerSheet() {
+  const countryOpts = Object.entries(COUNTRIES).map(([k,v]) => `<option value="${k}">${v}</option>`).join('');
+  const body = `
+    <div class="field">
+      <label>نام سرور</label>
+      <input id="srvName" class="inp" placeholder="مثلاً: آلمان — فرانکفورت">
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>کشور</label>
+        <select id="srvCountry" class="inp" onchange="updateSrvFlag()">${countryOpts}</select>
+      </div>
+      <div class="field">
+        <label>پرچم</label>
+        <input id="srvFlag" class="inp" value="🇩🇪" style="text-align:center;font-size:22px">
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>هاست / IP</label>
+        <input id="srvHost" class="inp" dir="ltr" placeholder="example.com">
+      </div>
+      <div class="field">
+        <label>پورت</label>
+        <input id="srvPort" class="inp" type="number" value="443" dir="ltr">
+      </div>
+    </div>
+    <div class="field">
+      <label>کانفیگ (vmess://، vless://، ...)</label>
+      <textarea id="srvConfig" class="inp" placeholder="vless://..." dir="ltr"></textarea>
+    </div>
+    <button class="submit-btn" onclick="createServer()">+ افزودن سرور</button>
+  `;
+  openSheet('سرور جدید', body);
+}
+
+function updateSrvFlag() {
+  const cc = $('#srvCountry').value;
+  $('#srvFlag').value = flagEmoji(cc) || '🌐';
+}
+
+function createServer() {
+  const name = $('#srvName').value.trim();
+  const host = $('#srvHost').value.trim();
+  const config = $('#srvConfig').value.trim();
+  if (!name || !host || !config) { toast('همه فیلدها لازم است', 'err'); return; }
+  S.data.servers.unshift({
+    id: randId(), name,
+    country: $('#srvCountry').value,
+    flag: $('#srvFlag').value || '🌐',
+    host, port: +$('#srvPort').value || 443,
+    config, active: true,
+    added: Date.now()
+  });
+  saveData();
+  closeSheet();
+  toast('سرور اضافه شد ✅', 'ok');
+  renderAdmin();
+}
+
+/* ============================================================
+   SHARE DATA
+   ============================================================ */
+function shareData() {
+  const payload = {
+    servers: S.data.servers,
+    codes: S.data.codes,
+    updated: Date.now()
+  };
+  const encoded = enc(JSON.stringify(payload));
+  const url = location.origin + location.pathname + '#d=' + encoded;
+  const body = `
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-size:48px;margin-bottom:8px">🔗</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px">لینک اشتراک‌گذاری</div>
+      <div style="font-size:12px;color:var(--ink-3);line-height:1.7">این لینک رو برای کاربرات بفرست<br>همه سرورها و کدها داخلشه</div>
+    </div>
+    <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11px;word-break:break-all;direction:ltr;text-align:left;max-height:140px;overflow:auto;margin-bottom:16px">${esc(url)}</div>
+    <button class="submit-btn" onclick="copyShare('${esc(url).replace(/'/g,'&#39;')}')">📋 کپی لینک</button>
+    <div style="text-align:center;margin-top:14px">
+      <div style="background:#fff;padding:12px;border-radius:16px;display:inline-block">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}" width="180" height="180" style="display:block;border-radius:8px" alt="QR">
+      </div>
+      <div style="font-size:11px;color:var(--ink-3);margin-top:8px">برای اسکن سریع</div>
+    </div>
+  `;
+  openSheet('اشتراک‌گذاری', body);
+}
+
+function copyShare(url) {
+  copy(url).then(() => toast('لینک کپی شد 📋', 'ok'));
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+initData();
+applyTheme();
+
+// Auto-refresh island stats
+setInterval(() => {
+  if (S.data) {
+    const activeSrvs = S.data.servers.filter(s=>s.active).length;
+    $('#islSrvs').textContent = fa(activeSrvs);
+  }
+}, 3000);
+
+// Initial render
+if (S.session) {
+  const code = S.data.codes.find(c => c.code === S.session.code);
+  if (code && code.active && (!code.expiresAt || code.expiresAt > Date.now())) {
+    S.view = 'home';
+  } else {
+    store.del('pom_session'); S.session = null;
+  }
+}
+render();
+$$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === S.view));
+</script>
+</body>
+</html>
