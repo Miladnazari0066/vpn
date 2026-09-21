@@ -447,30 +447,6 @@ footer{padding:40px 0 100px;border-top:1px solid var(--border);margin-top:50px;t
 </div>
 
 <script>
-/* ============ PWA MANIFEST (runtime) ============ */
-(function(){
-  const iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a84ff"/><stop offset="50%" stop-color="#5e5ce6"/><stop offset="100%" stop-color="#bf5af2"/></linearGradient></defs><rect width="512" height="512" rx="128" fill="url(#g)"/><path d="M170 150 V362 M170 150 H280 a72 72 0 0 1 0 144 H170" stroke="#fff" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="370" cy="340" r="38" fill="#fff"/></svg>';
-  const iconUri = 'data:image/svg+xml,' + encodeURIComponent(iconSvg);
-  const manifest = {
-    name: "پوم - پلتفرم دریافت قندشکن",
-    short_name: "پوم",
-    description: "کانفیگ‌های پرسرعت V2Ray",
-    start_url: "./",
-    scope: "./",
-    display: "standalone",
-    orientation: "portrait",
-    background_color: "#0a0a0f",
-    theme_color: "#0a84ff",
-    lang: "fa",
-    dir: "rtl",
-    icons: [
-      {src: iconUri, sizes: "192x192", type: "image/svg+xml", purpose: "any maskable"},
-      {src: iconUri, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable"}
-    ]
-  };
-  document.getElementById('mfLink').href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
-})();
-
 /* ============ PWA SERVICE WORKER (runtime) ============ */
 (function(){
   if(!('serviceWorker' in navigator)) return;
