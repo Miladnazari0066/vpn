@@ -61,6 +61,20 @@
   .st-success .orb, .st-ready .orb{width:128px;height:128px;border-radius:50%}
   .st-success .orb{background:var(--green-soft);border-color:rgba(63,125,88,.4)}
 
+  /* ── حلقه‌ی رنگی دور دایره‌ی اصلی ── */
+  .orb::after{
+    content:''; position:absolute; inset:-9px; border-radius:50%;
+    border:1.5px solid rgba(192,138,46,.55);
+    pointer-events:none;
+    animation:ringPulse 3.2s ease-in-out infinite;
+  }
+  .st-input .orb::after{border-radius:36px}
+  .st-success .orb::after{border-color:rgba(63,125,88,.65)}
+  @keyframes ringPulse{
+    0%,100%{transform:scale(1);opacity:.75}
+    50%{transform:scale(1.07);opacity:.3}
+  }
+
   .orb-logo{
     position:absolute; inset:0; display:grid; place-items:center;
     transition:transform .4s, opacity .3s; color:var(--ink);
@@ -193,6 +207,11 @@
   .loading{text-align:center;color:var(--sub);font-size:13px;padding:30px 0;animation:blink 1.2s ease infinite}
   @keyframes blink{50%{opacity:.35}}
 
+  /* ── کارت سرور تصادفی ── */
+  .rand-hint{
+    text-align:center;font:400 15px/2.2 'Noto Nastaliq Urdu',serif;
+    color:var(--sub);margin:2px 0 10px;
+  }
   .srv{
     background:var(--card);border:1px solid rgba(42,33,24,.08);border-radius:18px;
     padding:14px 16px;margin-bottom:10px;box-shadow:0 6px 16px -10px rgba(42,33,24,.15);
@@ -262,10 +281,6 @@
     resize:vertical;min-height:86px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
     font-size:12.5px;direction:ltr;text-align:left;line-height:1.7;
   }
-  .tok-inp{
-    direction:ltr;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:12px;letter-spacing:.3px;
-  }
   .form-hint{font-size:11.5px;color:var(--green);margin-top:7px;min-height:17px}
   .form-err{font-size:11.5px;color:var(--err);margin-top:7px;min-height:17px}
   .btn{
@@ -278,51 +293,7 @@
   .btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
   .btn.full{width:100%}
   .btn.ghost{background:transparent;border:1px solid rgba(42,33,24,.22);color:var(--ink)}
-
-  .cf-desc{font-size:12px;color:var(--sub);line-height:2;margin:-3px 0 10px}
-  .wz-box{
-    background:var(--card);border:1px solid rgba(42,33,24,.08);border-radius:16px;
-    padding:14px;margin-bottom:12px;
-  }
-  .wz-lbl{font:600 12px 'Vazirmatn';color:var(--sub);margin-bottom:7px}
-  .wz-row{display:flex;gap:8px;margin-bottom:8px}
-  .wz-row .inp{flex:1;min-width:0}
-  .wz-log{
-    direction:rtl;background:var(--card);border:1px solid rgba(42,33,24,.08);border-radius:14px;
-    padding:12px 14px;font-size:12px;line-height:2.1;min-height:40px;max-height:170px;
-    overflow-y:auto;color:var(--ink);display:none;
-  }
-  .wz-log.on{display:block}
-  .wz-line.ok{color:var(--green)}
-  .wz-line.err{color:var(--err)}
-  .wz-line.dim{color:var(--sub)}
-  .wz-res{display:none}
-  .wz-res.on{display:block}
-  .wz-url{
-    direction:ltr;text-align:left;background:var(--card);border:1px dashed rgba(63,125,88,.5);
-    border-radius:12px;padding:10px 12px;font:400 11px ui-monospace,monospace;
-    word-break:break-all;line-height:1.8;color:var(--ink);margin-bottom:10px;
-  }
-  details.wz-manual{
-    border:1px solid rgba(42,33,24,.12);border-radius:14px;background:var(--card);
-    margin-bottom:12px;overflow:hidden;
-  }
-  details.wz-manual summary{
-    cursor:pointer;padding:12px 14px;font:600 12.5px 'Vazirmatn';color:var(--sub);
-    list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;
-  }
-  details.wz-manual summary::-webkit-details-marker{display:none}
-  details.wz-manual summary::after{content:'+';font-size:16px;color:var(--sub)}
-  details.wz-manual[open] summary{color:var(--ink);border-bottom:1px dashed rgba(42,33,24,.12)}
-  details.wz-manual[open] summary::after{content:'−'}
-  details.wz-manual .inner{padding:12px 14px 14px}
-  .cf-link{color:var(--green);word-break:break-all;text-decoration:none;border-bottom:1px dashed currentColor}
-  .cf-token-ok{
-    display:none;align-items:center;gap:8px;background:var(--green-soft);
-    border:1px dashed rgba(63,125,88,.5);color:var(--green);
-    border-radius:12px;padding:10px 14px;font:600 12.5px 'Vazirmatn';margin-bottom:12px;
-  }
-  .cf-token-ok.on{display:flex}
+  .reroll{margin-top:2px}
 
   .u-row{
     background:var(--card);border:1px solid rgba(42,33,24,.08);border-radius:16px;
@@ -502,24 +473,26 @@
 
 <div class="backdrop" id="bd"></div>
 
-<section class="sheet" id="shServers" aria-label="سرورها">
+<!-- ═══ سرور من (تصادفی) ═══ -->
+<section class="sheet" id="shServers" aria-label="سرور من">
   <div class="handle"></div>
   <div class="sheet-head">
-    <h2 class="sheet-title">سرورهای من</h2>
+    <h2 class="sheet-title">سرور من</h2>
     <span class="count" id="srvCount"></span>
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <p class="sheet-sub">پینگ بگیر، کانفیگ رو کپی کن یا QR بساز و توی برنامه‌ات ایمپورت کن.</p>
+  <p class="sheet-sub">هر بار یک سرور از بین سرورهای فعال برایت انتخاب می‌شود. پینگش را ببین، کپی کن یا QR بگیر — اگر مناسب نبود، یکی دیگر بخواه.</p>
   <div id="srvList"></div>
 </section>
 
+<!-- ═══ مدیریت ═══ -->
 <section class="sheet" id="shAdmin" aria-label="مدیریت">
   <div class="handle"></div>
   <div class="sheet-head">
     <h2 class="sheet-title">مدیریت</h2>
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <p class="sheet-sub">کاربر بساز، سرور بساز و همه‌چیز را کنترل کن.</p>
+  <p class="sheet-sub">کاربر بساز، سرورهای واقعی‌ات را اضافه کن و همه‌چیز را کنترل کن. سرورهایی که این‌جا اضافه می‌کنی به استخرِ انتخاب تصادفی کاربران می‌روند.</p>
 
   <div class="adm-sec">
     <div class="adm-label"><span>کاربر جدید</span><span class="form-hint" style="margin:0">کد مدیر: <b dir="ltr">۰۰۶۶</b></span></div>
@@ -544,19 +517,13 @@
   </div>
 
   <div class="adm-sec">
-    <div class="adm-label"><span>ساخت خودکار سرور</span><span class="form-hint" style="margin:0">ورود خودکار به کلودفلر</span></div>
-    <p class="cf-desc">با یک ورود و تأیید ساده روی اکانت کلودفلرت، سرور شخصی VLESS ساخته می‌شود — بدون ساخت دستی توکن. کلودفلر خودش دسترسی را صادر می‌کند و کانفیگ‌ها خودکار به لیست همه‌ی کاربران اضافه می‌شوند.</p>
-    <button class="btn full" id="cfOpen">ورود خودکار به کلودفلر و ساخت سرور</button>
-  </div>
-
-  <div class="adm-sec">
-    <div class="adm-label"><span>افزودن سرور دستی</span><span id="protoHint" class="form-hint" style="margin:0"></span></div>
+    <div class="adm-label"><span>افزودن سرور</span><span id="protoHint" class="form-hint" style="margin:0"></span></div>
     <input class="inp" id="nameInp" placeholder="نام سرور (مثلاً آلمان · فرانکفورت)" style="margin-bottom:8px">
     <textarea class="inp" id="cfgInp" placeholder="vmess:// یا vless:// یا trojan:// یا ss://"></textarea>
     <div class="form-err" id="formErr"></div>
     <button class="btn full" id="addBtn">
       <svg viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>
-      افزودن به لیست سرورها
+      افزودن به استخر سرورها
     </button>
   </div>
 
@@ -568,70 +535,7 @@
   <p class="adm-note" id="admNote"></p>
 </section>
 
-<!-- ═══ ویزارد ورود خودکار + ساخت سرور ═══ -->
-<section class="sheet" id="shWizard" aria-label="ساخت سرور کلودفلر">
-  <div class="handle"></div>
-  <div class="sheet-head">
-    <h2 class="sheet-title">ورود خودکار به کلودفلر</h2>
-    <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-  </div>
-  <p class="sheet-sub">سه قدم: ورود و تأیید ← برگرداندن کد ← ساخت سرور. توکن را خود کلودفلر صادر می‌کند.</p>
-
-  <div class="wz-box">
-    <div class="wz-lbl">قدم ۱ — ورود و تأیید دسترسی</div>
-    <p class="cf-desc">دکمه را بزن؛ صفحه‌ی ورود کلودفلر باز می‌شود. وارد شو و روی <b>Allow</b> تأیید کن (صفحه نام Wrangler را نشان می‌دهد — کلاینت رسمی خود کلودفلر است، نگران نباش). بعدش صفحه‌ای می‌آید که می‌گوید «سایت در دسترس نیست» — این <b>طبیعی و لازم</b> است! فقط از نوار آدرس مرورگر، آدرس کامل را کپی کن.</p>
-    <button class="btn full" id="cfLogin">
-      <svg viewBox="0 0 24 24"><path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14M10 8l4 4-4 4M14 12H4"/></svg>
-      ورود به کلودفلر و صدور دسترسی
-    </button>
-    <div class="form-err" id="cfLoginErr"></div>
-  </div>
-
-  <div class="wz-box">
-    <div class="wz-lbl">قدم ۲ — برگرداندن کد تأیید</div>
-    <p class="cf-desc">آدرس کپی‌شده از نوار مرورگر (یا فقط کدِ بعد از <b dir="ltr">code=</b>) را این‌جا بچسبان؛ اپ خودش توکن را می‌سازد:</p>
-    <input class="inp tok-inp" id="cfCode" dir="ltr" placeholder="http://localhost:8976/oauth/callback?code=..." autocomplete="off" spellcheck="false" style="margin-bottom:8px">
-    <button class="btn full" id="cfExchange">دریافت توکن و ادامه</button>
-    <div class="form-err" id="cfExErr"></div>
-    <div class="cf-token-ok" id="cfTokState">✓ توکن از کلودفلر دریافت شد — آماده‌ی ساخت سرور</div>
-  </div>
-
-  <details class="wz-manual" id="cfManualBox">
-    <summary>روش دستی (اگر ورود خودکار کار نکرد)</summary>
-    <div class="inner">
-      <p class="cf-desc">توکن را دستی بساز: به <a class="cf-link" href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" rel="noopener">صفحه‌ی API Tokens</a> برو → Create Token → قالب <b>Edit Cloudflare Workers</b> → Create → کپی و این‌جا بچسبان:</p>
-      <input class="inp tok-inp" id="cfToken" placeholder="API Token" autocomplete="off" spellcheck="false">
-    </div>
-  </details>
-
-  <div class="wz-box">
-    <div class="wz-lbl">قدم ۳ — ساخت سرور</div>
-    <div class="wz-row">
-      <input class="inp" id="cfName" dir="ltr" placeholder="نام ورکر (انگلیسی)" style="font-family:ui-monospace,monospace;font-size:13px">
-      <input class="inp" id="cfPip" dir="ltr" placeholder="ProxyIP (اختیاری)" style="font-family:ui-monospace,monospace;font-size:13px">
-    </div>
-    <div class="form-err" id="cfErr"></div>
-    <button class="btn full" id="cfGo">
-      <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6.5 18.5 12 13 17.5"/></svg>
-      ساخت و استقرار سرور
-    </button>
-  </div>
-
-  <div class="wz-log" id="cfLog"></div>
-
-  <div class="wz-res" id="cfRes">
-    <div class="wz-lbl" style="margin-top:12px">لینک ساب (قابل ایمپورت در اپ‌های ساب‌پذیر)</div>
-    <div class="wz-url" id="cfSubUrl"></div>
-    <div class="wz-row">
-      <button class="btn" id="cfCopySub" style="flex:1">کپی لینک ساب</button>
-      <button class="btn ghost" id="cfCopyHost" style="flex:1">کپی آدرس ورکر</button>
-    </div>
-    <p class="cf-desc" id="cfResNote"></p>
-  </div>
-
-  <p class="adm-note">توکن فقط در حافظه‌ی همین صفحه استفاده می‌شود و هیچ‌جا ذخیره نمی‌شود. توکن دریافتی از ورود خودکار حدود یک ساعت اعتبار دارد — برای همین جلسه‌ی ساخت کافی است. پلن رایگان کلودفلر روزانه ۱۰۰,۰۰۰ درخواست به هر Worker می‌دهد. اگر نام ورکر را دوباره با اجرای جدید بسازی، سرور قبلی بازنویسی و UUID جدید می‌شود.</p>
-</section>
-
+<!-- ═══ اشتراک من ═══ -->
 <section class="sheet" id="shAccount" aria-label="اشتراک من">
   <div class="handle"></div>
   <div class="sheet-head">
@@ -661,6 +565,7 @@
   <button class="btn ghost full" id="logout" style="margin-top:12px">خروج از حساب</button>
 </section>
 
+<!-- راهنما -->
 <section class="sheet" id="shHelp" aria-label="راهنما">
   <div class="handle"></div>
   <div class="sheet-head">
@@ -668,12 +573,13 @@
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
   <p class="sheet-sub">سه قدم ساده تا اتصال:</p>
-  <div class="step"><span class="step-n">۱</span><p>در بخش <b>سرورها</b> روی آیکن <b>کپی</b> بزن، یا <b>QR</b> را با دوربین اسکن کن.</p></div>
+  <div class="step"><span class="step-n">۱</span><p>حباب <b>سرور من</b> را بزن؛ یک سرور برایت انتخاب می‌شود. روی آیکن <b>کپی</b> بزن یا <b>QR</b> را اسکن کن.</p></div>
   <div class="step"><span class="step-n">۲</span><p>در برنامه‌ات (v2rayNG، Streisand، NekoBox و…) گزینه‌ی <b>Add from Clipboard</b> یا <b>Scan QR</b> را بزن.</p></div>
-  <div class="step"><span class="step-n">۳</span><p>سرور را انتخاب و وصل شو. عدد پینگِ <b>کمتر</b> یعنی مسیر سریع‌تر.</p></div>
+  <div class="step"><span class="step-n">۳</span><p>سرور را انتخاب و وصل شو. عدد پینگِ <b>کمتر</b> یعنی مسیر سریع‌تر. اگر سرور کند بود، دوباره حباب را بزن تا سرور دیگری بگیری.</p></div>
   <div class="note">حباب «اشتراک من» روزهای باقی‌مانده و کد دسترسی‌ات را نشان می‌دهد. اگر رو به اتمام بود، از مدیر تمدید بخواه.</div>
 </section>
 
+<!-- مودال QR -->
 <div class="qr-wrap" id="qrWrap">
   <div class="qr-card">
     <div class="qr-title" id="qrTitle"></div>
@@ -781,13 +687,6 @@
     }
   }
 
-  const vm = o => 'vmess://' + btoa(JSON.stringify(o));
-  const seedServers = () => [
-    {name:'آلمان · فرانکفورت', cfg:vm({v:'2',ps:'Naron-DE1',add:'cloudflare.com',port:'443',id:'8f2a4c30-1b7e-4d2a-9c3f-6e5b8a1d2f40',aid:'0',scy:'auto',net:'ws',type:'none',host:'cloudflare.com',path:'/naron',tls:'tls'})},
-    {name:'آمریکا · ویرجینیا', cfg:'vless://8f2a4c30-1b7e-4d2a-9c3f-6e5b8a1d2f40@www.google.com:443?encryption=none&security=tls&sni=www.google.com&fp=chrome&type=ws&host=www.google.com&path=%2Fnaron#Naron-US1'},
-    {name:'ترکیه · استانبول', cfg:'trojan://naron-demo@github.com:443?security=tls&sni=github.com&type=tcp#Naron-TR1'},
-    {name:'ژاپن · توکیو (قطع)', cfg:'ss://YWVzLTI1Ni1nY206ZGVtbw==@dead.naron-demo.ir:443#Naron-JP1'}
-  ];
   const seedUsers = () => {
     const l = store.get(LS.users, null);
     if(l) return l;
@@ -805,14 +704,14 @@
   const DB = {
     cloud: !!sb,
     async getServers(){
-      if(!sb) return store.get(LS.srv, seedServers());
+      if(!sb) return store.get(LS.srv, []);
       const {data, error} = await sb.from('servers').select('*').order('created_at', {ascending:false});
       if(error) throw error;
       return (data||[]).map(r=>({id:r.id, name:r.name, cfg:r.cfg}));
     },
     async addServer(name, cfg){
       if(!sb){
-        const l = store.get(LS.srv, seedServers());
+        const l = store.get(LS.srv, []);
         const s = {id:'s'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36), name, cfg};
         l.unshift(s); store.set(LS.srv, l); return s;
       }
@@ -877,23 +776,33 @@
     }
   };
 
-  function ping(host, port){
+  /* ───────── پینگ واقعی: چند تلاش + کمترین زمان ───────── */
+  function pingOnce(url, timeout){
     return new Promise(res=>{
       const t0 = performance.now();
       const c = new AbortController();
-      const to = setTimeout(()=>c.abort(), 4500);
-      fetch(`https://${host}:${port}/`, {mode:'no-cors', cache:'no-store', signal:c.signal})
+      const to = setTimeout(()=>{ c.abort(); res(null) }, timeout);
+      fetch(url, {mode:'no-cors', cache:'no-store', signal:c.signal})
         .then(()=>{ clearTimeout(to); res(Math.round(performance.now()-t0)) })
-        .catch(()=>{
-          clearTimeout(to);
-          const t1 = performance.now(), c2 = new AbortController();
-          const to2 = setTimeout(()=>c2.abort(), 3500);
-          fetch(`http://${host}:${port}/`, {mode:'no-cors', cache:'no-store', signal:c2.signal})
-            .then(()=>{ clearTimeout(to2); res(Math.round(performance.now()-t1)) })
-            .catch(()=>{ clearTimeout(to2); res(null) });
-        });
+        .catch(()=>{ clearTimeout(to); res(null) });
     });
   }
+  async function ping(host, port){
+    let best = null;
+    for(let i=0;i<2;i++){
+      const ms = await pingOnce(`https://${host}:${port}/`, 4000);
+      if(ms!=null && (best==null || ms<best)) best = ms;
+      if(best!=null && best<=250) return best;
+    }
+    if(best!=null) return best;
+    for(let i=0;i<2;i++){
+      const ms = await pingOnce(`http://${host}:${port}/`, 3500);
+      if(ms!=null && (best==null || ms<best)) best = ms;
+      if(best!=null) return best;
+    }
+    return null;
+  }
+
   const lastPing = {};
   function paintPing(btn, id){
     const txt = btn.querySelector('.p-txt');
@@ -914,322 +823,16 @@
     const ms = await ping(host, port);
     lastPing[id] = ms;
     if(btn.isConnected) paintPing(btn, id);
-    if(ms==null) toast('این سرور پاسخ نداد');
+    if(ms==null) toast('این سرور پاسخ نداد — یکی دیگر بگیر');
   }
-
-  /* ───────── کد Worker سرور کلودفلر (VLESS over WS) ───────── */
-  const WORKER_SRC = `import{connect}from'cloudflare:sockets';
-const U='__UUID__';
-const R=U.replace(/-/g,'');
-const P='__PROXYIP__';
-const T=new TextDecoder();
-const cat=(...a)=>{let n=0;a.forEach(x=>n+=x.length);const o=new Uint8Array(n);let i=0;a.forEach(x=>{o.set(x,i);i+=x.length});return o};
-const hp=(h,p)=>(h.includes(':')?'['+h+']':h)+':'+p;
-function d64(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return s}
-function prs(b){
-  if(b.length<25)return null;
-  const ver=b[0];
-  const id=[...b.slice(1,17)].map(x=>x.toString(16).padStart(2,'0')).join('');
-  const ol=b[17];let o=18;
-  if(b.length<o+3)return null;
-  const cmd=b[o],pt=(b[o+1]<<8)|b[o+2];o+=3;
-  const at=b[o++];
-  let ad,hl;
-  if(at===1){if(b.length<o+4)return null;ad=[...b.slice(o,o+4)].join('.');hl=o+4}
-  else if(at===2){if(b.length<o+1)return null;const l=b[o++];if(b.length<o+l)return null;ad=T.decode(b.slice(o,o+l));hl=o+l}
-  else if(at===3){if(b.length<o+16)return null;ad=[...b.slice(o,o+16)].map(x=>x.toString(16).padStart(2,'0')).join(':');hl=o+16}
-  else return{bad:1};
-  return{ver,id,cmd,pt,ad,hl};
-}
-export default{
-  async fetch(req){
-    const u=new URL(req.url),pn=u.pathname;
-    if(pn==='/sub/'+U){
-      const h=u.hostname;
-      const mk=p=>'vless://'+U+'@'+h+':'+p+'?encryption=none&security=tls&sni='+h+'&fp=chrome&type=ws&host='+h+'&path=%2F'+U+'#'+h+'-'+p;
-      return new Response(btoa([443,8443,2053,2083,2087,2096].map(mk).join('\\n')),{headers:{'content-type':'text/plain;charset=utf-8','cache-control':'no-store'}});
-    }
-    if((req.headers.get('Upgrade')||'').toLowerCase()==='websocket'){
-      const e=req.headers.get('sec-websocket-protocol')||'';
-      const pair=new WebSocketPair();
-      const ws=pair[1];ws.accept();
-      wless(ws,e);
-      const hd={};if(e)hd['sec-websocket-protocol']=e;
-      return new Response(null,{status:101,webSocket:pair[0],headers:hd});
-    }
-    return new Response('Naron',{status:200});
-  }
-};
-function wless(ws,early){
-  let buf=early?Uint8Array.from(atob(d64(early)),c=>c.charCodeAt(0)):new Uint8Array(0);
-  let auth=false,sw=null,rd=null;
-  ws.addEventListener('message',async ev=>{
-    const ch=new Uint8Array(ev.data);
-    if(!auth){
-      buf=buf.length?cat(buf,ch):ch;
-      const p=prs(buf);
-      if(!p)return;
-      if(p.bad||p.id!==R||(p.cmd!==1&&p.cmd!==2)){try{ws.close(1008)}catch(_){}return}
-      auth=true;
-      const rest=buf.slice(p.hl);buf=new Uint8Array(0);
-      const hdr=new Uint8Array([p.ver,0]);
-      if(p.cmd===2){dns(p,rest,ws,hdr);return}
-      tcp(p,rest,ws,hdr,x=>{sw=x.sw;rd=x.rd});
-      return;
-    }
-    if(sw){try{await sw.write(ch)}catch(_){}}
-  });
-  ws.addEventListener('close',()=>{try{if(rd)rd.cancel();if(sw)sw.releaseLock()}catch(_){}});
-  ws.addEventListener('error',()=>{try{if(rd)rd.cancel()}catch(_){}});
-}
-async function tcp(p,d0,ws,hdr0,setup){
-  let hdr=hdr0,got=false;
-  const go=async host=>{
-    const s=connect(hp(host,p.pt));
-    const w=s.writable.getWriter();
-    if(d0.length)await w.write(d0);
-    const r=s.readable.getReader();
-    setup({sw:w,rd:r});
-    for(;;){
-      const{done,v}=await r.read();
-      if(done)break;
-      if(!got){got=true;if(hdr){ws.send(cat(hdr,v));hdr=null}else ws.send(v)}
-      else ws.send(v);
-    }
-    return got;
-  };
-  let ok=false;
-  try{ok=await go(p.ad)}catch(_){}
-  if(!ok&&!got&&P&&p.ad!==P){try{ok=await go(P)}catch(_){}}
-  try{ws.close(ok?1000:1001)}catch(_){}
-}
-async function dns(p,pl,ws,hdr){
-  try{
-    const r=await fetch('https://1.1.1.1/dns-query',{method:'POST',headers:{'content-type':'application/dns-message'},body:pl});
-    const a=new Uint8Array(await r.arrayBuffer());
-    ws.send(cat(hdr,new Uint8Array([(a.length>>8)&255,a.length&255]),a));
-  }catch(_){}
-  try{ws.close(1000)}catch(_){}
-}`;
-
-  /* ───────── API کلودفلر ───────── */
-  const CF_API = 'https://api.cloudflare.com/client/v4';
-  async function cfReq(token, path, opts={}){
-    const h = {'Authorization':'Bearer '+token};
-    if(opts.body){ h['Content-Type']='application/json'; opts.body = JSON.stringify(opts.body); }
-    const r = await fetch(CF_API+path, {...opts, headers:h});
-    const j = await r.json().catch(()=>({success:false, errors:[{message:'پاسخ نامعتبر از کلودفلر'}]}));
-    if(!j.success) throw new Error((j.errors && j.errors[0] && j.errors[0].message) || 'خطای کلودفلر');
-    return j.result;
-  }
-  async function cfPutWorker(token, acc, name, code){
-    const fd = new FormData();
-    fd.append('metadata', new Blob([JSON.stringify({main_module:'worker.js', compatibility_date:'2024-09-23'})], {type:'application/json'}));
-    fd.append('worker.js', new Blob([code], {type:'application/javascript+module'}), 'worker.js');
-    const r = await fetch(`${CF_API}/accounts/${acc}/workers/scripts/${name}`, {method:'PUT', headers:{'Authorization':'Bearer '+token}, body:fd});
-    const j = await r.json().catch(()=>null);
-    if(!j || !j.success) throw new Error((j && j.errors && j.errors[0] && j.errors[0].message) || 'بارگذاری Worker ناموفق بود');
-  }
-
-  /* ───────── ورود خودکار (OAuth کلودفلر با PKCE) ─────────
-     از کلاینت رسمی Wrangler استفاده می‌شود؛ کلودفلر اجازه‌ی ثبت
-     OAuth برای اپ‌های شخص ثالث را نمی‌دهد ولی این کلاینت رسمی است. */
-  const CF_OAUTH = {
-    auth:'https://dash.cloudflare.com/oauth2/auth',
-    tok :'https://dash.cloudflare.com/oauth2/token',
-    cid :'54d11594-84e4-41aa-b438-e81b8fa78ee7',          // client رسمی Wrangler
-    red :'http://localhost:8976/oauth/callback',           // آدرس بازگشتِ ثبت‌شده‌ی همین کلاینت
-    scope:'account:read user:read workers:write workers_kv:write workers_routes:write workers_scripts:write workers_tail:read zone:read offline_access'
-  };
-  let cfVerifier = '', cfState = '', cfTok = '';
-
-  const b64u = buf => btoa(String.fromCharCode(...new Uint8Array(buf)))
-    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-
-  async function pkceChallenge(){
-    const rnd = crypto.getRandomValues(new Uint8Array(48));
-    cfVerifier = b64u(rnd);
-    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(cfVerifier));
-    return b64u(digest);
-  }
-
-  $('#cfLogin').addEventListener('click', async ()=>{
-    $('#cfLoginErr').textContent = '';
-    try{
-      cfState = crypto.randomUUID();
-      const challenge = await pkceChallenge();
-      const url = CF_OAUTH.auth
-        + '?response_type=code'
-        + '&client_id=' + encodeURIComponent(CF_OAUTH.cid)
-        + '&redirect_uri=' + encodeURIComponent(CF_OAUTH.red)
-        + '&scope=' + encodeURIComponent(CF_OAUTH.scope)
-        + '&state=' + encodeURIComponent(cfState)
-        + '&code_challenge=' + encodeURIComponent(challenge)
-        + '&code_challenge_method=S256';
-      const w = window.open(url, '_blank');
-      if(!w) $('#cfLoginErr').textContent = 'مرورگر پنجره را مسدود کرد — پاپ‌آپ را اجازه بده و دوباره بزن';
-      else toast('صفحه‌ی کلودفلر باز شد — بعد از Allow، آدرس را کپی کن');
-      $('#cfCode').focus();
-    }catch(e){
-      $('#cfLoginErr').textContent = 'ساخت لینک ورود ناموفق بود — از روش دستی استفاده کن';
-    }
-  });
-
-  $('#cfExchange').addEventListener('click', async ()=>{
-    const err = $('#cfExErr');
-    err.textContent = '';
-    const raw = $('#cfCode').value.trim();
-    if(!raw){ err.textContent = 'کد یا آدرس برگشتی را وارد کن'; return }
-    if(!cfVerifier){ err.textContent = 'اول قدم ۱ را انجام بده (دکمه‌ی ورود)'; return }
-    // از آدرس کامل، کد را بیرون بکش
-    let code = raw;
-    const m = raw.match(/[?&]code=([^&\s]+)/);
-    if(m) code = decodeURIComponent(m[1]);
-    // چک state اگر همراه آدرس آمده
-    const sm = raw.match(/[?&]state=([^&\s]+)/);
-    if(sm && decodeURIComponent(sm[1]) !== cfState){
-      err.textContent = 'این کد مالِ درخواست دیگری است — دوباره قدم ۱ را بزن';
-      return;
-    }
-    const btn = $('#cfExchange'); btn.disabled = true; const old = btn.textContent; btn.textContent = 'در حال دریافت توکن…';
-    try{
-      const r = await fetch(CF_OAUTH.tok, {
-        method:'POST',
-        headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body: new URLSearchParams({
-          grant_type:'authorization_code',
-          code: code,
-          client_id: CF_OAUTH.cid,
-          redirect_uri: CF_OAUTH.red,
-          code_verifier: cfVerifier
-        })
-      });
-      const j = await r.json();
-      if(j.access_token){
-        cfTok = j.access_token;
-        $('#cfTokState').classList.add('on');
-        $('#cfCode').value = '';
-        err.textContent = '';
-        toast('توکن دریافت شد ✓ حالا قدم ۳');
-        $('#cfGo').scrollIntoView({behavior:'smooth', block:'center'});
-      }else{
-        err.textContent = (j.error_description || j.error || 'تبدیل کد ناموفق بود') + ' — از روش دستی استفاده کن';
-      }
-    }catch(e){
-      err.textContent = 'ارتباط با سرور توکن برقرار نشد — از روش دستی استفاده کن';
-    }
-    btn.disabled = false; btn.textContent = old;
-  });
-
-  /* ───────── ویزارد ساخت سرور ───────── */
-  function wlog(t, cls){
-    const box = $('#cfLog'); box.classList.add('on');
-    const d = document.createElement('div');
-    d.className = 'wz-line' + (cls ? ' '+cls : '');
-    d.textContent = t;
-    box.appendChild(d); box.scrollTop = 1e9;
-  }
-  $('#cfName').value = 'naron-' + Math.random().toString(36).slice(2,6);
-
-  let cfBusy = false;
-  async function deployCF(){
-    if(cfBusy) return;
-    const token = cfTok || $('#cfToken').value.trim();
-    const name  = $('#cfName').value.trim().toLowerCase();
-    const pip   = $('#cfPip').value.trim();
-    const err   = $('#cfErr');
-    err.textContent = '';
-    if(!token){ err.textContent = 'اول توکن را بگیر (قدم ۱ و ۲) یا از روش دستی استفاده کن'; return }
-    if(!/^[a-z]([a-z0-9-]{0,30}[a-z0-9])?$/.test(name)){ err.textContent = 'نام ورکر فقط حروف کوچک انگلیسی، عدد و خط تیره'; return }
-
-    const btn = $('#cfGo'); cfBusy = true; btn.disabled = true;
-    const old = btn.textContent; btn.textContent = 'در حال ساخت…';
-    $('#cfLog').innerHTML = ''; $('#cfRes').classList.remove('on');
-
-    try{
-      wlog('بررسی توکن و دریافت اکانت‌ها…','dim');
-      const accounts = await cfReq(token, '/accounts');
-      if(!accounts || !accounts.length) throw new Error('هیچ اکانتی با این توکن پیدا نشد');
-      wlog('اکانت‌ها: ' + faNum(accounts.length), 'ok');
-      let accId = accounts[0].id;
-      const accName = accounts[0].name || '';
-      if(accounts.length > 1) wlog('چند اکانت یافت شد؛ اولی استفاده می‌شود: ' + accName, 'dim');
-      else wlog('اکانت: ' + accName, 'dim');
-
-      const uuid = crypto.randomUUID();
-      const code = WORKER_SRC.replace('__UUID__', uuid).replace('__PROXYIP__', pip || 'proxyip.fxxk.dev');
-
-      wlog('بارگذاری Worker «'+name+'»…','dim');
-      await cfPutWorker(token, accId, name, code);
-      wlog('Worker آپلود شد','ok');
-
-      wlog('فعال‌سازی دامنه‌ی workers.dev…','dim');
-      let sub = '';
-      try{
-        const r = await cfReq(token, `/accounts/${accId}/workers/subdomain`);
-        sub = (r && r.subdomain) || '';
-        await cfReq(token, `/accounts/${accId}/workers/scripts/${name}/subdomain`, {method:'POST', body:{enabled:true, previews_enabled:false}});
-        wlog('دامنه فعال شد: ' + name + '.' + sub, 'ok');
-      }catch(e){
-        wlog('هشدار: فعال‌سازی workers.dev ناموفق — ' + e.message, 'err');
-      }
-      if(!sub) throw new Error('دامنه‌ی workers.dev اکانت پیدا نشد');
-
-      const host = name + '.' + sub;
-      const url  = 'https://' + host;
-      const subUrl = url + '/sub/' + uuid;
-
-      wlog('بررسی زنده‌بودن…','dim');
-      let live = false;
-      try{
-        const r = await fetch(subUrl, {cache:'no-store'});
-        if(r.ok) live = true;
-      }catch(e){}
-      wlog(live ? 'سرور زنده و پاسخ‌گو است' : 'Worker تازه ساخته شده؛ اگر پاسخ نداد چند لحظه بعد در «سرورها» پینگ بزن', live ? 'ok' : 'dim');
-
-      wlog('افزودن کانفیگ‌ها به لیست سرورها…','dim');
-      const ports = [443, 8443, 2053];
-      for(const p of ports){
-        const label = encodeURIComponent('CF · ' + name + ' · ' + p);
-        const link = 'vless://'+uuid+'@'+host+':'+p+'?encryption=none&security=tls&sni='+host+'&fp=chrome&type=ws&host='+host+'&path='+encodeURIComponent('/'+uuid)+'#'+label;
-        try{ await DB.addServer('کلودفلر · ' + name + ' · ' + faNum(p), link) }catch(e){}
-      }
-      await refreshServers();
-
-      $('#cfSubUrl').textContent = subUrl;
-      $('#cfCopySub').dataset.v = subUrl;
-      $('#cfCopyHost').dataset.v = url;
-      $('#cfResNote').textContent = faNum(ports.length) + ' کانفیگ (پورت‌های ۴۴۳، ۸۴۴۳ و ۲۰۵۳) با نام «کلودفلر · ' + name + '» به سرورها اضافه شد و برای همه‌ی کاربران قابل مشاهده است.';
-      $('#cfRes').classList.add('on');
-      wlog('تمام شد — سرور آماده است','ok');
-      toast('سرور کلودفلر ساخته شد');
-    }catch(e){
-      wlog('خطا: ' + e.message, 'err');
-    }
-    cfBusy = false; btn.disabled = false; btn.textContent = old;
-  }
-  $('#cfGo').addEventListener('click', deployCF);
-  $('#cfName').addEventListener('input',  ()=>{ $('#cfErr').textContent='' });
-  $('#cfCopySub').addEventListener('click', e=> copyTxt(e.currentTarget.dataset.v||'').then(ok=>toast(ok?'کپی شد':'کپی ناموفق بود')));
-  $('#cfCopyHost').addEventListener('click', e=> copyTxt(e.currentTarget.dataset.v||'').then(ok=>toast(ok?'کپی شد':'کپی ناموفق بود')));
-  $('#cfOpen').addEventListener('click', ()=>{
-    // ریست کامل ویزارد برای هر جلسه‌ی جدید
-    cfTok = ''; cfVerifier = ''; cfState = '';
-    $('#cfCode').value = ''; $('#cfToken').value = '';
-    $('#cfTokState').classList.remove('on');
-    $('#cfLoginErr').textContent = ''; $('#cfExErr').textContent = ''; $('#cfErr').textContent = '';
-    $('#cfLog').classList.remove('on'); $('#cfLog').innerHTML = '';
-    $('#cfRes').classList.remove('on');
-    $('#cfManualBox').open = false;
-    openSheet($('#shWizard'));
-  });
 
   /* ───────── آیکن‌ها ───────── */
   const I = {
     copy:'<svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>',
     qr:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><path d="M14 14.5h2.5M14 18h2.5M18 14v6M20.5 14v2.5"/></svg>',
     trash:'<svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V5.5A1.5 1.5 0 0 1 11.5 4h1A1.5 1.5 0 0 1 14 5.5V7M7.5 7l.9 12.1A1.9 1.9 0 0 0 10.3 21h3.4a1.9 1.9 0 0 0 1.9-1.9L16.5 7M10.5 11v6M13.5 11v6"/></svg>',
-    renew:'<svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M4 10.5h16M12 13.5v4.5M9.75 15.75h4.5"/></svg>'
+    renew:'<svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M4 10.5h16M12 13.5v4.5M9.75 15.75h4.5"/></svg>',
+    dice:'<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V8h-4.5"/></svg>'
   };
   const BICONS = {
     srv:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="6.5" rx="2"/><rect x="4" y="13.5" width="16" height="6.5" rx="2"/><path d="M7.5 7.2h.01M7.5 16.8h.01"/></svg>',
@@ -1240,29 +843,49 @@ async function dns(p,pl,ws,hdr){
 
   const showLoading = el => el.innerHTML = '<div class="loading">در حال دریافت از سرور…</div>';
 
-  function renderServers(){
+  /* ───────── سرور تصادفی ───────── */
+  let currentRandomId = null;
+
+  function renderRandomServer(opts={}){
     const box = $('#srvList');
     $('#srvCount').textContent = faNum(servers.length) + ' سرور';
     if(!servers.length){
-      box.innerHTML = '<div class="empty">هنوز سروری ثبت نشده.<br>از بخش «مدیریت» اولین سرور را اضافه کن.</div>';
+      currentRandomId = null;
+      box.innerHTML = '<div class="empty">هنوز سروری ثبت نشده.<br>مدیر از بخش «مدیریت» سرور اضافه می‌کند.</div>';
       return;
     }
-    box.innerHTML = '';
-    servers.forEach((s,i)=>{
-      const pr = protoOf(s.cfg), chip = pr ? PROTOS[pr] : ['نامشخص','ss'];
-      const {host, port} = parseCfg(s.cfg);
-      const el = document.createElement('article');
-      el.className = 'srv'; el.style.setProperty('--i', i);
-      el.innerHTML = `
+    let s = currentRandomId ? servers.find(x=>x.id===currentRandomId) : null;
+    const fresh = opts.fresh || !s;
+    if(fresh){
+      if(servers.length === 1){
+        s = servers[0];
+      }else{
+        do{ s = servers[Math.floor(Math.random()*servers.length)] }
+        while(s.id === currentRandomId);
+      }
+      currentRandomId = s.id;
+    }
+    const pr = protoOf(s.cfg), chip = pr ? PROTOS[pr] : ['نامشخص','ss'];
+    const {host, port} = parseCfg(s.cfg);
+    box.innerHTML = `
+      <div class="rand-hint">این سرور برای تو انتخاب شد</div>
+      <article class="srv" style="--i:0">
         <div class="srv-top"><span class="srv-name">${esc(s.name)}</span><span class="chip ${chip[1]}">${chip[0]}</span></div>
         <div class="srv-host">${host ? esc(host)+':'+port : '— آدرس قابل خواندن نیست —'}</div>
         <div class="srv-actions">
           <button class="ping" data-id="${s.id}"><span class="p-dot"></span><span class="p-txt" dir="ltr">تست پینگ</span></button>
           <button class="act do-copy" data-id="${s.id}" aria-label="کپی کانفیگ">${I.copy}</button>
           <button class="act do-qr"   data-id="${s.id}" aria-label="ساخت QR">${I.qr}</button>
-        </div>`;
-      box.appendChild(el);
-      paintPing(el.querySelector('.ping'), s.id);
+        </div>
+      </article>
+      <button class="btn ghost full reroll" id="reRoll">${I.dice} یکی دیگه نشونم بده</button>`;
+    const pb = box.querySelector('.ping');
+    paintPing(pb, s.id);
+    if(fresh || !(s.id in lastPing)) runPing(pb, s.id);
+    box.querySelector('#reRoll').addEventListener('click', ()=>{
+      currentRandomId = null;
+      renderRandomServer({fresh:true});
+      toast('یک سرور دیگر انتخاب شد');
     });
   }
 
@@ -1279,6 +902,7 @@ async function dns(p,pl,ws,hdr){
     if(p && !p.classList.contains('busy')) runPing(p, p.dataset.id);
   });
 
+  /* ───────── مودال QR ───────── */
   const qrWrap = $('#qrWrap');
   function openQr(id){
     const s = servers.find(x=>x.id===id); if(!s) return;
@@ -1305,6 +929,7 @@ async function dns(p,pl,ws,hdr){
   $('#qrClose').addEventListener('click', ()=>qrWrap.classList.remove('open'));
   qrWrap.addEventListener('click', e=>{ if(e.target === qrWrap) qrWrap.classList.remove('open') });
 
+  /* ───────── شیت‌ها ───────── */
   const bd = $('#bd');
   function openSheet(el){
     $$('.sheet').forEach(s=>s.classList.toggle('open', s===el));
@@ -1322,7 +947,10 @@ async function dns(p,pl,ws,hdr){
   async function refreshServers(){
     try{ servers = await DB.getServers() }
     catch(e){ toast('خطا در دریافت سرورها') }
-    if($('#shServers').classList.contains('open')) renderServers();
+    if($('#shServers').classList.contains('open')){
+      if(currentRandomId && servers.some(x=>x.id===currentRandomId)) renderRandomServer();
+      else renderRandomServer({fresh:true});
+    }
     if($('#shAdmin').classList.contains('open')) renderAdmServers();
   }
   async function refreshUsers(){
@@ -1345,6 +973,7 @@ async function dns(p,pl,ws,hdr){
     if(badge) badge.outerHTML = badgeHtml(u);
   }
 
+  /* ───────── مدیریت: کاربران ───────── */
   function genCode(){
     let c;
     do{ c = String(Math.floor(Math.random()*10000)).padStart(4,'0') }
@@ -1473,6 +1102,7 @@ async function dns(p,pl,ws,hdr){
     $('#'+id).addEventListener('input', ()=>{ $('#uErr').textContent=''; $('#'+id).classList.remove('bad') })
   );
 
+  /* ───────── مدیریت: سرورها ───────── */
   function renderAdmServers(){
     $('#admCount').textContent = faNum(servers.length) + ' مورد';
     const box = $('#admList');
@@ -1530,13 +1160,14 @@ async function dns(p,pl,ws,hdr){
       await DB.addServer(name || 'سرور بدون نام', cfg);
       await refreshServers();
       $('#nameInp').value=''; $('#cfgInp').value=''; $('#protoHint').textContent='';
-      toast('سرور اضافه شد · برای همه‌ی کاربران قابل مشاهده است');
+      toast('سرور به استخر اضافه شد');
     }catch(e){ err.textContent = 'ثبت ناموفق بود — اتصال را چک کن' }
     btn.disabled = false; btn.innerHTML = old;
   }
   $('#addBtn').addEventListener('click', addServer);
   $('#nameInp').addEventListener('keydown', e=>{ if(e.key==='Enter') addServer() });
 
+  /* ───────── اشتراک من ───────── */
   const ACC_C = 2*Math.PI*52;
   function renderAccount(){
     if(!currentUser || currentUser.role!=='user') return;
@@ -1567,6 +1198,7 @@ async function dns(p,pl,ws,hdr){
       copyTxt(currentUser.user.code).then(ok=>toast(ok?'کد کپی شد':'کپی ناموفق بود'));
   });
 
+  /* ───────── حباب‌ها ───────── */
   function placeBubbles(){
     const w = Math.min(innerWidth, 560);
     const sx = Math.min(185, Math.max(118, w/2 - 46));
@@ -1587,8 +1219,8 @@ async function dns(p,pl,ws,hdr){
 
   function renderBubbles(role){
     const defs = role==='admin'
-      ? [{t:'srv',l:'سرورها'},{t:'adm',l:'مدیریت'},{t:'help',l:'راهنما'}]
-      : [{t:'srv',l:'سرورها'},{t:'acc',l:'اشتراک من'},{t:'help',l:'راهنما'}];
+      ? [{t:'srv',l:'سرور من'},{t:'adm',l:'مدیریت'},{t:'help',l:'راهنما'}]
+      : [{t:'srv',l:'سرور من'},{t:'acc',l:'اشتراک من'},{t:'help',l:'راهنما'}];
     const box = $('#bubbles'); box.innerHTML = '';
     defs.forEach((d,i)=>{
       const b = document.createElement('button');
@@ -1610,9 +1242,9 @@ async function dns(p,pl,ws,hdr){
     );
     const t = b.dataset.target;
     if(t==='srv'){
+      currentRandomId = null;
       showLoading($('#srvList')); $('#srvCount').textContent = '…';
       openSheet($('#shServers'));
-      if(servers.length) renderServers();
       refreshServers();
     }
     else if(t==='adm'){
@@ -1627,6 +1259,7 @@ async function dns(p,pl,ws,hdr){
     else openSheet($('#shHelp'));
   }
 
+  /* ───────── جریان ورود ───────── */
   const orb = $('#orb'),
         digits = $$('.code'),
         row = $('#codeRow'),
@@ -1768,6 +1401,7 @@ async function dns(p,pl,ws,hdr){
     if(e.key==='Enter' || e.key===' '){ e.preventDefault(); orbTap() }
   });
 
+  /* ───────── نشست و شروع ───────── */
   function enterAs(role, user){
     currentUser = role==='admin' ? {role:'admin'} : {role:'user', user};
     body.classList.remove('st-intro','st-input','st-success','bubbles-on');
