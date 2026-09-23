@@ -27,7 +27,6 @@
   }
   ::selection{background:rgba(192,138,46,.3)}
 
-  /* ───────── صحنه اصلی / ورود ───────── */
   .stage{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 16px 96px}
   .field{position:relative;width:100%;max-width:560px;height:min(440px,calc(100dvh - 280px));min-height:340px}
 
@@ -111,7 +110,6 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   .ring text{font-family:'Vazirmatn';font-size:12.5px;letter-spacing:2.5px;fill:rgba(42,33,24,.5)}
 
-  /* ───────── حباب‌ها ───────── */
   #bubbles{position:absolute;inset:0;pointer-events:none;z-index:4}
   .bubble{
     position:absolute;left:50%;top:50%;width:70px;height:70px;margin:-35px 0 0 -35px;
@@ -144,7 +142,6 @@
     box-shadow:0 4px 10px rgba(42,33,24,.25);
   }
 
-  /* ───────── پیام / فلش ───────── */
   .beneath{margin-top:10px;width:100%;max-width:560px;text-align:center}
   .flash-hint{
     height:96px;display:flex;align-items:center;justify-content:center;gap:8px;
@@ -166,7 +163,6 @@
   .msg.err{color:var(--err)}
   .msg.ok{color:var(--green)}
 
-  /* ───────── شیت‌ها ───────── */
   .backdrop{
     position:fixed;inset:0;z-index:40;background:rgba(42,33,24,.42);
     backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
@@ -583,19 +579,17 @@
   const body = document.body;
 
   /* ═══════════════════════════════════════════════
-     تنظیمات اتصال به Supabase
-     ✅ URL پروژه‌ی تو تنظیم شده
-     ⚠️ فقط کلید anon را بین دو کوتیشن SUPABASE_KEY بگذار
+     اتصال به Supabase — آماده و تنظیم‌شده ✅
   ═══════════════════════════════════════════════ */
-  const SUPABASE_URL = 'https://iecqffkxrmpwpwtuwwopop.supabase.co';
-  const SUPABASE_KEY = ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllY3FmZmtycG1wd3R1d3dvcG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwNjAyNjEsImV4cCI6MjEwNTYzNjI2MX0.zoMGe71h8gB6WYYmHcZuBCWYTFnWOBylC58CBp3bPsM '
+  const SUPABASE_URL = 'https://iecqffkrpmpwtuwwopop.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllY3FmZmtycG1wd3R1d3dvcG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwNjAyNjEsImV4cCI6MjEwNTYzNjI2MX0.zoMGe71h8gB6WYYmHcZuBCWYTFnWOBylC58CBp3bPsM';
 
   const DAY = 86400000;
   const ADMIN_CODE = '0066';
   const RING_DEFAULT = 'نارون · مینی‌اپ سرور · نارون · مینی‌اپ سرور · نارون · مینی‌اپ سرور · ';
   const LS = {srv:'naron.servers', users:'naron.users', sess:'naron.session'};
 
-  const CONFIGURED = /^https:\/\/.+\.supabase\.co$/.test(SUPABASE_URL) && !SUPABASE_KEY.includes('YOUR') && !SUPABASE_KEY.includes('اینجا');
+  const CONFIGURED = /^https:\/\/.+\.supabase\.co$/.test(SUPABASE_URL) && SUPABASE_KEY.startsWith('eyJ');
   const sb = (CONFIGURED && window.supabase) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
   const store = {
@@ -1214,9 +1208,7 @@
         ringText = $('#ringText');
 
   function updateHint(){
-    testCode.textContent = DB.cloud
-      ? 'مدیر: ۰۰۶۶'
-      : 'مدیر: ۰۰۶۶ · کاربر: ۷۵۳۱ · منقضی: ۲۰۴۸';
+    testCode.textContent = DB.cloud ? 'مدیر: ۰۰۶۶' : 'مدیر: ۰۰۶۶ · کاربر: ۷۵۳۱';
   }
 
   function arrowDraw(){
@@ -1405,7 +1397,7 @@
     $('#cloudBadge').innerHTML = '<i></i>' + (DB.cloud ? 'اتصال ابری فعال' : 'حالت دمو · محلی');
     $('#admNote').innerHTML = DB.cloud
       ? 'داده‌ها در Supabase ذخیره می‌شوند و برای همه‌ی کاربران یکسان است. کد مدیر: <b dir="ltr">۰۰۶۶</b>'
-      : 'حالت دمو: داده‌ها فقط روی همین دستگاه ذخیره می‌شوند. برای اتصال به ابر، کلید anon را در خط SUPABASE_KEY وارد کن. کد مدیر: <b dir="ltr">۰۰۶۶</b>';
+      : 'حالت دمو: داده‌ها فقط روی همین دستگاه ذخیره می‌شوند.';
     if(CONFIGURED && !sb) toast('کتابخانه‌ی ابر بارگیری نشد — حالت محلی فعال شد');
     await Promise.allSettled([refreshServers(), refreshUsers()]);
     $('#uCode').value = genCode();
