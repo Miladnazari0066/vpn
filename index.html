@@ -15,11 +15,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
-  body{
-    background:var(--bg); color:var(--ink);
-    font-family:'Vazirmatn',sans-serif; overflow-x:hidden;
-    touch-action:manipulation;
-  }
+  body{background:var(--bg); color:var(--ink); font-family:'Vazirmatn',sans-serif; overflow-x:hidden; touch-action:manipulation}
   body.sheet-open{overflow:hidden}
   body::after{
     content:''; position:fixed; inset:0; pointer-events:none; opacity:.05; z-index:99;
@@ -38,18 +34,13 @@
   body:not(.st-input) .orb-pos:hover{transform:translate(-50%,-50%) scale(1.035)}
   .orb-pos:focus-visible{outline:2px solid rgba(150,160,255,.8);outline-offset:9px}
   .orb-pos.shake{animation:shake .5s ease}
-  @keyframes shake{
-    20%,60%{transform:translate(calc(-50% - 8px),-50%)}
-    40%,80%{transform:translate(calc(-50% + 8px),-50%)}
-  }
+  @keyframes shake{20%,60%{transform:translate(calc(-50% - 8px),-50%)}40%,80%{transform:translate(calc(-50% + 8px),-50%)}}
   .st-intro .orb-pos{animation:orbIn .85s cubic-bezier(.3,1.45,.45,1) backwards}
   @keyframes orbIn{from{opacity:0;transform:translate(-50%,-50%) scale(.45)}}
 
-  /* ── گوی بلوری درخشان ── */
   .orb{
     position:relative; display:flex; align-items:center; justify-content:center;
-    width:148px; height:148px; border-radius:50%;
-    border:0;
+    width:148px; height:148px; border-radius:50%; border:0;
     background:
       radial-gradient(circle at 30% 24%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 24%),
       radial-gradient(circle at 78% 84%, rgba(168,140,255,.55) 0%, rgba(168,140,255,0) 42%),
@@ -63,46 +54,34 @@
       0 26px 50px -18px rgba(58,66,150,.5),
       0 8px 20px rgba(80,90,180,.28);
     animation:float 4.6s ease-in-out infinite;
-    transition:
-      width .55s cubic-bezier(.6,.05,.25,1), height .55s cubic-bezier(.6,.05,.25,1),
-      border-radius .55s cubic-bezier(.6,.05,.25,1),
-      box-shadow .45s, border-color .45s, background-color .45s;
+    transition:width .55s cubic-bezier(.6,.05,.25,1), height .55s cubic-bezier(.6,.05,.25,1),
+      border-radius .55s cubic-bezier(.6,.05,.25,1), box-shadow .45s, background-color .45s;
   }
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-
-  /* رینگ شیشه‌ای و انعکاس لبه */
   .orb::before{
     content:''; position:absolute; inset:4.5%; border-radius:50%;
     background:
       radial-gradient(circle at 50% 118%, rgba(255,255,255,.65) 0%, rgba(255,255,255,0) 38%),
       radial-gradient(circle at 50% -18%, rgba(255,255,255,.4) 0%, rgba(255,255,255,0) 30%);
-    pointer-events:none; opacity:1; transition:opacity .4s;
+    pointer-events:none; transition:opacity .4s;
   }
   .orb::after{
     content:''; position:absolute; inset:-9px; border-radius:50%;
     border:1.5px solid rgba(150,160,255,.6);
     box-shadow:0 0 18px rgba(140,150,255,.35), inset 0 0 14px rgba(140,150,255,.18);
-    pointer-events:none;
-    animation:ringPulse 3.2s ease-in-out infinite;
+    pointer-events:none; animation:ringPulse 3.2s ease-in-out infinite;
   }
   .st-input .orb{
     width:min(268px,82vw); height:108px; border-radius:30px; animation:none;
-    background:var(--card);
-    border:1px solid rgba(42,33,24,.08);
+    background:var(--card); border:1px solid rgba(42,33,24,.08);
     box-shadow:0 24px 48px -20px rgba(42,33,24,.28), 0 4px 12px rgba(42,33,24,.06);
   }
   .st-input .orb::before{opacity:0}
   .st-input .orb::after{border-radius:36px}
   .st-success .orb::after{border-color:rgba(63,125,88,.65);box-shadow:0 0 18px rgba(63,125,88,.3), inset 0 0 14px rgba(63,125,88,.15)}
-  @keyframes ringPulse{
-    0%,100%{transform:scale(1);opacity:.8}
-    50%{transform:scale(1.06);opacity:.35}
-  }
+  @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.06);opacity:.35}}
 
-  .orb-logo{
-    position:absolute; inset:0; display:grid; place-items:center;
-    transition:transform .4s, opacity .3s; color:#fff;
-  }
+  .orb-logo{position:absolute; inset:0; display:grid; place-items:center; transition:transform .4s, opacity .3s; color:#fff}
   .st-intro .orb-logo{animation:logoPop .8s cubic-bezier(.34,1.5,.5,1) .1s backwards}
   .st-input .orb-logo, .st-success .orb-logo{opacity:0;transform:scale(.4)}
   .st-ready .orb-logo{animation:logoPop .7s cubic-bezier(.34,1.5,.5,1) .1s both}
@@ -112,10 +91,7 @@
     filter:drop-shadow(0 0 9px rgba(255,255,255,.95)) drop-shadow(0 0 22px rgba(255,255,255,.45));
     animation:twinkle 3.4s ease-in-out infinite;
   }
-  @keyframes twinkle{
-    0%,100%{transform:scale(1);opacity:1}
-    50%{transform:scale(1.1);opacity:.9}
-  }
+  @keyframes twinkle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.9}}
 
   .orb-input{
     position:absolute; inset:0; display:flex; flex-direction:column;
@@ -163,19 +139,13 @@
     opacity:0;pointer-events:none;transform:translate(0,0) scale(.15);
     transition:transform .65s cubic-bezier(.2,1.35,.4,1), opacity .25s;
   }
-  body.bubbles-on .bubble{
-    opacity:1;pointer-events:auto;
-    transform:translate(var(--tx),var(--ty)) scale(1);
-    transition-delay:calc(var(--i)*80ms);
-  }
+  body.bubbles-on .bubble{opacity:1;pointer-events:auto;transform:translate(var(--tx),var(--ty)) scale(1);transition-delay:calc(var(--i)*80ms)}
   .b-in{display:flex;flex-direction:column;align-items:center;gap:7px;animation:bob 4.4s ease-in-out infinite;animation-delay:calc(var(--i)*-.9s)}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
   .b-circle{
-    position:relative;
-    width:62px;height:62px;border-radius:50%;background:var(--card);
+    position:relative; width:62px;height:62px;border-radius:50%;background:var(--card);
     border:1px solid rgba(42,33,24,.09);display:grid;place-items:center;color:var(--ink);
-    box-shadow:0 14px 26px -12px rgba(42,33,24,.3);
-    transition:box-shadow .25s,color .25s;
+    box-shadow:0 14px 26px -12px rgba(42,33,24,.3); transition:box-shadow .25s,color .25s;
   }
   .bubble:hover .b-circle{color:var(--green);box-shadow:0 18px 32px -12px rgba(42,33,24,.42)}
   .b-circle svg{width:26px;height:26px;overflow:visible}
@@ -191,8 +161,7 @@
   .beneath{margin-top:10px;width:100%;max-width:560px;text-align:center}
   .flash-hint{
     height:96px;display:flex;align-items:center;justify-content:center;gap:8px;
-    opacity:0;visibility:hidden;pointer-events:none;
-    transition:opacity .5s, visibility 0s .5s;
+    opacity:0;visibility:hidden;pointer-events:none; transition:opacity .5s, visibility 0s .5s;
   }
   .st-intro .flash-hint{opacity:1;visibility:visible;transition-delay:1s,0s}
   .fh-text{font:400 20px/2.3 'Noto Nastaliq Urdu',serif;text-align:right;color:var(--ink);padding-top:14px}
@@ -201,10 +170,7 @@
   .arrow-head{opacity:0;transition:opacity .35s ease .8s}
   .st-intro .arrow-head{opacity:1}
 
-  .msg{
-    font:400 20px/2.15 'Noto Nastaliq Urdu',serif;min-height:88px;padding-top:8px;
-    opacity:0;transform:translateY(8px);transition:.45s;
-  }
+  .msg{font:400 20px/2.15 'Noto Nastaliq Urdu',serif;min-height:88px;padding-top:8px;opacity:0;transform:translateY(8px);transition:.45s}
   .msg.show{opacity:1;transform:none}
   .msg.err{color:var(--err)}
   .msg.ok{color:var(--green)}
@@ -219,7 +185,7 @@
     position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--bg);
     border-radius:26px 26px 0 0;
     padding:8px 20px calc(22px + env(safe-area-inset-bottom));
-    max-height:86dvh;overflow-y:auto;
+    max-height:88dvh;overflow-y:auto;
     transform:translateY(105%);transition:transform .45s cubic-bezier(.3,1,.3,1);
     box-shadow:0 -18px 50px rgba(42,33,24,.2);
   }
@@ -228,10 +194,7 @@
   .sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .sheet-title{font:600 20px/2 'Noto Nastaliq Urdu',serif}
   .count{font-size:11px;color:var(--sub);border:1px solid rgba(42,33,24,.18);border-radius:99px;padding:3px 10px;white-space:nowrap}
-  .x{
-    width:36px;height:36px;border-radius:12px;border:1px solid rgba(42,33,24,.14);
-    background:none;color:var(--sub);display:grid;place-items:center;cursor:pointer;transition:.2s;
-  }
+  .x{width:36px;height:36px;border-radius:12px;border:1px solid rgba(42,33,24,.14);background:none;color:var(--sub);display:grid;place-items:center;cursor:pointer;transition:.2s}
   .x:hover{color:var(--ink);border-color:rgba(42,33,24,.3)}
   .x svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
   .sheet-sub{font-size:12px;color:var(--sub);line-height:1.9;margin:2px 0 16px}
@@ -239,10 +202,7 @@
   .loading{text-align:center;color:var(--sub);font-size:13px;padding:30px 0;animation:blink 1.2s ease infinite}
   @keyframes blink{50%{opacity:.35}}
 
-  .rand-hint{
-    text-align:center;font:400 15px/2.2 'Noto Nastaliq Urdu',serif;
-    color:var(--sub);margin:2px 0 10px;
-  }
+  .rand-hint{text-align:center;font:400 15px/2.2 'Noto Nastaliq Urdu',serif;color:var(--sub);margin:2px 0 10px}
   .srv{
     background:var(--card);border:1px solid rgba(42,33,24,.08);border-radius:18px;
     padding:14px 16px;margin-bottom:10px;box-shadow:0 6px 16px -10px rgba(42,33,24,.15);
@@ -257,10 +217,10 @@
   .chip.tr{color:var(--ink);border-color:rgba(42,33,24,.35)}
   .chip.ss{color:var(--sub);border-color:rgba(138,127,110,.55)}
   .chip.sb{color:#5B7BA6;border-color:rgba(91,123,166,.55);background:rgba(91,123,166,.06)}
-  .chip.d-ok,.chip.d-warn,.chip.d-bad{direction:rtl;font-size:10.5px}
-  .chip.d-ok{color:var(--green);border-color:rgba(63,125,88,.5);background:var(--green-soft)}
-  .chip.d-warn{color:var(--amber);border-color:rgba(192,138,46,.5);background:rgba(192,138,46,.08)}
-  .chip.d-bad{color:var(--err);border-color:rgba(181,80,47,.4);background:rgba(181,80,47,.07)}
+  .chip.hy,.chip.tu{color:#7A5AA6;border-color:rgba(122,90,166,.5)}
+  .chip.d-ok{color:var(--green);border-color:rgba(63,125,88,.5);background:var(--green-soft);direction:rtl;font-size:10.5px}
+  .chip.d-warn{color:var(--amber);border-color:rgba(192,138,46,.5);background:rgba(192,138,46,.08);direction:rtl;font-size:10.5px}
+  .chip.d-bad{color:var(--err);border-color:rgba(181,80,47,.4);background:rgba(181,80,47,.07);direction:rtl;font-size:10.5px}
   .srv-host{
     direction:ltr;text-align:left;font:400 11px ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--sub);margin:7px 0 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
@@ -289,12 +249,9 @@
   }
   .act:hover{border-color:var(--amber);color:var(--amber)}
   .act svg,.del svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  .empty{
-    border:1.5px dashed rgba(42,33,24,.22);border-radius:18px;padding:28px 16px;
-    text-align:center;color:var(--sub);font-size:13px;line-height:2.1;
-  }
+  .empty{border:1.5px dashed rgba(42,33,24,.22);border-radius:18px;padding:28px 16px;text-align:center;color:var(--sub);font-size:13px;line-height:2.1}
 
-  /* ── لیست کانفیگ‌های ساب ── */
+  /* ── ساب: لیست کانفیگ‌ها ── */
   .sub-pick{border-top:1px dashed rgba(42,33,24,.15);margin-top:12px;padding-top:12px}
   .sub-pick-lbl{font:600 11px 'Vazirmatn';color:var(--sub);margin-bottom:8px;display:flex;align-items:center;gap:6px}
   .sub-pick-lbl svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
@@ -312,6 +269,42 @@
   .cfg-row .ping{min-width:82px;padding:6px 10px;font-size:11px}
   .cfg-row .act{width:32px;height:32px;border-radius:10px;flex:none}
   .cfg-row .act svg{width:15px;height:15px}
+
+  /* ── ایمپورت مستقیم به کلاینت‌ها ── */
+  .imp-wrap{border-top:1px dashed rgba(42,33,24,.15);margin-top:12px;padding-top:12px}
+  .imp-lbl{font:600 11px 'Vazirmatn';color:var(--sub);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .plat-chip{font:600 10px 'Vazirmatn';color:#5B7BA6;border:1px solid rgba(91,123,166,.5);background:rgba(91,123,166,.07);border-radius:99px;padding:3px 10px}
+  .imp-row{display:flex;flex-wrap:wrap;gap:7px}
+  .imp-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--card);border:1px solid rgba(42,33,24,.16);border-radius:11px;
+    padding:9px 13px;font:600 12px 'Vazirmatn';color:var(--ink);cursor:pointer;transition:.2s;
+  }
+  .imp-btn:hover{border-color:var(--amber);color:var(--amber)}
+  .imp-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+
+  /* ── گزارش دریافت ساب ── */
+  .attempts{border:1px dashed rgba(42,33,24,.2);border-radius:12px;padding:9px 12px;margin:8px 0;background:var(--card)}
+  .at-row{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--sub);padding:3px 0}
+  .at-row i{width:8px;height:8px;border-radius:50%;flex:none;background:rgba(42,33,24,.2)}
+  .at-row.run i{background:var(--amber);animation:pulse 1s ease infinite}
+  .at-row.ok i{background:var(--green)}
+  .at-row.no i{background:var(--err)}
+  .at-row b{color:var(--ink);font-weight:600}
+  .open-sub{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    text-decoration:none;margin-bottom:8px;width:100%;
+    border:1px solid rgba(42,33,24,.22);border-radius:13px;background:var(--card);
+    font:600 13.5px 'Vazirmatn';color:var(--ink);padding:11px 18px;
+  }
+  details.setup{border:1px dashed rgba(192,138,46,.5);border-radius:14px;background:rgba(192,138,46,.06);padding:11px 14px;margin:8px 0}
+  details.setup summary{cursor:pointer;font:600 12px 'Vazirmatn';color:#7A5A1E;list-style:none}
+  details.setup summary::-webkit-details-marker{display:none}
+  details.setup p{font-size:11.5px;line-height:2;color:#7A5A1E;margin:8px 0 6px}
+  details.setup pre{
+    direction:ltr;text-align:left;background:#2A2118;color:#F5F0E6;border-radius:10px;
+    padding:10px 12px;font:400 10px ui-monospace,monospace;overflow-x:auto;line-height:1.8;white-space:pre;
+  }
 
   .adm-sec{margin-bottom:22px}
   .adm-label{font:600 12.5px 'Vazirmatn';color:var(--sub);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -354,11 +347,7 @@
   .u-line1{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .u-line2{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px}
   .u-name{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .u-code{
-    font:700 14px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:3px;
-    background:rgba(42,33,24,.04);border:1px dashed rgba(42,33,24,.28);
-    border-radius:9px;padding:4px 10px;color:var(--ink);
-  }
+  .u-code{font:700 14px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:3px;background:rgba(42,33,24,.04);border:1px dashed rgba(42,33,24,.28);border-radius:9px;padding:4px 10px;color:var(--ink)}
   .u-actions{display:flex;gap:6px}
   .u-actions .act{width:36px;height:36px;border-radius:11px}
   .u-meta{font-size:10.5px;color:var(--sub);margin-top:7px}
@@ -372,11 +361,7 @@
   }
   .sheet.open .adm-row{animation:rise .4s both;animation-delay:calc(var(--i)*40ms)}
   .adm-row .srv-name{flex:1;font-size:13px}
-  .del{
-    min-width:36px;height:36px;border-radius:11px;border:1px solid rgba(42,33,24,.15);
-    background:none;color:var(--sub);display:grid;place-items:center;cursor:pointer;
-    transition:.2s;font:600 11px 'Vazirmatn';padding:0 8px;
-  }
+  .del{min-width:36px;height:36px;border-radius:11px;border:1px solid rgba(42,33,24,.15);background:none;color:var(--sub);display:grid;place-items:center;cursor:pointer;transition:.2s;font:600 11px 'Vazirmatn';padding:0 8px}
   .del:hover{color:var(--err);border-color:rgba(181,80,47,.4)}
   .del.armed{border-color:var(--err);color:var(--err);background:rgba(181,80,47,.08)}
   .adm-note{font-size:11px;color:var(--sub);line-height:1.9;border-top:1px dashed rgba(42,33,24,.15);padding-top:12px}
@@ -397,18 +382,12 @@
   }
   .acc-lbl{font-size:11px;color:var(--sub);margin-bottom:5px}
   .acc-code{font:700 21px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:5px;color:var(--ink)}
-  .note{
-    background:rgba(192,138,46,.08);border:1px dashed rgba(192,138,46,.45);
-    border-radius:14px;padding:11px 14px;font-size:12px;line-height:2;color:#7A5A1E;
-  }
+  .note{background:rgba(192,138,46,.08);border:1px dashed rgba(192,138,46,.45);border-radius:14px;padding:11px 14px;font-size:12px;line-height:2;color:#7A5A1E}
   .note.warn{background:rgba(181,80,47,.06);border-color:rgba(181,80,47,.4);color:var(--err)}
   .note[hidden]{display:none}
 
   .step{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
-  .step-n{
-    width:26px;height:26px;border-radius:50%;border:1px solid rgba(42,33,24,.3);
-    display:grid;place-items:center;font:600 12px 'Vazirmatn';flex:none;margin-top:4px;
-  }
+  .step-n{width:26px;height:26px;border-radius:50%;border:1px solid rgba(42,33,24,.3);display:grid;place-items:center;font:600 12px 'Vazirmatn';flex:none;margin-top:4px}
   .step p{font-size:13px;line-height:2;color:var(--ink)}
   .step b{font-weight:600}
 
@@ -433,11 +412,7 @@
   .qr-actions{display:flex;gap:8px}
   .qr-actions .btn{flex:1}
 
-  .testcode{
-    position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
-    font-size:12px;color:var(--sub);opacity:.55;letter-spacing:.3px;
-    pointer-events:none;transition:opacity .6s;z-index:10;
-  }
+  .testcode{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--sub);opacity:.55;letter-spacing:.3px;pointer-events:none;transition:opacity .6s;z-index:10}
   .testcode.gone{opacity:0}
   .cloud-badge{
     position:fixed;bottom:14px;inset-inline-end:16px;z-index:10;
@@ -478,7 +453,6 @@
     <div class="orb-pos" id="orb" role="button" tabindex="0" aria-label="لوگو — برای ادامه لمس کن">
       <div class="orb">
         <div class="orb-logo">
-          <!-- ستاره‌ی چهارپر درخشان داخل گوی -->
           <svg class="mono" viewBox="0 0 64 64">
             <defs>
               <radialGradient id="spkGlow" cx="50%" cy="50%" r="50%">
@@ -538,7 +512,7 @@
     <span class="count" id="srvCount"></span>
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <p class="sheet-sub">هر بار یک سرور برایت انتخاب می‌شود؛ اگر ساب باشد، همه‌ی کانفیگ‌های داخلش با پینگ لیست می‌شوند.</p>
+  <p class="sheet-sub">هر بار یک سرور برایت انتخاب می‌شود؛ اگر ساب باشد، کانفیگ‌های داخلش با پینگ لیست و ایمپورت مستقیم به برنامه‌ات می‌آید.</p>
   <div id="srvList"></div>
 </section>
 
@@ -630,8 +604,8 @@
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
   <p class="sheet-sub">سه قدم ساده تا اتصال:</p>
-  <div class="step"><span class="step-n">۱</span><p>حباب <b>سرور من</b> را بزن؛ یک کانفیگ می‌گیری. روی <b>کپی</b> بزن یا <b>QR</b> را اسکن کن. اگر ساب باشد، لیست کانفیگ‌ها با پینگ می‌آید.</p></div>
-  <div class="step"><span class="step-n">۲</span><p>در برنامه‌ات (v2rayNG، Streisand، NekoBox، Hiddify و…) گزینه‌ی <b>Add from Clipboard</b> یا <b>Scan QR</b> را بزن. برای ساب، گزینه‌ی <b>Subscribe</b> بهتر است چون خودکار آپدیت می‌شود.</p></div>
+  <div class="step"><span class="step-n">۱</span><p>حباب <b>سرور من</b> را بزن؛ یک سرور می‌گیری. روی دکمه‌ی برنامه‌ات (مثل <b>v2rayNG</b> یا <b>Happ</b>) بزن تا مستقیم باز شود، یا <b>کپی / QR</b>.</p></div>
+  <div class="step"><span class="step-n">۲</span><p>اگر برنامه با دکمه باز نشد، لینک را کپی کن و در برنامه گزینه‌ی <b>Subscribe / افزودن اشتراک</b> را بزن.</p></div>
   <div class="step"><span class="step-n">۳</span><p>وصل شو. عدد پینگِ <b>کمتر</b> یعنی مسیر سریع‌تر. اگر سرور مناسب نبود، دوباره حباب را بزن.</p></div>
   <div class="note">حباب «اشتراک من» روزهای باقی‌مانده و کد دسترسی‌ات را نشان می‌دهد. اگر رو به اتمام بود، از مدیر تمدید بخواه.</div>
 </section>
@@ -661,9 +635,6 @@
   const $$ = s => [...document.querySelectorAll(s)];
   const body = document.body;
 
-  /* ═══════════════════════════════════════════════
-     اتصال به Supabase — آماده و تنظیم‌شده ✅
-  ═══════════════════════════════════════════════ */
   const SUPABASE_URL = 'https://iecqffkrpmpwtuwwopop.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllY3FmZmtycG1wd3R1d3dvcG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwNjAyNjEsImV4cCI6MjEwNTYzNjI2MX0.zoMGe71h8gB6WYYmHcZuBCWYTFnWOBylC58CBp3bPsM';
 
@@ -690,7 +661,10 @@
   const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const fmtWhen = t => new Date(t).toLocaleString('fa-IR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
 
-  const PROTOS = {vmess:['VMess','vm'], vless:['VLESS','vl'], trojan:['Trojan','tr'], ss:['SS','ss']};
+  const PROTOS = {
+    vmess:['VMess','vm'], vless:['VLESS','vl'], trojan:['Trojan','tr'], ss:['SS','ss'], ssr:['SSR','ss'],
+    hysteria2:['Hy2','hy'], hy2:['Hy2','hy'], hysteria:['Hysteria','hy'], tuic:['TUIC','tu']
+  };
   const protoOf = cfg => { const m=String(cfg).match(/^([a-z0-9]+):\/\//i); return m && PROTOS[m[1].toLowerCase()] ? m[1].toLowerCase() : null; };
   const isSub = cfg => /^https?:\/\//i.test(String(cfg).trim());
   const chipFor = cfg => {
@@ -857,13 +831,11 @@
         .catch(()=>{ clearTimeout(to); res(null) });
     });
   }
-  // نسخه‌ی سبک برای لیست‌ها: یک تلاش HTTPS + یک تلاش HTTP
   async function pingFast(host, port){
     let ms = await pingOnce(`https://${host}:${port}/`, 3200);
     if(ms!=null) return ms;
     return await pingOnce(`http://${host}:${port}/`, 2600);
   }
-  // نسخه‌ی کامل برای پینگ تکی: بهترینِ چند تلاش
   async function ping(host, port){
     let best = null;
     for(let i=0;i<2;i++){
@@ -901,7 +873,6 @@
     if(btn.isConnected) paintPing(btn, key);
     if(ms==null && !silent) toast('این سرور پاسخ نداد — یکی دیگر بگیر');
   }
-  // پینگ گروهی با محدودیت همزمانی
   async function pingAllSeq(items, limit=3){
     let idx = 0;
     const worker = async ()=>{
@@ -917,53 +888,181 @@
     await Promise.all(Array.from({length:Math.min(limit, items.length)}, worker));
   }
 
-  /* ───────── دریافت و بازکردن ساب (با پروکسی‌های جایگزین) ───────── */
+  /* ═══════════════════════════════════════════════
+     دریافت ساب — مسیرهای چندگانه با گزارش زنده
+     مسیر طلایی: پروکسی شخصی ساپابیس (fetch-sub)
+  ═══════════════════════════════════════════════ */
   const subCache = {};
   const SUB_TTL = 10*60*1000;
+  const stripHash = u => String(u).replace(/#.*$/, '');
+  const SUB_FN = SUPABASE_URL + '/functions/v1/fetch-sub';
 
-  async function fetchTO(u, ms){
+  async function fetchTO(u, ms, headers, asJson){
     const c = new AbortController();
     const t = setTimeout(()=>c.abort(), ms);
     try{
-      const r = await fetch(u, {cache:'no-store', signal:c.signal});
+      const r = await fetch(u, {cache:'no-store', signal:c.signal, headers: headers||undefined, redirect:'follow'});
       clearTimeout(t);
-      if(!r.ok) return null;
-      return await r.text();
-    }catch(e){ clearTimeout(t); return null }
+      if(!r.ok) return {ok:false, status:r.status, body:null};
+      const body = asJson ? await r.json() : await r.text();
+      return {ok:true, status:r.status, body};
+    }catch(e){ clearTimeout(t); return {ok:false, status:0, body:null} }
   }
-  async function fetchText(url){
+
+  let lastAttemptLog = [];   // [{name, status:'ok'|'no'|'run', note}]
+  let goodAttemptName = null;
+
+  async function fetchSubText(url, onLog){
+    const enc = encodeURIComponent(url);
     const attempts = [
-      url,
-      'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url),
-      'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-      'https://corsproxy.io/?url=' + encodeURIComponent(url)
+      {name:'مستقیم',            u:url,   h:null,   note:'اگر CORS باز باشد'},
+      {name:'پروکسی ساپابیس',    u:SUB_FN + '?url=' + enc, h:{'Authorization':'Bearer '+SUPABASE_KEY, 'apikey':SUPABASE_KEY}, note:'پروکسی شخصی تو'},
+      {name:'جینا',              u:'https://r.jina.ai/' + url, h:null, note:'معمولاً از ایران باز است'},
+      {name:'codetabs',          u:'https://api.codetabs.com/v1/proxy?quest=' + enc, h:null, note:''},
+      {name:'allorigins',        u:'https://api.allorigins.win/raw?url=' + enc, h:null, note:''},
+      {name:'corsproxy',         u:'https://corsproxy.io/?url=' + enc, h:null, note:''}
     ];
-    for(const u of attempts){
-      const t = await fetchTO(u, 9000);
-      if(t && t.trim()) return t;
+    if(goodAttemptName){
+      const gi = attempts.findIndex(a=>a.name===goodAttemptName);
+      if(gi > 0) attempts.unshift(attempts.splice(gi,1)[0]);
     }
+
+    const rows = attempts.map(a=>({name:a.name, status:'run', note:a.note}));
+    lastAttemptLog = rows;
+    const paint = ()=>onLog && onLog(rows.map(r=>({...r})));
+
+    for(let i=0;i<attempts.length;i++){
+      const a = attempts[i];
+      rows[i].status = 'run'; paint();
+      const res = await fetchTO(a.u, 9000, a.h);
+      if(res.ok && res.body && String(res.body).trim()){
+        rows[i].status = 'ok'; rows[i].note = 'موفق';
+        for(let k=i+1;k<rows.length;k++){ rows[k].status='no'; rows[k].note='امتحان نشد' }
+        paint();
+        goodAttemptName = a.name;
+        return String(res.body);
+      }
+      if(res.status === 404 && a.name === 'پروکسی ساپابیس'){
+        rows[i].status = 'no'; rows[i].note = 'تابع ساخته نشده';
+      }else{
+        rows[i].status = 'no'; rows[i].note = res.status ? ('خطای '+res.status) : 'قطع';
+      }
+      paint();
+    }
+    // آخرین تیر: allorigins با JSON
+    const j = await fetchTO('https://api.allorigins.win/get?url=' + enc, 9000, null, true);
+    const okj = !!(j.ok && j.body && j.body.contents && String(j.body.contents).trim());
+    rows.push({name:'allorigins(json)', status: okj?'ok':'no', note:''});
+    paint();
+    if(okj){ goodAttemptName = 'allorigins(json)'; return String(j.body.contents) }
     return null;
   }
-  async function getSubConfigs(s){
+
+  const CFG_RE = /(?:vmess|vless|trojan|ss|ssr|hysteria2|hy2|hysteria|tuic):\/\/[^\s"'<>\\]+/gi;
+  function extractCfgs(text){
+    const out = [], seen = new Set();
+    let m;
+    CFG_RE.lastIndex = 0;
+    while((m = CFG_RE.exec(String(text))) !== null){
+      let c = m[0].trim().replace(/[),.'"']+$/,'');
+      if(c && !seen.has(c)){ seen.add(c); out.push(c) }
+    }
+    return out;
+  }
+  function b64decode(s){
+    s = String(s).replace(/-/g,'+').replace(/_/g,'/').replace(/\s+/g,'');
+    while(s.length % 4) s += '=';
+    const bin = atob(s);
+    const bytes = new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder('utf-8').decode(bytes);
+  }
+  const looksB64 = t => /^[A-Za-z0-9+/\-_=\s]+$/.test(t) && t.replace(/\s/g,'').length > 8;
+
+  async function getSubConfigs(s, onLog){
     const c = subCache[s.id];
     if(c && (Date.now()-c.at) < SUB_TTL && c.cfgs.length) return c.cfgs;
-    const raw = await fetchText(s.cfg);
+
+    const url = stripHash(s.cfg);
+    const raw = await fetchSubText(url, onLog);
     if(raw == null) throw new Error('دریافت ساب ناموفق بود');
-    let lines = [];
-    const t = raw.trim();
-    if(t && !t.includes('://')){
-      // احتمالاً base64
-      try{
-        let b = t.replace(/-/g,'+').replace(/_/g,'/').replace(/\s+/g,'');
-        while(b.length % 4) b += '=';
-        const dec = atob(b);
-        if(dec.includes('://')) lines = dec.split(/\r?\n/);
-      }catch(e){}
+
+    let cfgs = extractCfgs(raw);
+    let fmt = 'xray';
+    if(!cfgs.length){
+      if(/proxies\s*:|yaml|clash/i.test(raw)) fmt = 'clash';
+      const trimmed = String(raw).trim();
+      if(looksB64(trimmed)){
+        try{
+          const dec = b64decode(trimmed);
+          const c2 = extractCfgs(dec);
+          if(c2.length){ cfgs = c2; fmt = 'xray-b64' }
+        }catch(e){}
+      }
     }
-    if(!lines.length) lines = t.split(/\r?\n/);
-    lines = lines.map(l=>l.trim()).filter(l=>protoOf(l));
-    subCache[s.id] = {cfgs:lines, at:Date.now()};
-    return lines;
+    subCache[s.id] = {cfgs, at:Date.now(), fmt};
+    return cfgs;
+  }
+
+  /* ───────── تشخیص دستگاه و کلاینت‌ها ───────── */
+  function detectDevice(){
+    const ua = navigator.userAgent || '';
+    const isAndroid = /android/i.test(ua);
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+    if(isAndroid) return {id:'android', label:'اندروید'};
+    if(isIOS)     return {id:'ios',     label:'آیفون / آیپد'};
+    if(/windows|macintosh|linux/i.test(ua)) return {id:'desktop', label:'دسکتاپ'};
+    return {id:'other', label:'موبایل'};
+  }
+  const DEVICE = detectDevice();
+
+  // اسکیم ایمپورت سابِ هر کلاینت
+  const CLIENTS = [
+    {id:'v2rayng', name:'v2rayNG',  plats:['android'],
+     sub:u=>'v2rayng://install-sub?url='+encodeURIComponent(u)},
+    {id:'karing',  name:'Karing',   plats:['android','ios'],
+     sub:u=>'karing://install-sub?url='+encodeURIComponent(u)},
+    {id:'happ',    name:'Happ',     plats:['android','ios'],
+     sub:u=>'happ://add_sub/'+b64u(u)},
+    {id:'v2box',   name:'V2Box',    plats:['android','ios'],
+     sub:u=>'v2box://install-sub?url='+encodeURIComponent(u)},
+    {id:'mahsang', name:'MahsaNG',  plats:['android'],
+     sub:u=>'mahsang://install-sub?url='+encodeURIComponent(u)},
+    {id:'npv',     name:'NPV Tunnel', plats:['android'],
+     sub:u=>'npvtunnel://install-sub?url='+encodeURIComponent(u)}
+  ];
+  function b64u(s){ return btoa(unescape(encodeURIComponent(s))) }
+
+  function openClientScheme(link, name){
+    toast('در حال باز کردن ' + name + '…');
+    const a = document.createElement('a');
+    a.href = link; a.style.display = 'none';
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>a.remove(), 1500);
+    setTimeout(()=>{
+      toast('اگر ' + name + ' باز نشد، برنامه را نصب کن یا لینک را کپی و دستی اضافه کن');
+    }, 2600);
+  }
+
+  function importButtonsHtml(kind, cfgText){
+    // kind: 'sub' | 'cfg'
+    const avail = kind==='sub'
+      ? CLIENTS.filter(c=>c.plats.includes(DEVICE.id))
+      : CLIENTS.filter(c=>c.id==='happ' && c.plats.includes(DEVICE.id));
+    if(!avail.length) return '';
+    const mk = c => {
+      const link = kind==='sub' ? c.sub(cfgText) : ('happ://add/' + b64u(cfgText));
+      const title = kind==='sub' ? ('ایمپورت ساب در ' + c.name) : ('افزودن در ' + c.name);
+      return `<button class="imp-btn" data-imp-link="${esc(link)}" data-imp-name="${esc(c.name)}" title="${esc(title)}">
+        <svg viewBox="0 0 24 24"><path d="M12 4v10M8 10.5 12 14l4-3.5"/><path d="M5 19h14"/></svg>${esc(c.name)}</button>`;
+    };
+    return `
+      <div class="imp-wrap">
+        <div class="imp-lbl"><span>ایمپورت مستقیم به برنامه‌ات</span><span class="plat-chip">${esc(DEVICE.label)}</span></div>
+        <div class="imp-row">${avail.map(mk).join('')}
+          ${kind==='sub' ? `<button class="imp-btn" data-imp-copy="1"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>کپی لینک</button>` : ''}
+        </div>
+      </div>`;
   }
 
   /* ───────── آیکن‌ها ───────── */
@@ -983,6 +1082,37 @@
   };
 
   const showLoading = el => el.innerHTML = '<div class="loading">در حال دریافت از سرور…</div>';
+
+  // راهنمای ساخت تابع ساپابیس (فقط وقتی لازم شد نشان داده می‌شود)
+  const SETUP_GUIDE = `
+    <details class="setup">
+      <summary>راهنما برای مدیر: راه‌اندازی «پروکسی ساپابیس» (۲ دقیقه · یک‌بار برای همیشه)</summary>
+      <p>۱) در داشبورد Supabase از سایدبار <b>Edge Functions</b> را بزن → <b>Create a new function</b> → نام: <b dir="ltr">fetch-sub</b> → Create.</p>
+      <p>۲) کد داخلش را با این عوض کن و <b>Deploy</b> بزن:</p>
+      <pre>const cors = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS")
+    return new Response("ok", { headers: cors });
+  const target = new URL(req.url).searchParams.get("url");
+  if (!target)
+    return new Response("missing url", { status: 400, headers: cors });
+  try {
+    const r = await fetch(target, {
+      headers: { "User-Agent": "NaronApp/1.0" }
+    });
+    const text = await r.text();
+    return new Response(text, {
+      headers: { ...cors, "Content-Type": "text/plain; charset=utf-8" }
+    });
+  } catch (_e) {
+    return new Response("fetch failed", { status: 502, headers: cors });
+  }
+});</pre>
+      <p>۳) همین‌قدر. اپ خودش آن را پیدا و استفاده می‌کند — بعد از این، ساب‌ها همیشه از مسیر دیتابیس خودت خوانده می‌شوند.</p>
+    </details>`;
 
   /* ───────── سرور تصادفی ───────── */
   let currentRandomId = null;
@@ -1024,10 +1154,11 @@
             : `<button class="act do-copy" aria-label="کپی کانفیگ">${I.copy}</button>
                <button class="act do-qr"   aria-label="ساخت QR">${I.qr}</button>`}
         </div>
+        ${importButtonsHtml(isSub(s.cfg) ? 'sub' : 'cfg', s.cfg)}
         ${isSub(s.cfg) ? `
         <div class="sub-pick">
           <div class="sub-pick-lbl">${I.list} کانفیگ‌های داخل این ساب</div>
-          <div id="subPickArea"><div class="loading" style="padding:14px 0">در حال خواندن ساب…</div></div>
+          <div id="subPickArea"></div>
         </div>` : ''}
       </article>
       <button class="btn ghost full reroll" id="reRoll">${I.dice} یکی دیگه نشونم بده</button>`;
@@ -1054,85 +1185,105 @@
     });
   }
 
+  function attemptsHtml(rows){
+    if(!rows || !rows.length) return '';
+    return `<div class="attempts">` + rows.map(r=>
+      `<div class="at-row ${r.status}"><i></i><b>${esc(r.name)}</b> ${r.status==='ok'?'✓':r.status==='no'?'✗':'…'} ${r.note?`<span>· ${esc(r.note)}</span>`:''}</div>`
+    ).join('') + `</div>`;
+  }
+
   async function loadSubPick(s, area){
+    // مرحله ۱: گرفتن ساب با گزارش زنده
+    area.innerHTML = `
+      <div class="sub-note">در حال خواندن ساب…</div>
+      <div id="atBox"></div>`;
+    const atBox = area.querySelector('#atBox');
+    let cfgs = null;
     try{
-      const cfgs = await getSubConfigs(s);
-      if(!area.isConnected) return;
-      if(!cfgs.length){
-        area.innerHTML = `
-          <div class="sub-note">محتوای ساب قابل خواندن نبود (یا فرمتش clash است).</div>
-          <div class="sub-note">نگران نباش: «کپی لینک ساب» را در برنامه‌ات به‌عنوان اشتراک اضافه کن — خود برنامه می‌خواندش.</div>
-          <button class="btn ghost full reroll" id="subRetry">${I.dice} تلاش دوباره</button>`;
-        area.querySelector('#subRetry').addEventListener('click', ()=>{
-          delete subCache[s.id];
-          area.innerHTML = '<div class="loading" style="padding:14px 0">در حال خواندن ساب…</div>';
-          loadSubPick(s, area);
-        });
-        return;
-      }
-
-      const pending = [];
-      area.innerHTML = `
-        <div class="sub-count">
-          <span>${faNum(cfgs.length)} کانفیگ پیدا شد</span>
-          <button class="btn ghost" id="subPingAll" style="padding:7px 12px;font-size:11.5px;border-radius:10px">پینگ همه</button>
-        </div>
-        <div id="cfgRows"></div>`;
-      const rowsBox = area.querySelector('#cfgRows');
-
-      cfgs.forEach((cfg, idx)=>{
-        const key = s.id+'#'+idx;
-        const name = cfgName(cfg, idx);
-        const {host, port} = parseCfg(cfg);
-        const pr = protoOf(cfg), chip = pr ? PROTOS[pr] : ['نامشخص','ss'];
-        const row = document.createElement('div');
-        row.className = 'cfg-row';
-        row.innerHTML = `
-          <div class="cfg-info">
-            <div class="cfg-name">${esc(name)}</div>
-            <div class="cfg-meta">${host ? esc(host)+':'+port : '—'}</div>
-          </div>
-          <span class="chip ${chip[1]}">${chip[0]}</span>
-          <button class="ping"><span class="p-dot"></span><span class="p-txt" dir="ltr">تست</span></button>
-          <button class="act do-copy" aria-label="کپی کانفیگ">${I.copy}</button>
-          <button class="act do-qr"   aria-label="ساخت QR">${I.qr}</button>`;
-        rowsBox.appendChild(row);
-        const pb = row.querySelector('.ping');
-        row.querySelector('.do-copy').addEventListener('click', ()=> copyTxt(cfg).then(ok=>toast(ok?'کانفیگ کپی شد':'کپی ناموفق بود')));
-        row.querySelector('.do-qr').addEventListener('click', ()=> openQrText(name, cfg));
-        pb.addEventListener('click', ()=>{ if(!pb.classList.contains('busy')) runPingOn(pb, cfg, key, true) });
-        paintPing(pb, key);
-        if(!(key in lastPing)) pending.push({btn:pb, cfg, key});
-      });
-
-      // پینگ خودکارِ همه‌ی مواردِ بدون نتیجه، با همزمانی محدود
-      if(pending.length) pingAllSeq(pending);
-
-      area.querySelector('#subPingAll').addEventListener('click', ()=>{
-        const all = [...area.querySelectorAll('.cfg-row')].map((row, idx)=>({
-          btn: row.querySelector('.ping'), cfg: cfgs[idx], key: s.id+'#'+idx
-        }));
-        all.forEach(it=>{
-          it.btn.classList.add('busy');
-          it.btn.querySelector('.p-txt').textContent = '…';
-        });
-        pingAllSeq(all);
-      });
+      cfgs = await getSubConfigs(s, rows=>{ atBox.innerHTML = attemptsHtml(rows) });
     }catch(e){
-      if(!area.isConnected) return;
+      cfgs = null;
+    }
+    if(!area.isConnected) return;
+    atBox.innerHTML = attemptsHtml(lastAttemptLog);
+
+    if(!cfgs || !cfgs.length){
+      const fmt = subCache[s.id] && subCache[s.id].fmt;
+      const fnMissing = lastAttemptLog.some(r=>r.name==='پروکسی ساپابیس' && r.note==='تابع ساخته نشده');
       area.innerHTML = `
-        <div class="sub-note">ساب خوانده نشد — احتمالاً مسدود است یا دسترسی از مرورگر ندارد.</div>
-        <div class="sub-note">می‌توانی «کپی لینک ساب» را در برنامه‌ات ایمپورت کنی، یا دوباره تلاش کنی.</div>
+        <div class="sub-note">${fmt==='clash'
+          ? 'این ساب فرمت clash/yaml دارد و کانفیگ URI داخلش نیست.'
+          : 'ساب خوانده نشد. گزارش مسیرها:'}</div>
+        ${fmt!=='clash' ? attemptsHtml(lastAttemptLog) : ''}
+        ${fnMissing ? SETUP_GUIDE : ''}
+        <a class="open-sub" href="${esc(stripHash(s.cfg))}" target="_blank" rel="noopener">باز کردن مستقیم ساب در مرورگر (تست شبکه)</a>
+        <div class="sub-note">در همین حین، دکمه‌های «ایمپورت مستقیم» و «کپی لینک ساب» بالای کارت همیشه کار می‌کنند — برنامه‌ی تو خودش ساب را می‌خواند.</div>
         <button class="btn ghost full reroll" id="subRetry">${I.dice} تلاش دوباره</button>`;
       area.querySelector('#subRetry').addEventListener('click', ()=>{
         delete subCache[s.id];
         area.innerHTML = '<div class="loading" style="padding:14px 0">در حال خواندن ساب…</div>';
         loadSubPick(s, area);
       });
+      return;
     }
+
+    // مرحله ۲: رندر ردیف‌ها + پینگ خودکار
+    const pending = [];
+    const rowsHtml = cfgs.map((cfg, idx)=>{
+      const key = s.id+'#'+idx;
+      return `
+      <div class="cfg-row" data-cfg-idx="${idx}">
+        <div class="cfg-info">
+          <div class="cfg-name">${esc(cfgName(cfg, idx))}</div>
+          <div class="cfg-meta" data-meta></div>
+        </div>
+        <span class="chip" data-chip></span>
+        <button class="ping"><span class="p-dot"></span><span class="p-txt" dir="ltr">تست</span></button>
+        <button class="act do-copy" aria-label="کپی کانفیگ">${I.copy}</button>
+        <button class="act do-qr"   aria-label="ساخت QR">${I.qr}</button>
+      </div>`;
+    }).join('');
+    area.innerHTML = `
+      <div class="sub-count">
+        <span>${faNum(cfgs.length)} کانفیگ پیدا شد</span>
+        <button class="btn ghost" id="subPingAll" style="padding:7px 12px;font-size:11.5px;border-radius:10px">پینگ همه</button>
+      </div>
+      <div>${rowsHtml}</div>`;
+    const rowEls = [...area.querySelectorAll('.cfg-row')];
+    rowEls.forEach((row, idx)=>{
+      const cfg = cfgs[idx];
+      const key = s.id+'#'+idx;
+      const {host, port} = parseCfg(cfg);
+      const pr = protoOf(cfg), chip = pr ? PROTOS[pr] : ['نامشخص','ss'];
+      row.querySelector('.cfg-meta').textContent = host ? (host+':'+port) : '—';
+      const ch = row.querySelector('[data-chip]');
+      ch.textContent = chip[0]; ch.className = 'chip ' + chip[1];
+      const pb = row.querySelector('.ping');
+      row.querySelector('.do-copy').addEventListener('click', ()=> copyTxt(cfg).then(ok=>toast(ok?'کانفیگ کپی شد':'کپی ناموفق بود')));
+      row.querySelector('.do-qr').addEventListener('click', ()=> openQrText(cfgName(cfg, idx), cfg));
+      pb.addEventListener('click', ()=>{ if(!pb.classList.contains('busy')) runPingOn(pb, cfg, key, true) });
+      paintPing(pb, key);
+      if(!(key in lastPing)) pending.push({btn:pb, cfg, key});
+    });
+    if(pending.length) pingAllSeq(pending);
+    area.querySelector('#subPingAll').addEventListener('click', ()=>{
+      const all = rowEls.map((row, idx)=>({btn: row.querySelector('.ping'), cfg: cfgs[idx], key: s.id+'#'+idx}));
+      all.forEach(it=>{ it.btn.classList.add('busy'); it.btn.querySelector('.p-txt').textContent='…' });
+      pingAllSeq(all);
+    });
   }
 
   $('#srvList').addEventListener('click', e=>{
+    // ایمپورت مستقیم
+    const imp = e.target.closest('[data-imp-link]');
+    if(imp){ openClientScheme(imp.dataset.impLink, imp.dataset.impName); return }
+    const cp2 = e.target.closest('[data-imp-copy]');
+    if(cp2){
+      const s = servers.find(x=>x.id===currentRandomId);
+      if(s) copyTxt(s.cfg).then(ok=>toast(ok?'لینک ساب کپی شد':'کپی ناموفق بود'));
+      return;
+    }
+    // پینگ هاست کارت
     const p = e.target.closest('#hostPing');
     if(p && !p.classList.contains('busy')){
       const s = servers.find(x=>x.id===currentRandomId);
@@ -1162,7 +1313,6 @@
       }catch(e){}
     }
     if(!done){
-      // fallback: سرویس تصویر QR
       const img = new Image();
       img.alt = 'QR';
       img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=206x206&margin=0&data=' + encodeURIComponent(text);
