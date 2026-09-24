@@ -61,7 +61,6 @@
   .st-success .orb, .st-ready .orb{width:128px;height:128px;border-radius:50%}
   .st-success .orb{background:var(--green-soft);border-color:rgba(63,125,88,.4)}
 
-  /* ── حلقه‌ی رنگی دور دایره‌ی اصلی ── */
   .orb::after{
     content:''; position:absolute; inset:-9px; border-radius:50%;
     border:1.5px solid rgba(192,138,46,.55);
@@ -207,7 +206,6 @@
   .loading{text-align:center;color:var(--sub);font-size:13px;padding:30px 0;animation:blink 1.2s ease infinite}
   @keyframes blink{50%{opacity:.35}}
 
-  /* ── کارت سرور تصادفی ── */
   .rand-hint{
     text-align:center;font:400 15px/2.2 'Noto Nastaliq Urdu',serif;
     color:var(--sub);margin:2px 0 10px;
@@ -225,6 +223,7 @@
   .chip.vl{color:var(--green);border-color:rgba(63,125,88,.5)}
   .chip.tr{color:var(--ink);border-color:rgba(42,33,24,.35)}
   .chip.ss{color:var(--sub);border-color:rgba(138,127,110,.55)}
+  .chip.sb{color:#5B7BA6;border-color:rgba(91,123,166,.55);background:rgba(91,123,166,.06)}
   .chip.d-ok,.chip.d-warn,.chip.d-bad{direction:rtl;font-size:10.5px}
   .chip.d-ok{color:var(--green);border-color:rgba(63,125,88,.5);background:var(--green-soft)}
   .chip.d-warn{color:var(--amber);border-color:rgba(192,138,46,.5);background:rgba(192,138,46,.08)}
@@ -261,6 +260,14 @@
     border:1.5px dashed rgba(42,33,24,.22);border-radius:18px;padding:28px 16px;
     text-align:center;color:var(--sub);font-size:13px;line-height:2.1;
   }
+
+  /* ── بخش کانفیگ انتخابی از ساب ── */
+  .sub-pick{
+    border-top:1px dashed rgba(42,33,24,.15);margin-top:12px;padding-top:12px;
+  }
+  .sub-pick-lbl{font:600 11px 'Vazirmatn';color:var(--sub);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .sub-pick-lbl svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+  .sub-note{font-size:11.5px;color:var(--sub);line-height:2;padding:4px 0}
 
   .adm-sec{margin-bottom:22px}
   .adm-label{font:600 12.5px 'Vazirmatn';color:var(--sub);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -473,7 +480,7 @@
 
 <div class="backdrop" id="bd"></div>
 
-<!-- ═══ سرور من (تصادفی) ═══ -->
+<!-- ═══ سرور من (تصادفی — از کانفیگ یا ساب) ═══ -->
 <section class="sheet" id="shServers" aria-label="سرور من">
   <div class="handle"></div>
   <div class="sheet-head">
@@ -481,7 +488,7 @@
     <span class="count" id="srvCount"></span>
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <p class="sheet-sub">هر بار یک سرور از بین سرورهای فعال برایت انتخاب می‌شود. پینگش را ببین، کپی کن یا QR بگیر — اگر مناسب نبود، یکی دیگر بخواه.</p>
+  <p class="sheet-sub">هر بار یک سرور برایت انتخاب می‌شود؛ اگر ساب باشد، از داخلش یک کانفیگ تصادفی درمی‌آید. پینگ را ببین، کپی کن یا QR بگیر.</p>
   <div id="srvList"></div>
 </section>
 
@@ -492,7 +499,7 @@
     <h2 class="sheet-title">مدیریت</h2>
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <p class="sheet-sub">کاربر بساز، سرورهای واقعی‌ات را اضافه کن و همه‌چیز را کنترل کن. سرورهایی که این‌جا اضافه می‌کنی به استخرِ انتخاب تصادفی کاربران می‌روند.</p>
+  <p class="sheet-sub">کاربر بساز و سرورها را وارد استخرِ انتخاب تصادفی کن — هم کانفیگ تکی (vmess/vless/…) و هم لینک ساب (https://…).</p>
 
   <div class="adm-sec">
     <div class="adm-label"><span>کاربر جدید</span><span class="form-hint" style="margin:0">کد مدیر: <b dir="ltr">۰۰۶۶</b></span></div>
@@ -517,9 +524,9 @@
   </div>
 
   <div class="adm-sec">
-    <div class="adm-label"><span>افزودن سرور</span><span id="protoHint" class="form-hint" style="margin:0"></span></div>
-    <input class="inp" id="nameInp" placeholder="نام سرور (مثلاً آلمان · فرانکفورت)" style="margin-bottom:8px">
-    <textarea class="inp" id="cfgInp" placeholder="vmess:// یا vless:// یا trojan:// یا ss://"></textarea>
+    <div class="adm-label"><span>افزودن سرور یا ساب</span><span id="protoHint" class="form-hint" style="margin:0"></span></div>
+    <input class="inp" id="nameInp" placeholder="نام (مثلاً BPB · کلودفلر)" style="margin-bottom:8px">
+    <textarea class="inp" id="cfgInp" placeholder="لینک ساب (https://…) یا کانفیگ vmess:// vless:// trojan:// ss://"></textarea>
     <div class="form-err" id="formErr"></div>
     <button class="btn full" id="addBtn">
       <svg viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>
@@ -573,9 +580,9 @@
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
   <p class="sheet-sub">سه قدم ساده تا اتصال:</p>
-  <div class="step"><span class="step-n">۱</span><p>حباب <b>سرور من</b> را بزن؛ یک سرور برایت انتخاب می‌شود. روی آیکن <b>کپی</b> بزن یا <b>QR</b> را اسکن کن.</p></div>
-  <div class="step"><span class="step-n">۲</span><p>در برنامه‌ات (v2rayNG، Streisand، NekoBox و…) گزینه‌ی <b>Add from Clipboard</b> یا <b>Scan QR</b> را بزن.</p></div>
-  <div class="step"><span class="step-n">۳</span><p>سرور را انتخاب و وصل شو. عدد پینگِ <b>کمتر</b> یعنی مسیر سریع‌تر. اگر سرور کند بود، دوباره حباب را بزن تا سرور دیگری بگیری.</p></div>
+  <div class="step"><span class="step-n">۱</span><p>حباب <b>سرور من</b> را بزن؛ یک کانفیگ تصادفی می‌گیری. روی <b>کپی</b> بزن یا <b>QR</b> را اسکن کن. اگر ساب باشد، می‌توانی کل <b>لینک ساب</b> را هم کپی کنی.</p></div>
+  <div class="step"><span class="step-n">۲</span><p>در برنامه‌ات (v2rayNG، Streisand، NekoBox، Hiddify و…) گزینه‌ی <b>Add from Clipboard</b> یا <b>Scan QR</b> را بزن. برای ساب، گزینه‌ی <b>Subscribe / افزودن اشتراک</b> بهتر است چون خودکار آپدیت می‌شود.</p></div>
+  <div class="step"><span class="step-n">۳</span><p>وصل شو. عدد پینگِ <b>کمتر</b> یعنی مسیر سریع‌تر. اگر سرور مناسب نبود، دوباره حباب را بزن.</p></div>
   <div class="note">حباب «اشتراک من» روزهای باقی‌مانده و کد دسترسی‌ات را نشان می‌دهد. اگر رو به اتمام بود، از مدیر تمدید بخواه.</div>
 </section>
 
@@ -634,6 +641,12 @@
 
   const PROTOS = {vmess:['VMess','vm'], vless:['VLESS','vl'], trojan:['Trojan','tr'], ss:['SS','ss']};
   const protoOf = cfg => { const m=String(cfg).match(/^([a-z0-9]+):\/\//i); return m && PROTOS[m[1].toLowerCase()] ? m[1].toLowerCase() : null; };
+  const isSub = cfg => /^https?:\/\//i.test(String(cfg).trim());
+  const chipFor = cfg => {
+    if(isSub(cfg)) return ['SUB','sb'];
+    const pr = protoOf(cfg);
+    return pr ? PROTOS[pr] : ['نامشخص','ss'];
+  };
 
   function parseCfg(cfg){
     const p = protoOf(cfg); if(!p) return {host:null, port:null};
@@ -804,26 +817,64 @@
   }
 
   const lastPing = {};
-  function paintPing(btn, id){
+  function paintPing(btn, key, label){
     const txt = btn.querySelector('.p-txt');
     btn.classList.remove('busy','ok','mid','bad');
-    txt.textContent = 'تست پینگ';
-    if(id in lastPing){
-      const ms = lastPing[id];
+    txt.textContent = label || 'تست پینگ';
+    if(key in lastPing){
+      const ms = lastPing[key];
       btn.classList.add(ms==null ? 'bad' : ms<=300 ? 'ok' : ms<=900 ? 'mid' : 'bad');
       txt.textContent = ms==null ? 'بی‌پاسخ' : ms+'ms';
     }
   }
-  async function runPing(btn, id){
-    const s = servers.find(x=>x.id===id); if(!s) return;
-    const {host, port} = parseCfg(s.cfg);
-    if(!host){ lastPing[id]=null; paintPing(btn,id); toast('آدرس این کانفیگ قابل خواندن نیست'); return }
+  async function runPingOn(btn, cfgText, key){
+    const {host, port} = parseCfg(cfgText);
+    if(!host){ lastPing[key]=null; paintPing(btn,key); toast('آدرس این کانفیگ قابل خواندن نیست'); return }
     btn.classList.add('busy');
     btn.querySelector('.p-txt').textContent = '…';
     const ms = await ping(host, port);
-    lastPing[id] = ms;
-    if(btn.isConnected) paintPing(btn, id);
+    lastPing[key] = ms;
+    if(btn.isConnected) paintPing(btn, key);
     if(ms==null) toast('این سرور پاسخ نداد — یکی دیگر بگیر');
+  }
+
+  /* ───────── دریافت و بازکردن ساب ───────── */
+  const subCache = {};       // id -> {cfgs:[...], at:timestamp}
+  const SUB_TTL = 10*60*1000;
+  const subLastIdx = {};     // id -> آخرین ایندکس انتخاب‌شده
+
+  async function fetchText(url){
+    try{
+      const r = await fetch(url, {cache:'no-store'});
+      if(r.ok) return await r.text();
+    }catch(e){}
+    // جایگزین در صورت بلاک CORS
+    try{
+      const r = await fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url), {cache:'no-store'});
+      if(r.ok) return await r.text();
+    }catch(e){}
+    return null;
+  }
+  async function getSubConfigs(s){
+    const c = subCache[s.id];
+    if(c && (Date.now()-c.at) < SUB_TTL && c.cfgs.length) return c.cfgs;
+    const raw = await fetchText(s.cfg);
+    if(raw == null) throw new Error('دریافت ساب ناموفق بود');
+    let lines = [];
+    const t = raw.trim();
+    if(t && !t.includes('://')){
+      // احتمالاً base64
+      try{
+        let b = t.replace(/-/g,'+').replace(/_/g,'/').replace(/\s+/g,'');
+        while(b.length % 4) b += '=';
+        const dec = atob(b);
+        if(dec.includes('://')) lines = dec.split(/\r?\n/);
+      }catch(e){}
+    }
+    if(!lines.length) lines = t.split(/\r?\n/);
+    lines = lines.map(l=>l.trim()).filter(l=>protoOf(l));
+    subCache[s.id] = {cfgs:lines, at:Date.now()};
+    return lines;
   }
 
   /* ───────── آیکن‌ها ───────── */
@@ -832,7 +883,8 @@
     qr:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><path d="M14 14.5h2.5M14 18h2.5M18 14v6M20.5 14v2.5"/></svg>',
     trash:'<svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V5.5A1.5 1.5 0 0 1 11.5 4h1A1.5 1.5 0 0 1 14 5.5V7M7.5 7l.9 12.1A1.9 1.9 0 0 0 10.3 21h3.4a1.9 1.9 0 0 0 1.9-1.9L16.5 7M10.5 11v6M13.5 11v6"/></svg>',
     renew:'<svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M4 10.5h16M12 13.5v4.5M9.75 15.75h4.5"/></svg>',
-    dice:'<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V8h-4.5"/></svg>'
+    dice:'<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V8h-4.5"/></svg>',
+    link:'<svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.2 1.2"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.2-1.2"/></svg>'
   };
   const BICONS = {
     srv:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="6.5" rx="2"/><rect x="4" y="13.5" width="16" height="6.5" rx="2"/><path d="M7.5 7.2h.01M7.5 16.8h.01"/></svg>',
@@ -846,12 +898,19 @@
   /* ───────── سرور تصادفی ───────── */
   let currentRandomId = null;
 
+  function pickRandomFrom(arr, avoidIdx){
+    if(arr.length === 1) return 0;
+    let i;
+    do{ i = Math.floor(Math.random()*arr.length) } while(i === avoidIdx);
+    return i;
+  }
+
   function renderRandomServer(opts={}){
     const box = $('#srvList');
-    $('#srvCount').textContent = faNum(servers.length) + ' سرور';
+    $('#srvCount').textContent = faNum(servers.length) + ' مورد';
     if(!servers.length){
       currentRandomId = null;
-      box.innerHTML = '<div class="empty">هنوز سروری ثبت نشده.<br>مدیر از بخش «مدیریت» سرور اضافه می‌کند.</div>';
+      box.innerHTML = '<div class="empty">هنوز سروری ثبت نشده.<br>مدیر از بخش «مدیریت» سرور یا ساب اضافه می‌کند.</div>';
       return;
     }
     let s = currentRandomId ? servers.find(x=>x.id===currentRandomId) : null;
@@ -865,23 +924,49 @@
       }
       currentRandomId = s.id;
     }
-    const pr = protoOf(s.cfg), chip = pr ? PROTOS[pr] : ['نامشخص','ss'];
-    const {host, port} = parseCfg(s.cfg);
+    const chip = chipFor(s.cfg);
+    const hostTxt = isSub(s.cfg)
+      ? (()=>{ try{ return new URL(s.cfg).hostname }catch(e){ return s.cfg } })()
+      : (()=>{ const {host, port} = parseCfg(s.cfg); return host ? host+':'+port : '— آدرس قابل خواندن نیست —' })();
+
     box.innerHTML = `
-      <div class="rand-hint">این سرور برای تو انتخاب شد</div>
+      <div class="rand-hint">این برای تو انتخاب شد</div>
       <article class="srv" style="--i:0">
         <div class="srv-top"><span class="srv-name">${esc(s.name)}</span><span class="chip ${chip[1]}">${chip[0]}</span></div>
-        <div class="srv-host">${host ? esc(host)+':'+port : '— آدرس قابل خواندن نیست —'}</div>
+        <div class="srv-host">${esc(hostTxt)}</div>
         <div class="srv-actions">
-          <button class="ping" data-id="${s.id}"><span class="p-dot"></span><span class="p-txt" dir="ltr">تست پینگ</span></button>
-          <button class="act do-copy" data-id="${s.id}" aria-label="کپی کانفیگ">${I.copy}</button>
-          <button class="act do-qr"   data-id="${s.id}" aria-label="ساخت QR">${I.qr}</button>
+          <button class="ping" id="hostPing" data-key="${s.id}"><span class="p-dot"></span><span class="p-txt" dir="ltr">${isSub(s.cfg)?'پینگ ساب':'تست پینگ'}</span></button>
+          ${isSub(s.cfg)
+            ? `<button class="act do-copysub" aria-label="کپی لینک ساب">${I.copy}</button>
+               <button class="act do-qrsub"   aria-label="QR لینک ساب">${I.qr}</button>`
+            : `<button class="act do-copy" aria-label="کپی کانفیگ">${I.copy}</button>
+               <button class="act do-qr"   aria-label="ساخت QR">${I.qr}</button>`}
         </div>
+        ${isSub(s.cfg) ? `
+        <div class="sub-pick">
+          <div class="sub-pick-lbl">${I.dice} کانفیگ تصادفی از این ساب</div>
+          <div id="subPickArea"><div class="loading" style="padding:14px 0">در حال خواندن ساب…</div></div>
+        </div>` : ''}
       </article>
       <button class="btn ghost full reroll" id="reRoll">${I.dice} یکی دیگه نشونم بده</button>`;
-    const pb = box.querySelector('.ping');
-    paintPing(pb, s.id);
-    if(fresh || !(s.id in lastPing)) runPing(pb, s.id);
+
+    // اکشن‌های کانفیگ تکی
+    if(!isSub(s.cfg)){
+      const pb = box.querySelector('#hostPing');
+      paintPing(pb, s.id);
+      if(fresh || !(s.id in lastPing)) runPingOn(pb, s.cfg, s.id);
+      box.querySelector('.do-copy').addEventListener('click', ()=> copyTxt(s.cfg).then(ok=>toast(ok?'کانفیگ کپی شد':'کپی ناموفق بود')));
+      box.querySelector('.do-qr').addEventListener('click', ()=> openQrText(s.name, s.cfg));
+    }else{
+      // اکشن‌های ساب
+      const pb = box.querySelector('#hostPing');
+      paintPing(pb, s.id+'#host');
+      runPingOn(pb, 'vless://x@'+hostTxt.replace(/:\d+$/,'')+':443?x', s.id+'#host');
+      box.querySelector('.do-copysub').addEventListener('click', ()=> copyTxt(s.cfg).then(ok=>toast(ok?'لینک ساب کپی شد':'کپی ناموفق بود')));
+      box.querySelector('.do-qrsub').addEventListener('click', ()=> openQrText(s.name+' · لینک ساب', s.cfg));
+      loadSubPick(s, box.querySelector('#subPickArea'), fresh);
+    }
+
     box.querySelector('#reRoll').addEventListener('click', ()=>{
       currentRandomId = null;
       renderRandomServer({fresh:true});
@@ -889,33 +974,84 @@
     });
   }
 
+  async function loadSubPick(s, area, fresh){
+    try{
+      const cfgs = await getSubConfigs(s);
+      if(!area.isConnected) return;
+      if(!cfgs.length){
+        area.innerHTML = `
+          <div class="sub-note">محتوای ساب قابل خواندن نبود (یا فرمتش clash است).</div>
+          <div class="sub-note">نگران نباش: دکمه‌ی «کپی لینک ساب» بالای کارت را بزن و در برنامه‌ات به‌عنوان اشتراک اضافه کن — خود برنامه می‌خواندش.</div>
+          <button class="btn ghost full reroll" id="subRetry">${I.dice} تلاش دوباره</button>`;
+        area.querySelector('#subRetry').addEventListener('click', ()=>{
+          delete subCache[s.id];
+          area.innerHTML = '<div class="loading" style="padding:14px 0">در حال خواندن ساب…</div>';
+          loadSubPick(s, area, true);
+        });
+        return;
+      }
+      const idx = pickRandomFrom(cfgs, subLastIdx[s.id]);
+      subLastIdx[s.id] = idx;
+      const cfg = cfgs[idx];
+      const key = s.id+'#'+idx;
+      const pr = protoOf(cfg), chip = pr ? PROTOS[pr] : ['نامشخص','ss'];
+      const {host, port} = parseCfg(cfg);
+      area.innerHTML = `
+        <div class="srv-host">${host ? esc(host)+':'+port : '— آدرس قابل خواندن نیست —'} · ${faNum(idx+1)} از ${faNum(cfgs.length)}</div>
+        <div class="srv-actions">
+          <button class="ping" id="pickPing"><span class="p-dot"></span><span class="p-txt" dir="ltr">تست پینگ</span></button>
+          <span class="chip ${chip[1]}" style="align-self:center">${chip[0]}</span>
+          <button class="act do-pickcopy" aria-label="کپی کانفیگ">${I.copy}</button>
+          <button class="act do-pickqr"   aria-label="ساخت QR">${I.qr}</button>
+        </div>`;
+      const pb = area.querySelector('#pickPing');
+      paintPing(pb, key);
+      if(fresh || !(key in lastPing)) runPingOn(pb, cfg, key);
+      pb.addEventListener('click', ()=>{ if(!pb.classList.contains('busy')) runPingOn(pb, cfg, key) });
+      area.querySelector('.do-pickcopy').addEventListener('click', ()=> copyTxt(cfg).then(ok=>toast(ok?'کانفیگ کپی شد':'کپی ناموفق بود')));
+      area.querySelector('.do-pickqr').addEventListener('click', ()=> openQrText(s.name+' · کانفیگ '+faNum(idx+1), cfg));
+    }catch(e){
+      if(!area.isConnected) return;
+      area.innerHTML = `
+        <div class="sub-note">ساب خوانده نشد — احتمالاً مسدود است یا دسترسی از مرورگر ندارد.</div>
+        <div class="sub-note">می‌توانی «کپی لینک ساب» را در برنامه‌ات ایمپورت کنی، یا دوباره تلاش کنی.</div>
+        <button class="btn ghost full reroll" id="subRetry">${I.dice} تلاش دوباره</button>`;
+      area.querySelector('#subRetry').addEventListener('click', ()=>{
+        delete subCache[s.id];
+        area.innerHTML = '<div class="loading" style="padding:14px 0">در حال خواندن ساب…</div>';
+        loadSubPick(s, area, true);
+      });
+    }
+  }
+
   $('#srvList').addEventListener('click', e=>{
-    const cp = e.target.closest('.do-copy');
-    if(cp){
-      const s = servers.find(x=>x.id===cp.dataset.id);
-      copyTxt(s.cfg).then(ok=> toast(ok ? 'کانفیگ کپی شد' : 'کپی ناموفق بود'));
+    const p = e.target.closest('#hostPing');
+    if(p && !p.classList.contains('busy')){
+      const s = servers.find(x=>x.id===currentRandomId);
+      if(s){
+        if(isSub(s.cfg)){
+          const h = p.dataset.key; // sub host ping
+          try{ const u = new URL(s.cfg); runPingOn(p, 'vless://x@'+u.hostname+':443?x', s.id+'#host') }catch(_){}
+        }else runPingOn(p, s.cfg, s.id);
+      }
       return;
     }
-    const q = e.target.closest('.do-qr');
-    if(q){ openQr(q.dataset.id); return }
-    const p = e.target.closest('.ping');
-    if(p && !p.classList.contains('busy')) runPing(p, p.dataset.id);
+    // بقیه با listener مستقیم بسته شده‌اند
   });
 
-  /* ───────── مودال QR ───────── */
+  /* ───────── مودال QR (عمومی) ───────── */
   const qrWrap = $('#qrWrap');
-  function openQr(id){
-    const s = servers.find(x=>x.id===id); if(!s) return;
-    $('#qrTitle').textContent = s.name;
-    $('#qrCfg').textContent = s.cfg;
-    $('#qrCopy').dataset.cfg = s.cfg;
+  function openQrText(title, text){
+    $('#qrTitle').textContent = title || '';
+    $('#qrCfg').textContent = text;
+    $('#qrCopy').dataset.cfg = text;
     const box = $('#qrBox'); box.innerHTML = '';
     if(typeof QRCode !== 'undefined'){
       try{
         new QRCode(box, {
-          text:s.cfg, width:206, height:206,
+          text, width:206, height:206,
           colorDark:'#2A2118', colorLight:'#FFFFFF',
-          correctLevel: s.cfg.length > 600 ? QRCode.CorrectLevel.L : QRCode.CorrectLevel.M
+          correctLevel: text.length > 600 ? QRCode.CorrectLevel.L : QRCode.CorrectLevel.M
         });
       }catch(e){ box.innerHTML = '<div class="qr-fallback">ساخت QR ممکن نشد</div>' }
     }else{
@@ -924,7 +1060,7 @@
     qrWrap.classList.add('open');
   }
   $('#qrCopy').addEventListener('click', e=>{
-    copyTxt(e.currentTarget.dataset.cfg).then(ok=> toast(ok ? 'کانفیگ کپی شد' : 'کپی ناموفق بود'));
+    copyTxt(e.currentTarget.dataset.cfg).then(ok=> toast(ok ? 'کپی شد' : 'کپی ناموفق بود'));
   });
   $('#qrClose').addEventListener('click', ()=>qrWrap.classList.remove('open'));
   qrWrap.addEventListener('click', e=>{ if(e.target === qrWrap) qrWrap.classList.remove('open') });
@@ -1109,7 +1245,7 @@
     if(!servers.length){ box.innerHTML = '<div class="empty">لیست خالی است.</div>'; return }
     box.innerHTML = '';
     servers.forEach((s,i)=>{
-      const pr = protoOf(s.cfg), chip = pr ? PROTOS[pr] : ['نامشخص','ss'];
+      const chip = chipFor(s.cfg);
       const el = document.createElement('div');
       el.className = 'adm-row'; el.style.setProperty('--i', i);
       el.innerHTML = `
@@ -1126,6 +1262,7 @@
       try{
         await DB.delServer(b.dataset.id);
         delete lastPing[b.dataset.id];
+        delete subCache[b.dataset.id];
         await refreshServers();
         toast('حذف شد');
       }catch(err){ toast('حذف ناموفق بود'); b.disabled = false }
@@ -1138,10 +1275,14 @@
   });
 
   $('#cfgInp').addEventListener('input', ()=>{
-    const p = protoOf($('#cfgInp').value.trim());
+    const v = $('#cfgInp').value.trim();
     const h = $('#protoHint');
-    h.textContent = p ? 'پروتکل: ' + PROTOS[p][0] : '';
-    h.style.color = p ? 'var(--green)' : '';
+    if(isSub(v)){ h.textContent = 'لینک ساب تشخیص داده شد'; h.style.color = 'var(--green)'; }
+    else{
+      const p = protoOf(v);
+      h.textContent = p ? 'پروتکل: ' + PROTOS[p][0] : '';
+      h.style.color = p ? 'var(--green)' : '';
+    }
     $('#cfgInp').classList.remove('bad'); $('#formErr').textContent = '';
   });
 
@@ -1149,18 +1290,19 @@
     const name = $('#nameInp').value.trim();
     const cfg  = $('#cfgInp').value.trim();
     const err  = $('#formErr');
-    if(!protoOf(cfg)){
-      err.textContent = 'لینک معتبر نیست — با vmess:// یا vless:// یا trojan:// یا ss:// شروع شود';
+    const ok = isSub(cfg) || protoOf(cfg);
+    if(!ok){
+      err.textContent = 'ورودی معتبر نیست — لینک ساب (https://…) یا کانفیگ vmess/vless/trojan/ss بگذار';
       $('#cfgInp').classList.add('bad');
       return;
     }
     err.textContent = ''; $('#cfgInp').classList.remove('bad');
     const btn = $('#addBtn'); btn.disabled = true; const old = btn.innerHTML; btn.textContent = 'در حال ثبت…';
     try{
-      await DB.addServer(name || 'سرور بدون نام', cfg);
+      await DB.addServer(name || (isSub(cfg) ? 'ساب بدون نام' : 'سرور بدون نام'), cfg);
       await refreshServers();
       $('#nameInp').value=''; $('#cfgInp').value=''; $('#protoHint').textContent='';
-      toast('سرور به استخر اضافه شد');
+      toast(isSub(cfg) ? 'ساب به استخر اضافه شد' : 'سرور به استخر اضافه شد');
     }catch(e){ err.textContent = 'ثبت ناموفق بود — اتصال را چک کن' }
     btn.disabled = false; btn.innerHTML = old;
   }
