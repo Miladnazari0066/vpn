@@ -4,10 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F5F0E6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="نارون">
 <title>نارون · مینی‌اپ سرور</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap" rel="stylesheet">
+<link id="appFavicon" rel="icon" href="">
+<link id="appTouchIcon" rel="apple-touch-icon" href="">
 <style>
   :root{
     --bg:#F5F0E6; --ink:#2A2118; --sub:#8A7F6E; --card:#FFFFFF;
@@ -218,31 +223,11 @@
   .chip.ss{color:var(--sub);border-color:rgba(138,127,110,.55)}
   .chip.sb{color:#5B7BA6;border-color:rgba(91,123,166,.55);background:rgba(91,123,166,.06)}
   .chip.hy,.chip.tu{color:#7A5AA6;border-color:rgba(122,90,166,.5)}
-  .chip.d-ok{color:var(--green);border-color:rgba(63,125,88,.5);background:var(--green-soft);direction:rtl;font-size:10.5px}
-  .chip.d-warn{color:var(--amber);border-color:rgba(192,138,46,.5);background:rgba(192,138,46,.08);direction:rtl;font-size:10.5px}
-  .chip.d-bad{color:var(--err);border-color:rgba(181,80,47,.4);background:rgba(181,80,47,.07);direction:rtl;font-size:10.5px}
   .srv-host{
     direction:ltr;text-align:left;font:400 11px ui-monospace,SFMono-Regular,Menlo,monospace;
     color:var(--sub);margin:7px 0 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
   .srv-actions{display:flex;gap:8px;align-items:center}
-  .ping{
-    display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;
-    border:1px solid rgba(42,33,24,.18);background:transparent;
-    font:500 12px 'Vazirmatn';color:var(--ink);cursor:pointer;
-    min-width:106px;justify-content:center;transition:.25s;
-  }
-  .p-dot{width:7px;height:7px;border-radius:50%;background:rgba(42,33,24,.25);transition:.25s;flex:none}
-  .p-txt{white-space:nowrap}
-  .ping.busy{pointer-events:none;color:var(--sub)}
-  .ping.busy .p-dot{background:var(--amber);animation:pulse 1s ease infinite}
-  @keyframes pulse{50%{box-shadow:0 0 0 5px rgba(192,138,46,.18);transform:scale(1.2)}}
-  .ping.ok{border-color:rgba(63,125,88,.45);background:var(--green-soft);color:var(--green)}
-  .ping.ok .p-dot{background:var(--green)}
-  .ping.mid{border-color:rgba(192,138,46,.5);background:rgba(192,138,46,.08);color:var(--amber)}
-  .ping.mid .p-dot{background:var(--amber)}
-  .ping.bad{border-color:rgba(181,80,47,.4);background:rgba(181,80,47,.07);color:var(--err)}
-  .ping.bad .p-dot{background:var(--err)}
   .act{
     width:38px;height:38px;border-radius:12px;border:1px solid rgba(42,33,24,.14);
     background:transparent;display:grid;place-items:center;color:var(--ink);cursor:pointer;transition:.2s;
@@ -251,60 +236,39 @@
   .act svg,.del svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   .empty{border:1.5px dashed rgba(42,33,24,.22);border-radius:18px;padding:28px 16px;text-align:center;color:var(--sub);font-size:13px;line-height:2.1}
 
-  /* ── ساب: لیست کانفیگ‌ها ── */
-  .sub-pick{border-top:1px dashed rgba(42,33,24,.15);margin-top:12px;padding-top:12px}
-  .sub-pick-lbl{font:600 11px 'Vazirmatn';color:var(--sub);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-  .sub-pick-lbl svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
-  .sub-note{font-size:11.5px;color:var(--sub);line-height:2;padding:4px 0}
-  .sub-count{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
-  .sub-count span{font-size:11.5px;color:var(--sub)}
-  .cfg-row{
-    display:flex;align-items:center;gap:7px;
-    background:var(--bg);border:1px solid rgba(42,33,24,.08);
-    border-radius:12px;padding:8px 10px;margin-bottom:6px;
-  }
-  .cfg-info{flex:1;min-width:0}
-  .cfg-name{font-weight:600;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .cfg-meta{font:400 10px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--sub);direction:ltr;text-align:left;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .cfg-row .ping{min-width:82px;padding:6px 10px;font-size:11px}
-  .cfg-row .act{width:32px;height:32px;border-radius:10px;flex:none}
-  .cfg-row .act svg{width:15px;height:15px}
-
-  /* ── ایمپورت مستقیم به کلاینت‌ها ── */
+  /* ── ایمپورت مستقیم: لوگوی پلتفرم + لوگوی کلاینت‌ها ── */
   .imp-wrap{border-top:1px dashed rgba(42,33,24,.15);margin-top:12px;padding-top:12px}
-  .imp-lbl{font:600 11px 'Vazirmatn';color:var(--sub);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-  .plat-chip{font:600 10px 'Vazirmatn';color:#5B7BA6;border:1px solid rgba(91,123,166,.5);background:rgba(91,123,166,.07);border-radius:99px;padding:3px 10px}
-  .imp-row{display:flex;flex-wrap:wrap;gap:7px}
+  .imp-lbl{font:600 11px 'Vazirmatn';color:var(--sub);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .plat-ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:rgba(42,33,24,.06);flex:none}
+  .plat-ic svg{width:15px;height:15px;fill:var(--ink)}
+  .imp-row{display:flex;flex-wrap:wrap;gap:10px}
   .imp-btn{
-    display:inline-flex;align-items:center;gap:6px;
-    background:var(--card);border:1px solid rgba(42,33,24,.16);border-radius:11px;
-    padding:9px 13px;font:600 12px 'Vazirmatn';color:var(--ink);cursor:pointer;transition:.2s;
+    width:48px;height:48px;border-radius:14px;border:1px solid rgba(42,33,24,.12);
+    background:var(--bg);display:grid;place-items:center;cursor:pointer;transition:.2s;padding:0;overflow:hidden;
   }
-  .imp-btn:hover{border-color:var(--amber);color:var(--amber)}
-  .imp-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+  .imp-btn:hover{border-color:var(--amber);transform:translateY(-2px)}
+  .imp-btn svg,.imp-btn img{width:28px;height:28px;border-radius:7px;display:block}
+  .imp-copy{
+    width:48px;height:48px;border-radius:14px;border:1px dashed rgba(42,33,24,.3);
+    background:transparent;display:grid;place-items:center;color:var(--sub);cursor:pointer;transition:.2s;
+  }
+  .imp-copy:hover{color:var(--amber);border-color:var(--amber)}
+  .imp-copy svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
 
-  /* ── گزارش دریافت ساب ── */
-  .attempts{border:1px dashed rgba(42,33,24,.2);border-radius:12px;padding:9px 12px;margin:8px 0;background:var(--card)}
-  .at-row{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--sub);padding:3px 0}
-  .at-row i{width:8px;height:8px;border-radius:50%;flex:none;background:rgba(42,33,24,.2)}
-  .at-row.run i{background:var(--amber);animation:pulse 1s ease infinite}
-  .at-row.ok i{background:var(--green)}
-  .at-row.no i{background:var(--err)}
-  .at-row b{color:var(--ink);font-weight:600}
-  .open-sub{
-    display:inline-flex;align-items:center;justify-content:center;gap:7px;
-    text-decoration:none;margin-bottom:8px;width:100%;
-    border:1px solid rgba(42,33,24,.22);border-radius:13px;background:var(--card);
-    font:600 13.5px 'Vazirmatn';color:var(--ink);padding:11px 18px;
+  /* ── کارت نصب اپ ── */
+  .install-card{
+    display:flex;align-items:center;gap:12px;
+    background:var(--card);border:1px solid rgba(42,33,24,.1);border-radius:16px;
+    padding:12px 14px;margin-bottom:16px;
   }
-  details.setup{border:1px dashed rgba(192,138,46,.5);border-radius:14px;background:rgba(192,138,46,.06);padding:11px 14px;margin:8px 0}
-  details.setup summary{cursor:pointer;font:600 12px 'Vazirmatn';color:#7A5A1E;list-style:none}
-  details.setup summary::-webkit-details-marker{display:none}
-  details.setup p{font-size:11.5px;line-height:2;color:#7A5A1E;margin:8px 0 6px}
-  details.setup pre{
-    direction:ltr;text-align:left;background:#2A2118;color:#F5F0E6;border-radius:10px;
-    padding:10px 12px;font:400 10px ui-monospace,monospace;overflow-x:auto;line-height:1.8;white-space:pre;
-  }
+  .install-card img{width:46px;height:46px;border-radius:12px;flex:none;box-shadow:0 6px 14px -6px rgba(58,66,150,.4)}
+  .install-card .t{flex:1;min-width:0}
+  .install-card .t b{display:block;font-size:13px}
+  .install-card .t span{font-size:11px;color:var(--sub);line-height:1.9}
+  .install-card .btn{flex:none;padding:9px 16px;font-size:12.5px}
+  .ios-hint{font-size:11.5px;color:#7A5A1E;background:rgba(192,138,46,.08);border:1px dashed rgba(192,138,46,.45);border-radius:12px;padding:10px 14px;line-height:2;margin-bottom:16px}
+  .ios-hint b{font-weight:600}
+  [hidden]{display:none!important}
 
   .adm-sec{margin-bottom:22px}
   .adm-label{font:600 12.5px 'Vazirmatn';color:var(--sub);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -512,7 +476,7 @@
     <span class="count" id="srvCount"></span>
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <p class="sheet-sub">هر بار یک سرور برایت انتخاب می‌شود؛ اگر ساب باشد، کانفیگ‌های داخلش با پینگ لیست و ایمپورت مستقیم به برنامه‌ات می‌آید.</p>
+  <p class="sheet-sub">هر بار یک سرور برایت انتخاب می‌شود. با لوگوی برنامه‌ات مستقیم ایمپورت کن یا کپی/QR بگیر.</p>
   <div id="srvList"></div>
 </section>
 
@@ -603,10 +567,23 @@
     <h2 class="sheet-title">راهنمای اتصال</h2>
     <button class="x" data-close aria-label="بستن"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
+
+  <div class="install-card" id="installCard">
+    <img id="installIcon" alt="نارون">
+    <div class="t">
+      <b>نصب نارون روی گوشی</b>
+      <span>دسترسی سریع‌تر، بدون نوار مرورگر، مثل یک اپ واقعی</span>
+    </div>
+    <button class="btn" id="pwaBtn">نصب</button>
+  </div>
+  <div class="ios-hint" id="iosHint" hidden>
+    روی <b>آیفون</b>: دکمه‌ی <b>Share ⬆</b> در پایین سافاری را بزن ← <b>Add to Home Screen</b>. آیکون نارون روی صفحه‌ات اضافه می‌شود.
+  </div>
+
   <p class="sheet-sub">سه قدم ساده تا اتصال:</p>
-  <div class="step"><span class="step-n">۱</span><p>حباب <b>سرور من</b> را بزن؛ یک سرور می‌گیری. روی دکمه‌ی برنامه‌ات (مثل <b>v2rayNG</b> یا <b>Happ</b>) بزن تا مستقیم باز شود، یا <b>کپی / QR</b>.</p></div>
-  <div class="step"><span class="step-n">۲</span><p>اگر برنامه با دکمه باز نشد، لینک را کپی کن و در برنامه گزینه‌ی <b>Subscribe / افزودن اشتراک</b> را بزن.</p></div>
-  <div class="step"><span class="step-n">۳</span><p>وصل شو. عدد پینگِ <b>کمتر</b> یعنی مسیر سریع‌تر. اگر سرور مناسب نبود، دوباره حباب را بزن.</p></div>
+  <div class="step"><span class="step-n">۱</span><p>حباب <b>سرور من</b> را بزن؛ یک سرور می‌گیری. روی لوگوی برنامه‌ات بزن تا مستقیم باز و ایمپورت شود.</p></div>
+  <div class="step"><span class="step-n">۲</span><p>اگر برنامه باز نشد، لینک را <b>کپی</b> کن و در برنامه گزینه‌ی <b>Subscribe / افزودن اشتراک</b> را بزن.</p></div>
+  <div class="step"><span class="step-n">۳</span><p>وصل شو. اگر سرور مناسب نبود، دوباره حباب را بزن تا سرور دیگری بگیری.</p></div>
   <div class="note">حباب «اشتراک من» روزهای باقی‌مانده و کد دسترسی‌ات را نشان می‌دهد. اگر رو به اتمام بود، از مدیر تمدید بخواه.</div>
 </section>
 
@@ -661,6 +638,114 @@
   const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const fmtWhen = t => new Date(t).toLocaleString('fa-IR',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
 
+  /* ═══════════════════════════════════════════════
+     PWA — ساخت لوگوی اپ (گوی + ستاره) و ثبت نصب
+  ═══════════════════════════════════════════════ */
+  function makeAppIcon(size){
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const x = c.getContext('2d');
+    const cx = size/2;
+    const bg = x.createLinearGradient(0,0,size,size);
+    bg.addColorStop(0,'#242A63'); bg.addColorStop(1,'#171B45');
+    x.fillStyle = bg; x.fillRect(0,0,size,size);
+    const r = size*0.375;
+    const g = x.createRadialGradient(cx-r*0.45, cx-r*0.5, r*0.08, cx, cx, r);
+    g.addColorStop(0,'#F6F7FF'); g.addColorStop(0.4,'#CBD4F9');
+    g.addColorStop(0.75,'#A2B2EC'); g.addColorStop(1,'#8FA0E2');
+    x.fillStyle = g;
+    x.beginPath(); x.arc(cx,cx,r,0,7); x.fill();
+    const h = x.createRadialGradient(cx-r*0.38, cx-r*0.48, 1, cx-r*0.38, cx-r*0.48, r*0.6);
+    h.addColorStop(0,'rgba(255,255,255,.95)'); h.addColorStop(1,'rgba(255,255,255,0)');
+    x.fillStyle = h;
+    x.beginPath(); x.arc(cx,cx,r,0,7); x.fill();
+    const p = x.createRadialGradient(cx+r*0.42, cx+r*0.42, 1, cx+r*0.42, cx+r*0.42, r*0.7);
+    p.addColorStop(0,'rgba(168,140,255,.5)'); p.addColorStop(1,'rgba(168,140,255,0)');
+    x.fillStyle = p;
+    x.beginPath(); x.arc(cx,cx,r,0,7); x.fill();
+    const t = x.createRadialGradient(cx-r*0.4, cx+r*0.35, 1, cx-r*0.4, cx+r*0.35, r*0.6);
+    t.addColorStop(0,'rgba(110,220,255,.45)'); t.addColorStop(1,'rgba(110,220,255,0)');
+    x.fillStyle = t;
+    x.beginPath(); x.arc(cx,cx,r,0,7); x.fill();
+    function star(sx,sy,R){
+      const q = R*0.16;
+      x.beginPath();
+      x.moveTo(sx,sy-R);
+      x.quadraticCurveTo(sx+q, sy-q, sx+R, sy);
+      x.quadraticCurveTo(sx+q, sy+q, sx, sy+R);
+      x.quadraticCurveTo(sx-q, sy+q, sx-R, sy);
+      x.quadraticCurveTo(sx-q, sy-q, sx, sy-R);
+      x.closePath();
+      x.fillStyle = '#fff';
+      x.shadowColor = 'rgba(255,255,255,.9)';
+      x.shadowBlur = R*0.35;
+      x.fill();
+      x.shadowBlur = 0;
+    }
+    star(cx, cx, r*0.62);
+    star(cx+r*0.52, cx-r*0.55, r*0.14);
+    return c.toDataURL('image/png');
+  }
+
+  (function setupPWA(){
+    try{
+      const icon192 = makeAppIcon(192);
+      const icon512 = makeAppIcon(512);
+      const icon180 = makeAppIcon(180);
+      $('#appFavicon').href = icon192;
+      $('#appTouchIcon').href = icon180;
+      $('#installIcon').src = icon192;
+      const manifest = {
+        name:'نارون · مینی‌اپ سرور',
+        short_name:'نارون',
+        start_url: location.href.split('#')[0],
+        scope: location.href.split('#')[0].replace(/[^/]*$/,''),
+        display:'standalone',
+        dir:'rtl', lang:'fa',
+        background_color:'#F5F0E6',
+        theme_color:'#F5F0E6',
+        icons:[
+          {src:icon192, sizes:'192x192', type:'image/png', purpose:'any'},
+          {src:icon512, sizes:'512x512', type:'image/png', purpose:'any'},
+          {src:icon512, sizes:'512x512', type:'image/png', purpose:'maskable'}
+        ]
+      };
+      const mfURL = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'}));
+      const link = document.createElement('link');
+      link.rel = 'manifest'; link.href = mfURL;
+      document.head.appendChild(link);
+    }catch(e){}
+  })();
+
+  let deferredPrompt = null;
+  addEventListener('beforeinstallprompt', e=>{
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+  (function setupInstallUI(){
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+    const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    const btn = $('#pwaBtn'), card = $('#installCard'), ios = $('#iosHint');
+    if(standalone){ card.hidden = true; return }
+    if(isIOS){
+      btn.hidden = true;
+      ios.hidden = false;
+    }
+    btn.addEventListener('click', async ()=>{
+      if(deferredPrompt){
+        deferredPrompt.prompt();
+        const {outcome} = await deferredPrompt.userChoice;
+        if(outcome === 'accepted'){ toast('نارون نصب شد ✓'); card.hidden = true }
+        deferredPrompt = null;
+      }else{
+        toast('از منوی مرورگر: Add to Home Screen');
+      }
+    });
+  })();
+
+  /* ═══════════════════════════════════════════════
+     ابزارهای عمومی
+  ═══════════════════════════════════════════════ */
   const PROTOS = {
     vmess:['VMess','vm'], vless:['VLESS','vl'], trojan:['Trojan','tr'], ss:['SS','ss'], ssr:['SSR','ss'],
     hysteria2:['Hy2','hy'], hy2:['Hy2','hy'], hysteria:['Hysteria','hy'], tuic:['TUIC','tu']
@@ -672,12 +757,6 @@
     const pr = protoOf(cfg);
     return pr ? PROTOS[pr] : ['نامشخص','ss'];
   };
-  function cfgName(cfg, idx){
-    const m = String(cfg).match(/#(.*)$/);
-    if(m){ try{ const d = decodeURIComponent(m[1]).trim(); if(d) return d }catch(e){} }
-    const {host} = parseCfg(cfg);
-    return host || ('کانفیگ ' + faNum(idx+1));
-  }
 
   function parseCfg(cfg){
     const p = protoOf(cfg); if(!p) return {host:null, port:null};
@@ -820,247 +899,172 @@
     }
   };
 
-  /* ───────── پینگ ───────── */
-  function pingOnce(url, timeout){
+  /* ═══════════════════════════════════════════════
+     لوگوها — لوگوی واقعی از App Store / GitHub
+     با نشان مینیمال به‌عنوان fallback
+  ═══════════════════════════════════════════════ */
+  const PLAT_ICONS = {
+    android:`<svg viewBox="0 0 24 24"><path d="M17.52 15.34c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1m-11.05 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1m11.4-6.02 2-3.46a.42.42 0 0 0-.15-.57.42.42 0 0 0-.57.15l-2.02 3.5A11.9 11.9 0 0 0 12 7.85c-1.75 0-3.41.4-4.87 1.1L5.1 5.45a.42.42 0 0 0-.57-.15.42.42 0 0 0-.15.57l2 3.46C3.19 11.19.95 14.5.68 18.35h22.64c-.27-3.85-2.51-7.16-5.95-9.03"/></svg>`,
+    apple:`<svg viewBox="0 0 24 24"><path d="M12.15 6.9c-.95 0-2.42-1.08-3.96-1.04-2.04.03-3.91 1.18-4.96 3.01-2.12 3.68-.55 9.1 1.52 12.09 1.01 1.45 2.21 3.09 3.79 3.04 1.52-.07 2.09-.99 3.94-.99 1.83 0 2.35.99 3.96.95 1.64-.03 2.68-1.48 3.68-2.95 1.16-1.69 1.64-3.33 1.66-3.42-.04-.01-3.18-1.22-3.22-4.86-.03-3.04 2.48-4.49 2.6-4.56-1.43-2.09-3.62-2.32-4.39-2.38-2-.16-3.68 1.09-4.62 1.11m3.38-3.07c.84-1.01 1.4-2.43 1.25-3.83-1.21.05-2.66.81-3.53 1.82-.78.9-1.45 2.34-1.27 3.71 1.34.1 2.72-.69 3.56-1.7"/></svg>`,
+    windows:`<svg viewBox="0 0 24 24"><path d="M0 3.45 9.75 2.1v9.45H0m10.95-9.6L24 0v11.4H10.95M0 12.6h9.75v9.45L0 20.7m10.95-8.1H24V24l-12.9-1.8"/></svg>`,
+    monitor:`<svg viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round"><rect x="3" y="4.5" width="18" height="12.5" rx="2"/><path d="M9 20.5h6M12 17v3.5"/></svg>`
+  };
+
+  const fb = (bg, inner)=>`<svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6.5" fill="${bg}"/>${inner}</svg>`;
+  const CLIENT_LOGOS_FALLBACK = {
+    v2rayng: fb('#1565C0', `<path d="M7.2 7.5 12 17l4.8-9.5" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>`),
+    karing:  fb('#0D6EFD', `<path d="M9 6.5v11M9 12l5.5-5.5M9.5 12.5 15 17.5" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>`),
+    happ:    fb('#F4511E', `<path d="M8.6 6.8v10.4M15.4 6.8v10.4M8.6 12h6.8" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/>`),
+    v2box:   fb('#3949AB', `<path d="M12 4.6l6.4 3.6v7.6L12 19.4l-6.4-3.6V8.2z" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 4.6v7.6m0 0 6.4-3.6M12 12.2 5.6 8.2" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>`),
+    mahsang: fb('#1B1B2F', `<path d="M7 17.2V8l5 6 5-6v9.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18.6" cy="5.6" r="1.7" fill="#4CAF50"/>`),
+    npv:     fb('#00897B', `<path d="M6.2 17.2v-4.4a5.8 5.8 0 0 1 11.6 0v4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M4 17.2h16" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M9.4 17.2v-4.2a2.6 2.6 0 0 1 5.2 0v4.2" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".7"/>`)
+  };
+
+  const LOGO_URLS = {};
+
+  function ghIconTry(url){
     return new Promise(res=>{
-      const t0 = performance.now();
-      const c = new AbortController();
-      const to = setTimeout(()=>{ c.abort(); res(null) }, timeout);
-      fetch(url, {mode:'no-cors', cache:'no-store', signal:c.signal})
-        .then(()=>{ clearTimeout(to); res(Math.round(performance.now()-t0)) })
-        .catch(()=>{ clearTimeout(to); res(null) });
+      const img = new Image();
+      const to = setTimeout(()=>{ img.src=''; res(null) }, 7000);
+      img.onload = ()=>{ clearTimeout(to); res(url) };
+      img.onerror = ()=>{ clearTimeout(to); res(null) };
+      img.src = url;
     });
   }
-  async function pingFast(host, port){
-    let ms = await pingOnce(`https://${host}:${port}/`, 3200);
-    if(ms!=null) return ms;
-    return await pingOnce(`http://${host}:${port}/`, 2600);
-  }
-  async function ping(host, port){
-    let best = null;
-    for(let i=0;i<2;i++){
-      const ms = await pingOnce(`https://${host}:${port}/`, 4000);
-      if(ms!=null && (best==null || ms<best)) best = ms;
-      if(best!=null && best<=250) return best;
-    }
-    if(best!=null) return best;
-    for(let i=0;i<2;i++){
-      const ms = await pingOnce(`http://${host}:${port}/`, 3500);
-      if(ms!=null && (best==null || ms<best)) best = ms;
-      if(best!=null) return best;
+  async function ghIcon(repo, paths){
+    for(const p of paths){
+      const u = 'https://cdn.jsdelivr.net/gh/'+repo+'@master/'+p;
+      const ok = await ghIconTry(u);
+      if(ok) return ok;
     }
     return null;
   }
-
-  const lastPing = {};
-  function paintPing(btn, key, label){
-    const txt = btn.querySelector('.p-txt');
-    btn.classList.remove('busy','ok','mid','bad');
-    txt.textContent = label || 'تست پینگ';
-    if(key in lastPing){
-      const ms = lastPing[key];
-      btn.classList.add(ms==null ? 'bad' : ms<=300 ? 'ok' : ms<=900 ? 'mid' : 'bad');
-      txt.textContent = ms==null ? 'بی‌پاسخ' : ms+'ms';
-    }
-  }
-  async function runPingOn(btn, cfgText, key, silent){
-    const {host, port} = parseCfg(cfgText);
-    if(!host){ lastPing[key]=null; paintPing(btn,key); if(!silent) toast('آدرس این کانفیگ قابل خواندن نیست'); return }
-    btn.classList.add('busy');
-    btn.querySelector('.p-txt').textContent = '…';
-    const ms = await ping(host, port);
-    lastPing[key] = ms;
-    if(btn.isConnected) paintPing(btn, key);
-    if(ms==null && !silent) toast('این سرور پاسخ نداد — یکی دیگر بگیر');
-  }
-  async function pingAllSeq(items, limit=3){
-    let idx = 0;
-    const worker = async ()=>{
-      while(idx < items.length){
-        const it = items[idx++];
-        const {host, port} = parseCfg(it.cfg);
-        if(!host){ lastPing[it.key]=null; if(it.btn.isConnected) paintPing(it.btn, it.key); continue }
-        const ms = await pingFast(host, port);
-        lastPing[it.key] = ms;
-        if(it.btn.isConnected) paintPing(it.btn, it.key);
-      }
-    };
-    await Promise.all(Array.from({length:Math.min(limit, items.length)}, worker));
-  }
-
-  /* ═══════════════════════════════════════════════
-     دریافت ساب — مسیرهای چندگانه با گزارش زنده
-     مسیر طلایی: پروکسی شخصی ساپابیس (fetch-sub)
-  ═══════════════════════════════════════════════ */
-  const subCache = {};
-  const SUB_TTL = 10*60*1000;
-  const stripHash = u => String(u).replace(/#.*$/, '');
-  const SUB_FN = SUPABASE_URL + '/functions/v1/fetch-sub';
-
-  async function fetchTO(u, ms, headers, asJson){
-    const c = new AbortController();
-    const t = setTimeout(()=>c.abort(), ms);
-    try{
-      const r = await fetch(u, {cache:'no-store', signal:c.signal, headers: headers||undefined, redirect:'follow'});
-      clearTimeout(t);
-      if(!r.ok) return {ok:false, status:r.status, body:null};
-      const body = asJson ? await r.json() : await r.text();
-      return {ok:true, status:r.status, body};
-    }catch(e){ clearTimeout(t); return {ok:false, status:0, body:null} }
-  }
-
-  let lastAttemptLog = [];   // [{name, status:'ok'|'no'|'run', note}]
-  let goodAttemptName = null;
-
-  async function fetchSubText(url, onLog){
-    const enc = encodeURIComponent(url);
-    const attempts = [
-      {name:'مستقیم',            u:url,   h:null,   note:'اگر CORS باز باشد'},
-      {name:'پروکسی ساپابیس',    u:SUB_FN + '?url=' + enc, h:{'Authorization':'Bearer '+SUPABASE_KEY, 'apikey':SUPABASE_KEY}, note:'پروکسی شخصی تو'},
-      {name:'جینا',              u:'https://r.jina.ai/' + url, h:null, note:'معمولاً از ایران باز است'},
-      {name:'codetabs',          u:'https://api.codetabs.com/v1/proxy?quest=' + enc, h:null, note:''},
-      {name:'allorigins',        u:'https://api.allorigins.win/raw?url=' + enc, h:null, note:''},
-      {name:'corsproxy',         u:'https://corsproxy.io/?url=' + enc, h:null, note:''}
-    ];
-    if(goodAttemptName){
-      const gi = attempts.findIndex(a=>a.name===goodAttemptName);
-      if(gi > 0) attempts.unshift(attempts.splice(gi,1)[0]);
-    }
-
-    const rows = attempts.map(a=>({name:a.name, status:'run', note:a.note}));
-    lastAttemptLog = rows;
-    const paint = ()=>onLog && onLog(rows.map(r=>({...r})));
-
-    for(let i=0;i<attempts.length;i++){
-      const a = attempts[i];
-      rows[i].status = 'run'; paint();
-      const res = await fetchTO(a.u, 9000, a.h);
-      if(res.ok && res.body && String(res.body).trim()){
-        rows[i].status = 'ok'; rows[i].note = 'موفق';
-        for(let k=i+1;k<rows.length;k++){ rows[k].status='no'; rows[k].note='امتحان نشد' }
-        paint();
-        goodAttemptName = a.name;
-        return String(res.body);
-      }
-      if(res.status === 404 && a.name === 'پروکسی ساپابیس'){
-        rows[i].status = 'no'; rows[i].note = 'تابع ساخته نشده';
-      }else{
-        rows[i].status = 'no'; rows[i].note = res.status ? ('خطای '+res.status) : 'قطع';
-      }
-      paint();
-    }
-    // آخرین تیر: allorigins با JSON
-    const j = await fetchTO('https://api.allorigins.win/get?url=' + enc, 9000, null, true);
-    const okj = !!(j.ok && j.body && j.body.contents && String(j.body.contents).trim());
-    rows.push({name:'allorigins(json)', status: okj?'ok':'no', note:''});
-    paint();
-    if(okj){ goodAttemptName = 'allorigins(json)'; return String(j.body.contents) }
-    return null;
-  }
-
-  const CFG_RE = /(?:vmess|vless|trojan|ss|ssr|hysteria2|hy2|hysteria|tuic):\/\/[^\s"'<>\\]+/gi;
-  function extractCfgs(text){
-    const out = [], seen = new Set();
-    let m;
-    CFG_RE.lastIndex = 0;
-    while((m = CFG_RE.exec(String(text))) !== null){
-      let c = m[0].trim().replace(/[),.'"']+$/,'');
-      if(c && !seen.has(c)){ seen.add(c); out.push(c) }
-    }
-    return out;
-  }
-  function b64decode(s){
-    s = String(s).replace(/-/g,'+').replace(/_/g,'/').replace(/\s+/g,'');
-    while(s.length % 4) s += '=';
-    const bin = atob(s);
-    const bytes = new Uint8Array(bin.length);
-    for(let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
-    return new TextDecoder('utf-8').decode(bytes);
-  }
-  const looksB64 = t => /^[A-Za-z0-9+/\-_=\s]+$/.test(t) && t.replace(/\s/g,'').length > 8;
-
-  async function getSubConfigs(s, onLog){
-    const c = subCache[s.id];
-    if(c && (Date.now()-c.at) < SUB_TTL && c.cfgs.length) return c.cfgs;
-
-    const url = stripHash(s.cfg);
-    const raw = await fetchSubText(url, onLog);
-    if(raw == null) throw new Error('دریافت ساب ناموفق بود');
-
-    let cfgs = extractCfgs(raw);
-    let fmt = 'xray';
-    if(!cfgs.length){
-      if(/proxies\s*:|yaml|clash/i.test(raw)) fmt = 'clash';
-      const trimmed = String(raw).trim();
-      if(looksB64(trimmed)){
+  function itunesIcon(term, mustInclude){
+    return new Promise(res=>{
+      const cb = 'icb_'+Math.random().toString(36).slice(2);
+      const s = document.createElement('script');
+      const cleanup = ()=>{ clearTimeout(to); delete window[cb]; s.remove() };
+      const to = setTimeout(()=>{ cleanup(); res(null) }, 7000);
+      window[cb] = j=>{
+        cleanup();
         try{
-          const dec = b64decode(trimmed);
-          const c2 = extractCfgs(dec);
-          if(c2.length){ cfgs = c2; fmt = 'xray-b64' }
-        }catch(e){}
-      }
-    }
-    subCache[s.id] = {cfgs, at:Date.now(), fmt};
-    return cfgs;
+          const rs = (j.results||[]).filter(x=>(x.artworkUrl512||x.artworkUrl100));
+          const hit = rs.find(x=>(x.trackName||'').toLowerCase().includes(mustInclude)) || rs[0];
+          if(hit) res((hit.artworkUrl512||hit.artworkUrl100).replace(/\/\d+x\d+/, '/256x256'));
+          else res(null);
+        }catch(e){ res(null) }
+      };
+      s.src = 'https://itunes.apple.com/search?term='+encodeURIComponent(term)+'&entity=software&limit=8&callback='+cb;
+      s.onerror = ()=>{ cleanup(); res(null) };
+      document.head.appendChild(s);
+    });
   }
 
-  /* ───────── تشخیص دستگاه و کلاینت‌ها ───────── */
+  const LOGO_RESOLVERS = {
+    v2rayng: ()=> ghIcon('2dust/v2rayNG', [
+      'app/src/main/res/mipmap-xxxhdpi/ic_launcher.png',
+      'app/src/main/res/mipmap-xhdpi/ic_launcher.png',
+      'app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png'
+    ]),
+    mahsang: ()=> ghIcon('GFW4Fun/MahsaNG', [
+      'app/src/main/res/mipmap-xxxhdpi/ic_launcher.png',
+      'app/src/main/res/mipmap-xhdpi/ic_launcher.png'
+    ]),
+    karing:  ()=> itunesIcon('karing', 'karing'),
+    happ:    ()=> itunesIcon('happ proxy', 'happ'),
+    v2box:   ()=> itunesIcon('v2box', 'v2box'),
+    npv:     ()=> itunesIcon('npv tunnel', 'npv')
+  };
+
+  function applyRealLogo(id, url){
+    if(!url) return;
+    LOGO_URLS[id] = url;
+    document.querySelectorAll('[data-logo-id="'+id+'"]').forEach(el=>{
+      el.innerHTML = '<img src="'+url+'" alt="" draggable="false">';
+    });
+  }
+  (async function resolveLogos(){
+    const jobs = Object.entries(LOGO_RESOLVERS).map(async ([id, fn])=>{
+      try{ applyRealLogo(id, await fn()) }catch(e){}
+    });
+    await Promise.allSettled(jobs);
+  })();
+
+  /* ───────── تشخیص دستگاه ───────── */
   function detectDevice(){
     const ua = navigator.userAgent || '';
     const isAndroid = /android/i.test(ua);
     const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
-    if(isAndroid) return {id:'android', label:'اندروید'};
-    if(isIOS)     return {id:'ios',     label:'آیفون / آیپد'};
-    if(/windows|macintosh|linux/i.test(ua)) return {id:'desktop', label:'دسکتاپ'};
-    return {id:'other', label:'موبایل'};
+    const isWin = /windows/i.test(ua);
+    const isMac = /macintosh/i.test(ua);
+    if(isAndroid) return {id:'android', icon:'android',  plats:['android']};
+    if(isIOS)     return {id:'ios',     icon:'apple',    plats:['ios']};
+    if(isWin)     return {id:'windows', icon:'windows',  plats:['desktop']};
+    if(isMac)     return {id:'mac',     icon:'apple',    plats:['desktop']};
+    if(/linux/i.test(ua)) return {id:'linux', icon:'monitor', plats:['desktop']};
+    return {id:'other', icon:'monitor', plats:['android','ios']};
   }
   const DEVICE = detectDevice();
 
-  // اسکیم ایمپورت سابِ هر کلاینت
-  const CLIENTS = [
-    {id:'v2rayng', name:'v2rayNG',  plats:['android'],
-     sub:u=>'v2rayng://install-sub?url='+encodeURIComponent(u)},
-    {id:'karing',  name:'Karing',   plats:['android','ios'],
-     sub:u=>'karing://install-sub?url='+encodeURIComponent(u)},
-    {id:'happ',    name:'Happ',     plats:['android','ios'],
-     sub:u=>'happ://add_sub/'+b64u(u)},
-    {id:'v2box',   name:'V2Box',    plats:['android','ios'],
-     sub:u=>'v2box://install-sub?url='+encodeURIComponent(u)},
-    {id:'mahsang', name:'MahsaNG',  plats:['android'],
-     sub:u=>'mahsang://install-sub?url='+encodeURIComponent(u)},
-    {id:'npv',     name:'NPV Tunnel', plats:['android'],
-     sub:u=>'npvtunnel://install-sub?url='+encodeURIComponent(u)}
-  ];
-  function b64u(s){ return btoa(unescape(encodeURIComponent(s))) }
+  const b64u = s => btoa(unescape(encodeURIComponent(s)));
 
-  function openClientScheme(link, name){
-    toast('در حال باز کردن ' + name + '…');
-    const a = document.createElement('a');
-    a.href = link; a.style.display = 'none';
-    document.body.appendChild(a); a.click();
-    setTimeout(()=>a.remove(), 1500);
-    setTimeout(()=>{
-      toast('اگر ' + name + ' باز نشد، برنامه را نصب کن یا لینک را کپی و دستی اضافه کن');
-    }, 2600);
+  const CLIENTS = [
+    {id:'v2rayng', plats:['android'],
+     sub:u=>'v2rayng://install-sub?url='+encodeURIComponent(u),
+     cfg:u=>'v2rayng://install-config?url='+encodeURIComponent(u)},
+    {id:'karing',  plats:['android','ios'],
+     sub:u=>'karing://install-sub?url='+encodeURIComponent(u),
+     cfg:u=>'karing://install-config?url='+encodeURIComponent(u)},
+    {id:'happ',    plats:['android','ios'],
+     sub:u=>'happ://add_sub/'+b64u(u),
+     cfg:u=>'happ://add/'+b64u(u)},
+    {id:'v2box',   plats:['android','ios'],
+     sub:u=>'v2box://install-sub?url='+encodeURIComponent(u),
+     cfg:u=>'v2box://install-config?url='+encodeURIComponent(u)},
+    {id:'mahsang', plats:['android'],
+     sub:u=>'mahsang://install-sub?url='+encodeURIComponent(u),
+     cfg:u=>'mahsang://install-config?url='+encodeURIComponent(u)},
+    {id:'npv',     plats:['android'],
+     sub:u=>'npvtunnel://install-sub?url='+encodeURIComponent(u),
+     cfg:u=>'npvtunnel://install-config?url='+encodeURIComponent(u)}
+  ];
+
+  function openClientScheme(link){
+    toast('در حال باز کردن برنامه…');
+    try{
+      const a = document.createElement('a');
+      a.href = link; a.style.display = 'none';
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>a.remove(), 1500);
+      setTimeout(()=>{
+        toast('اگر باز نشد، برنامه را نصب کن یا از «کپی لینک» استفاده کن');
+      }, 2600);
+    }catch(e){
+      toast('باز کردن ناموفق بود — از «کپی لینک» استفاده کن');
+    }
   }
 
   function importButtonsHtml(kind, cfgText){
-    // kind: 'sub' | 'cfg'
-    const avail = kind==='sub'
-      ? CLIENTS.filter(c=>c.plats.includes(DEVICE.id))
-      : CLIENTS.filter(c=>c.id==='happ' && c.plats.includes(DEVICE.id));
+    const avail = CLIENTS.filter(c=>c.plats.includes(DEVICE.id));
     if(!avail.length) return '';
-    const mk = c => {
-      const link = kind==='sub' ? c.sub(cfgText) : ('happ://add/' + b64u(cfgText));
-      const title = kind==='sub' ? ('ایمپورت ساب در ' + c.name) : ('افزودن در ' + c.name);
-      return `<button class="imp-btn" data-imp-link="${esc(link)}" data-imp-name="${esc(c.name)}" title="${esc(title)}">
-        <svg viewBox="0 0 24 24"><path d="M12 4v10M8 10.5 12 14l4-3.5"/><path d="M5 19h14"/></svg>${esc(c.name)}</button>`;
-    };
+    const btns = avail.map(c=>{
+      const link = kind==='sub' ? c.sub(cfgText) : c.cfg(cfgText);
+      const inner = LOGO_URLS[c.id]
+        ? '<img src="'+LOGO_URLS[c.id]+'" alt="" draggable="false">'
+        : CLIENT_LOGOS_FALLBACK[c.id];
+      return `<button class="imp-btn" data-logo-id="${c.id}" data-imp-link="${esc(link)}" aria-label="ایمپورت در ${c.id}">${inner}</button>`;
+    }).join('');
     return `
       <div class="imp-wrap">
-        <div class="imp-lbl"><span>ایمپورت مستقیم به برنامه‌ات</span><span class="plat-chip">${esc(DEVICE.label)}</span></div>
-        <div class="imp-row">${avail.map(mk).join('')}
-          ${kind==='sub' ? `<button class="imp-btn" data-imp-copy="1"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>کپی لینک</button>` : ''}
+        <div class="imp-lbl">
+          <span>ایمپورت مستقیم به برنامه‌ات</span>
+          <span class="plat-ic" title="دستگاه تو">${PLAT_ICONS[DEVICE.icon]}</span>
+        </div>
+        <div class="imp-row">
+          ${btns}
+          <button class="imp-copy" data-imp-copy="1" title="کپی لینک" aria-label="کپی لینک">
+            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15"/></svg>
+          </button>
         </div>
       </div>`;
   }
@@ -1071,8 +1075,7 @@
     qr:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><path d="M14 14.5h2.5M14 18h2.5M18 14v6M20.5 14v2.5"/></svg>',
     trash:'<svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V5.5A1.5 1.5 0 0 1 11.5 4h1A1.5 1.5 0 0 1 14 5.5V7M7.5 7l.9 12.1A1.9 1.9 0 0 0 10.3 21h3.4a1.9 1.9 0 0 0 1.9-1.9L16.5 7M10.5 11v6M13.5 11v6"/></svg>',
     renew:'<svg viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M4 10.5h16M12 13.5v4.5M9.75 15.75h4.5"/></svg>',
-    dice:'<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V8h-4.5"/></svg>',
-    list:'<svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>'
+    dice:'<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V8h-4.5"/></svg>'
   };
   const BICONS = {
     srv:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="6.5" rx="2"/><rect x="4" y="13.5" width="16" height="6.5" rx="2"/><path d="M7.5 7.2h.01M7.5 16.8h.01"/></svg>',
@@ -1082,37 +1085,6 @@
   };
 
   const showLoading = el => el.innerHTML = '<div class="loading">در حال دریافت از سرور…</div>';
-
-  // راهنمای ساخت تابع ساپابیس (فقط وقتی لازم شد نشان داده می‌شود)
-  const SETUP_GUIDE = `
-    <details class="setup">
-      <summary>راهنما برای مدیر: راه‌اندازی «پروکسی ساپابیس» (۲ دقیقه · یک‌بار برای همیشه)</summary>
-      <p>۱) در داشبورد Supabase از سایدبار <b>Edge Functions</b> را بزن → <b>Create a new function</b> → نام: <b dir="ltr">fetch-sub</b> → Create.</p>
-      <p>۲) کد داخلش را با این عوض کن و <b>Deploy</b> بزن:</p>
-      <pre>const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-Deno.serve(async (req) => {
-  if (req.method === "OPTIONS")
-    return new Response("ok", { headers: cors });
-  const target = new URL(req.url).searchParams.get("url");
-  if (!target)
-    return new Response("missing url", { status: 400, headers: cors });
-  try {
-    const r = await fetch(target, {
-      headers: { "User-Agent": "NaronApp/1.0" }
-    });
-    const text = await r.text();
-    return new Response(text, {
-      headers: { ...cors, "Content-Type": "text/plain; charset=utf-8" }
-    });
-  } catch (_e) {
-    return new Response("fetch failed", { status: 502, headers: cors });
-  }
-});</pre>
-      <p>۳) همین‌قدر. اپ خودش آن را پیدا و استفاده می‌کند — بعد از این، ساب‌ها همیشه از مسیر دیتابیس خودت خوانده می‌شوند.</p>
-    </details>`;
 
   /* ───────── سرور تصادفی ───────── */
   let currentRandomId = null;
@@ -1147,7 +1119,6 @@ Deno.serve(async (req) => {
         <div class="srv-top"><span class="srv-name">${esc(s.name)}</span><span class="chip ${chip[1]}">${chip[0]}</span></div>
         <div class="srv-host">${esc(hostTxt)}</div>
         <div class="srv-actions">
-          <button class="ping" id="hostPing"><span class="p-dot"></span><span class="p-txt" dir="ltr">${isSub(s.cfg)?'پینگ ساب':'تست پینگ'}</span></button>
           ${isSub(s.cfg)
             ? `<button class="act do-copysub" aria-label="کپی لینک ساب">${I.copy}</button>
                <button class="act do-qrsub"   aria-label="QR لینک ساب">${I.qr}</button>`
@@ -1155,27 +1126,15 @@ Deno.serve(async (req) => {
                <button class="act do-qr"   aria-label="ساخت QR">${I.qr}</button>`}
         </div>
         ${importButtonsHtml(isSub(s.cfg) ? 'sub' : 'cfg', s.cfg)}
-        ${isSub(s.cfg) ? `
-        <div class="sub-pick">
-          <div class="sub-pick-lbl">${I.list} کانفیگ‌های داخل این ساب</div>
-          <div id="subPickArea"></div>
-        </div>` : ''}
       </article>
       <button class="btn ghost full reroll" id="reRoll">${I.dice} یکی دیگه نشونم بده</button>`;
 
     if(!isSub(s.cfg)){
-      const pb = box.querySelector('#hostPing');
-      paintPing(pb, s.id);
-      if(fresh || !(s.id in lastPing)) runPingOn(pb, s.cfg, s.id);
       box.querySelector('.do-copy').addEventListener('click', ()=> copyTxt(s.cfg).then(ok=>toast(ok?'کانفیگ کپی شد':'کپی ناموفق بود')));
       box.querySelector('.do-qr').addEventListener('click', ()=> openQrText(s.name, s.cfg));
     }else{
-      const pb = box.querySelector('#hostPing');
-      paintPing(pb, s.id+'#host');
-      runPingOn(pb, 'vless://x@'+hostTxt+':443?x', s.id+'#host');
       box.querySelector('.do-copysub').addEventListener('click', ()=> copyTxt(s.cfg).then(ok=>toast(ok?'لینک ساب کپی شد':'کپی ناموفق بود')));
       box.querySelector('.do-qrsub').addEventListener('click', ()=> openQrText(s.name+' · لینک ساب', s.cfg));
-      loadSubPick(s, box.querySelector('#subPickArea'));
     }
 
     box.querySelector('#reRoll').addEventListener('click', ()=>{
@@ -1185,112 +1144,13 @@ Deno.serve(async (req) => {
     });
   }
 
-  function attemptsHtml(rows){
-    if(!rows || !rows.length) return '';
-    return `<div class="attempts">` + rows.map(r=>
-      `<div class="at-row ${r.status}"><i></i><b>${esc(r.name)}</b> ${r.status==='ok'?'✓':r.status==='no'?'✗':'…'} ${r.note?`<span>· ${esc(r.note)}</span>`:''}</div>`
-    ).join('') + `</div>`;
-  }
-
-  async function loadSubPick(s, area){
-    // مرحله ۱: گرفتن ساب با گزارش زنده
-    area.innerHTML = `
-      <div class="sub-note">در حال خواندن ساب…</div>
-      <div id="atBox"></div>`;
-    const atBox = area.querySelector('#atBox');
-    let cfgs = null;
-    try{
-      cfgs = await getSubConfigs(s, rows=>{ atBox.innerHTML = attemptsHtml(rows) });
-    }catch(e){
-      cfgs = null;
-    }
-    if(!area.isConnected) return;
-    atBox.innerHTML = attemptsHtml(lastAttemptLog);
-
-    if(!cfgs || !cfgs.length){
-      const fmt = subCache[s.id] && subCache[s.id].fmt;
-      const fnMissing = lastAttemptLog.some(r=>r.name==='پروکسی ساپابیس' && r.note==='تابع ساخته نشده');
-      area.innerHTML = `
-        <div class="sub-note">${fmt==='clash'
-          ? 'این ساب فرمت clash/yaml دارد و کانفیگ URI داخلش نیست.'
-          : 'ساب خوانده نشد. گزارش مسیرها:'}</div>
-        ${fmt!=='clash' ? attemptsHtml(lastAttemptLog) : ''}
-        ${fnMissing ? SETUP_GUIDE : ''}
-        <a class="open-sub" href="${esc(stripHash(s.cfg))}" target="_blank" rel="noopener">باز کردن مستقیم ساب در مرورگر (تست شبکه)</a>
-        <div class="sub-note">در همین حین، دکمه‌های «ایمپورت مستقیم» و «کپی لینک ساب» بالای کارت همیشه کار می‌کنند — برنامه‌ی تو خودش ساب را می‌خواند.</div>
-        <button class="btn ghost full reroll" id="subRetry">${I.dice} تلاش دوباره</button>`;
-      area.querySelector('#subRetry').addEventListener('click', ()=>{
-        delete subCache[s.id];
-        area.innerHTML = '<div class="loading" style="padding:14px 0">در حال خواندن ساب…</div>';
-        loadSubPick(s, area);
-      });
-      return;
-    }
-
-    // مرحله ۲: رندر ردیف‌ها + پینگ خودکار
-    const pending = [];
-    const rowsHtml = cfgs.map((cfg, idx)=>{
-      const key = s.id+'#'+idx;
-      return `
-      <div class="cfg-row" data-cfg-idx="${idx}">
-        <div class="cfg-info">
-          <div class="cfg-name">${esc(cfgName(cfg, idx))}</div>
-          <div class="cfg-meta" data-meta></div>
-        </div>
-        <span class="chip" data-chip></span>
-        <button class="ping"><span class="p-dot"></span><span class="p-txt" dir="ltr">تست</span></button>
-        <button class="act do-copy" aria-label="کپی کانفیگ">${I.copy}</button>
-        <button class="act do-qr"   aria-label="ساخت QR">${I.qr}</button>
-      </div>`;
-    }).join('');
-    area.innerHTML = `
-      <div class="sub-count">
-        <span>${faNum(cfgs.length)} کانفیگ پیدا شد</span>
-        <button class="btn ghost" id="subPingAll" style="padding:7px 12px;font-size:11.5px;border-radius:10px">پینگ همه</button>
-      </div>
-      <div>${rowsHtml}</div>`;
-    const rowEls = [...area.querySelectorAll('.cfg-row')];
-    rowEls.forEach((row, idx)=>{
-      const cfg = cfgs[idx];
-      const key = s.id+'#'+idx;
-      const {host, port} = parseCfg(cfg);
-      const pr = protoOf(cfg), chip = pr ? PROTOS[pr] : ['نامشخص','ss'];
-      row.querySelector('.cfg-meta').textContent = host ? (host+':'+port) : '—';
-      const ch = row.querySelector('[data-chip]');
-      ch.textContent = chip[0]; ch.className = 'chip ' + chip[1];
-      const pb = row.querySelector('.ping');
-      row.querySelector('.do-copy').addEventListener('click', ()=> copyTxt(cfg).then(ok=>toast(ok?'کانفیگ کپی شد':'کپی ناموفق بود')));
-      row.querySelector('.do-qr').addEventListener('click', ()=> openQrText(cfgName(cfg, idx), cfg));
-      pb.addEventListener('click', ()=>{ if(!pb.classList.contains('busy')) runPingOn(pb, cfg, key, true) });
-      paintPing(pb, key);
-      if(!(key in lastPing)) pending.push({btn:pb, cfg, key});
-    });
-    if(pending.length) pingAllSeq(pending);
-    area.querySelector('#subPingAll').addEventListener('click', ()=>{
-      const all = rowEls.map((row, idx)=>({btn: row.querySelector('.ping'), cfg: cfgs[idx], key: s.id+'#'+idx}));
-      all.forEach(it=>{ it.btn.classList.add('busy'); it.btn.querySelector('.p-txt').textContent='…' });
-      pingAllSeq(all);
-    });
-  }
-
   $('#srvList').addEventListener('click', e=>{
-    // ایمپورت مستقیم
     const imp = e.target.closest('[data-imp-link]');
-    if(imp){ openClientScheme(imp.dataset.impLink, imp.dataset.impName); return }
+    if(imp){ openClientScheme(imp.dataset.impLink); return }
     const cp2 = e.target.closest('[data-imp-copy]');
     if(cp2){
       const s = servers.find(x=>x.id===currentRandomId);
       if(s) copyTxt(s.cfg).then(ok=>toast(ok?'لینک ساب کپی شد':'کپی ناموفق بود'));
-      return;
-    }
-    // پینگ هاست کارت
-    const p = e.target.closest('#hostPing');
-    if(p && !p.classList.contains('busy')){
-      const s = servers.find(x=>x.id===currentRandomId);
-      if(s){
-        if(isSub(s.cfg)){ try{ const u = new URL(s.cfg); runPingOn(p, 'vless://x@'+u.hostname+':443?x', s.id+'#host') }catch(_){} }
-        else runPingOn(p, s.cfg, s.id);
-      }
     }
   });
 
@@ -1522,8 +1382,6 @@ Deno.serve(async (req) => {
       b.disabled = true;
       try{
         await DB.delServer(b.dataset.id);
-        delete lastPing[b.dataset.id];
-        delete subCache[b.dataset.id];
         await refreshServers();
         toast('حذف شد');
       }catch(err){ toast('حذف ناموفق بود'); b.disabled = false }
